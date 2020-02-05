@@ -1,5 +1,10 @@
 import Phaser from "phaser";
+import Board from "./tycoon/board";
+import Dice from "./tycoon/dice";
+import Player from "./tycoon/player";
 
+
+// phaser setup stuff
 const config = {
 	type: Phaser.AUTO,
 	parent: "tycoon",
@@ -9,54 +14,54 @@ const config = {
 	scene: {
 		preload: preload,
 		create: create
+	},
+	scale: {
+		mode: Phaser.Scale.FIT,
+		autoCenter: Phaser.Scale.CENTER_BOTH
 	}
 };
 
 const game = new Phaser.Game(config);
 
-
-class Property extends Phaser.GameObjects.Rectangle {
-	constructor(position, background) {
-		super(position.scene, background.x, background.y, background.width, 20, 0xFF0000);
-		this.setStrokeStyle(3, 0x00000);
-		this.setOrigin(0);
-		this.position = position;
-
-		position.add(this);
-	}
-}
-
-
-class Position extends Phaser.GameObjects.Container {
-	constructor(scene, x, y) {
-		super(scene, x, y);
-		
-		scene.add.existing(this);
-
-		let background = new Phaser.GameObjects.Rectangle(scene, x, y, 60, 100, 0xCDE6D0);
-		let text = new Phaser.GameObjects.Text(scene, x, y+25, "PROP", {"color": "#000000"});
-
-		text.setOrigin(0);
-		background.setOrigin(0);
-
-		background.setStrokeStyle(3, 0x00000);
-		this.add(background);
-		this.propertyHolder = new Property(this, background);
-		this.add(text);
-		
-	}
-}
-
-
+/**
+ * Preload assets (images, spritesheets, sounds, etc).
+ */
 function preload() {
-
+	this.load.multiatlas("dice", "assets/dice.json", "assets");
 }
 
+/**
+ * Entrypoint for program.
+ * 
+ * Create the board and move it to the middle of the screen.
+ * 
+ * Create dice and players and game management.
+ * 
+ * TODO: Move all this logic to its own class?
+ */
 function create() {
 	let scene = game.scene.add("board", {}, true);
-	let pos1 = new Position(scene, 0, 0);
-	pos1.setAngle(90);
-	pos1.setPosition(50, 500);
-	new Position(scene, 60, 0);
+	
+	let board = new Board(game, scene, 0, 0);
+	scene.add.existing(board);
+
+	let boardDimensions = board.getBounds();
+	board.setPosition(
+		(game.config.width / 2) - boardDimensions.width / 2, 
+		(game.config.height / 2) - boardDimensions.height / 2
+	);
+
+	let dice = new Dice(board);
+	dice.requestRoll();
+
+	let p = new Player(board);
+	p.moveToPosition(0);
+
+	dice.on("landed", (result) => {
+		let roll = result[0] + result[1];
+		let newPos = (p.position + roll) % 39;
+		p.moveToPosition(newPos);
+		dice.requestRoll();
+	});
 }
 
