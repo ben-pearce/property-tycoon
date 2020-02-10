@@ -1,13 +1,13 @@
 import Phaser from "phaser";
 
 
-class Player extends Phaser.GameObjects.Rectangle {
+class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * This class represents a player.
 	 * @param {Board} board The board this player belongs to.
 	 */
 	constructor(board) {
-		super(board.scene, 0, 0, 20, 20, 0xFF0000);
+		super(board.scene, 0, 0, "boot");
 		this.board = board;
 		this.scene = board.scene;
 		this.position = 0;
