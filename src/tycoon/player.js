@@ -7,7 +7,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Board} board The board this player belongs to.
 	 */
 	constructor(board) {
-		super(board.scene, 0, 0, "boot");
+		super(board.scene, 0, 0, "tokens", "cat");
 		this.board = board;
 		this.scene = board.scene;
 		this.position = 0;

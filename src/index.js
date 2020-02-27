@@ -28,7 +28,7 @@ const game = new Phaser.Game(config);
  */
 function preload() {
 	this.load.multiatlas("dice", "assets/dice.json", "assets");
-	this.load.image("boot", "assets/boot.png");
+	this.load.multiatlas("tokens", "assets/tokens.json", "assets");
 }
 
 /**
