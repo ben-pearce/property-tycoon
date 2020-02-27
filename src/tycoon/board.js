@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import BoardConfig from "../boardConfig";
-import GeneralConfig from "../generalConfig";
-import Position from "./position";
+import BoardConfig from "../positions";
+import GeneralConfig from "../general";
+import Position from "./positions/position";
 
 
 class Board extends Phaser.GameObjects.Container {
