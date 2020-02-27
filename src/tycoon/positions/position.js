@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import Property from "./property";
-import GeneralConfig from "../generalConfig";
+import Property from "../property";
+import GeneralConfig from "../../general";
 
 
 class Position extends Phaser.GameObjects.Container {
