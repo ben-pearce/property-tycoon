@@ -8,7 +8,7 @@ import Player from "./tycoon/player";
 const config = {
 	type: Phaser.AUTO,
 	parent: "tycoon",
-	width: 1200,
+	width: 1500,
 	height: 900,
 	transparent: true,
 	scene: {
