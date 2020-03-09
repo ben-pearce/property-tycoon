@@ -31,26 +31,22 @@ class Property extends Phaser.GameObjects.Rectangle {
         var housefull = false;
         var hotelNo = 0;
     }
-//With every successful upgrade we will add a house/hotel to the board.
+    //With every successful upgrade we will add a house/hotel to the board.
     upgrade() {
-        if ((house == 4)&&(housefull==false) {
+        if ((this.house == 4)&&(this.housefull==false)) {
             //you need to pay to upgrade into hotel.
 	    
-            hotelNo = 1;
-            housefull = true;
+            this.hotelNo = 1;
+            this.housefull = true;
         }
-        if (house < 4) {
-            house++;
+        if (this.house < 4) {
+            this.house++;
         }
-        if ((housefull == true)&&hotelNo<4) {
+        if ((this.housefull == true)&&this.hotelNo<4) {
             hotelNo++;
         }
-        if (hotelNo == 4) {
+        if (this.hotelNo == 4) {
             //Upgrade Completed
         }
-
-        
-
-        
-
     }
+}
