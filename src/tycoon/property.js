@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 
+
 class Property extends Phaser.GameObjects.Rectangle {
 	/**
 	 * This class represents a property. 
@@ -30,10 +31,11 @@ class Property extends Phaser.GameObjects.Rectangle {
         var housefull = false;
         var hotelNo = 0;
     }
-
+//With every successful upgrade we will add a house/hotel to the board.
     upgrade() {
         if ((house == 4)&&(housefull==false) {
             //you need to pay to upgrade into hotel.
+	    
             hotelNo = 1;
             housefull = true;
         }
