@@ -28,9 +28,15 @@ class Board extends Phaser.GameObjects.Container {
 			GeneralConfig.positions.width*(this.dimension-1), 
 			GeneralConfig.board.color);
 		this.background.setOrigin(0);
+		
+		this.wallpaper = new Phaser.GameObjects.Sprite(
+			this.scene, 
+			this.background.x + (this.background.width / 2), 
+			this.background.y + (this.background.height / 2), 
+			"wallpaper");
 		this.positions = this.drawPositions();
 
-		this.add([this.background, ...this.positions]);
+		this.add([this.background, this.wallpaper, ...this.positions]);
 		this.movePositions();
 	}
 
