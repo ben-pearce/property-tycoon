@@ -65,5 +65,23 @@ function create() {
 		p.moveToPosition(newPos);
 		dice.requestRoll();
 	});
+
+	let hud = scene.add.existing(new Phaser.GameObjects.Rectangle(scene, 1300, 100, 300, 100, 0x000000, 0.5));
+	scene.add.existing(new Phaser.GameObjects.Sprite(scene, 1190, 90, "tokens", "cat"));
+	const textStyle = {
+		fontFamily: "Arial",
+		color: "#FFFFFF", 
+		fontSize: "30px"
+	};
+
+	const cashStyle = {
+		fontFamily: "Arial",
+		color: "#FFFFFF", 
+		fontSize: "10px"
+	};
+
+	let text = scene.add.existing(new Phaser.GameObjects.Text(scene, 1230, 60, "Player 1", textStyle));
+	let cash = scene.add.existing(new Phaser.GameObjects.Text(scene, 1230, 100, "Cash: $1500", cashStyle));
+	text.setStroke(0x000000, 3);
 }
 
