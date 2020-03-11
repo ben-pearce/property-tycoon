@@ -15,5 +15,8 @@ module.exports = {
 		"Purple": 0x6a0dad,
 		"Blue": 0x0d98ba,
 		"Red": 0xff0000
+	},
+	player: {
+		token: ["boot", "cat", "goblet", "hatstand", "smartphone"]
 	}
 };
