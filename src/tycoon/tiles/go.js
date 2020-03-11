@@ -1,6 +1,6 @@
-import Position from "./position";
+import Tile from "./tile";
 
-class Go extends Position {
+class Go extends Tile {
 	constructor(game, options) {
 		super(game, options);
 	}

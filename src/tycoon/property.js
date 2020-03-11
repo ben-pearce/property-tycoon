@@ -11,16 +11,16 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * 	- 3 houses
 	 * 	- 4 houses
 	 * 	- hotel
-	 * @param {Position} position The position this property belongs to
+	 * @param {Tile} tile The tile this property belongs to
 	 * @param {string} color The background color hex code
 	 */
-	constructor(position, color) {
-		super(position.scene, 
-			position.background.x, 
-			position.background.y, 
-			position.background.width, 
+	constructor(tile, color) {
+		super(tile.scene, 
+			tile.background.x, 
+			tile.background.y, 
+			tile.background.width, 
 			20, color);
-		this.position = position;
+		this.tile = tile;
 
 		this.setStrokeStyle(3, 0x00000);
 		this.setOrigin(0);

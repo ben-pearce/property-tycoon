@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import BoardConfig from "../positions";
+import BoardConfig from "../tiles";
 import GeneralConfig from "../general";
-import Position from "./positions/position";
+import Tile from "./tiles/tile";
 
 
 class Board extends Phaser.GameObjects.Container {
@@ -22,10 +22,10 @@ class Board extends Phaser.GameObjects.Container {
 
 		this.background = new Phaser.GameObjects.Rectangle(
 			this.scene, 
-			GeneralConfig.positions.height,
-			GeneralConfig.positions.height, 
-			GeneralConfig.positions.width*(this.dimension-1), 
-			GeneralConfig.positions.width*(this.dimension-1), 
+			GeneralConfig.tiles.height,
+			GeneralConfig.tiles.height, 
+			GeneralConfig.tiles.width*(this.dimension-1), 
+			GeneralConfig.tiles.width*(this.dimension-1), 
 			GeneralConfig.board.color);
 		this.background.setOrigin(0);
 		
@@ -34,52 +34,48 @@ class Board extends Phaser.GameObjects.Container {
 			this.background.x + (this.background.width / 2), 
 			this.background.y + (this.background.height / 2), 
 			"wallpaper");
-		this.positions = this.drawPositions();
+		this.tiles = this.drawTiles();
 
-		this.add([this.background, this.wallpaper, ...this.positions]);
-		this.movePositions();
+		this.add([this.background, this.wallpaper, ...this.tiles]);
+		this.moveTiles();
 	}
 
 	/**
-	 * This methods creates an array of positions
+	 * This methods creates an array of tiles
 	 * and returns them.
 	 * 
 	 * It will also pass in the configuration for that
-	 * position (i.e. what type of position is it? is it a corner peice? etc).
+	 * tile (i.e. what type of tile is it? is it a corner peice? etc).
 	 * 
-	 * @returns {Position[]} The new array of position instances
+	 * @returns {Tile[]} The new array of tile instances
 	 */
-	drawPositions() {
-		const positions = [];
-		for(let pos in BoardConfig) {
-			let positionConfig = BoardConfig[pos];
-			let position = new Position(this, 
-				positionConfig.name,
-				positionConfig.buy,
-				pos % this.dimension == 0,
-				positionConfig.group);
-			positions.push(position);
+	drawTiles() {
+		const tiles = [];
+		for(let tile in BoardConfig) {
+			let tileConfig = BoardConfig[tile];
+			let t = new Tile(this, tileConfig);
+			tiles.push(t);
 		}
-		return positions;
+		return tiles;
 	}
 
 	/**
-	 * This method moves and rotates all the positions to construct
+	 * This method moves and rotates all the tiles to construct
 	 * the board.
 	 * 
 	 * It works around the board from bottom right anti-clockwise.
 	 */
-	movePositions() { 
-		const posHeight = GeneralConfig.positions.height;
-		const posWidth = GeneralConfig.positions.width;
+	moveTiles() { 
+		const tileHeight = GeneralConfig.tiles.height;
+		const tileWidth = GeneralConfig.tiles.width;
 		for(let i = 0; i < this.dimension; i++) {
-			this.positions[i].setPosition(posWidth*(9-i) + posHeight, posWidth*(this.dimension-1) + posHeight);
-			this.positions[i+this.dimension].setAngle(90);
-			this.positions[i+this.dimension].setPosition(posHeight, posWidth*((this.dimension-1)-i) + posHeight);
-			this.positions[i+this.dimension*2].setAngle(180);
-			this.positions[i+this.dimension*2].setPosition(posHeight + posWidth*i, posHeight);
-			this.positions[i+this.dimension*3].setAngle(270);
-			this.positions[i+this.dimension*3].setPosition(posHeight + posWidth*(this.dimension-1), posHeight + posWidth*i);
+			this.tiles[i].setPosition(tileWidth*(9-i) + tileHeight, tileWidth*(this.dimension-1) + tileHeight);
+			this.tiles[i+this.dimension].setAngle(90);
+			this.tiles[i+this.dimension].setPosition(tileHeight, tileWidth*((this.dimension-1)-i) + tileHeight);
+			this.tiles[i+this.dimension*2].setAngle(180);
+			this.tiles[i+this.dimension*2].setPosition(tileHeight + tileWidth*i, tileHeight);
+			this.tiles[i+this.dimension*3].setAngle(270);
+			this.tiles[i+this.dimension*3].setPosition(tileHeight + tileWidth*(this.dimension-1), tileHeight + tileWidth*i);
 		}
 	}
 }

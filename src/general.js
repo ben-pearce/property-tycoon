@@ -1,5 +1,5 @@
 module.exports = {
-	positions: {
+	tiles: {
 		height: 100,
 		width: 60
 	},
