@@ -6,16 +6,12 @@ import Tile from "./tiles/tile";
 
 class Board extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents our game "board". It will contain
-	 * all of the player tokens, positions, dice and cards.
+	 * This class represents our game "board".
 	 * 
-	 * @param {Phaser.Game} game Phaser game engine
-	 * @param {Phaser.Scene} scene Phaser scene to draw board onto
-	 * @param {integer} x 
-	 * @param {integer} y 
+	 * @param {GameManager} game Game manager this board belongs to.
 	 */
-	constructor(game, scene, x, y) {
-		super(scene, x, y);
+	constructor(game) {
+		super(game.scene, 0, 0);
 
 		this.game = game;
 		this.dimension = BoardConfig.length / 4;
