@@ -3,29 +3,28 @@ import Property from "../property";
 import GeneralConfig from "../../general";
 
 
-class Position extends Phaser.GameObjects.Container {
+class Tile extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a position on the board. 
+	 * This class represents a tile on the board. 
 	 * 
 	 * This class will not be used alone, there will be classes
 	 * that inherit this class to give further functionality (i.e. Jail, Station etc).
 	 * 
-	 * @param {Board} board The board object this belongs to
-	 * @param {string} name 
-	 * @param {boolean} buyable 
-	 * @param {boolean} isCorner 
-	 * @param {string} group 
+	 * @param {Board} board The board object this belongs to.
+	 * @param {Object} config Configuration options for this tile.
 	 */
-	constructor(board, name, buyable=true, isCorner=false, group=null) {
+	constructor(board, config) {
 		super(board.scene, 0, 0);
 
 		this.board = board;
 		this.game = board.game;
+		this.id = config.id;
+
 		this.background = new Phaser.GameObjects.Rectangle(
 			board.scene, 
 			this.x, this.y, 
-			isCorner ? GeneralConfig.positions.height : GeneralConfig.positions.width, 
-			GeneralConfig.positions.height, 
+			(config.id % 10 == 0) ? GeneralConfig.tiles.height : GeneralConfig.tiles.width, 
+			GeneralConfig.tiles.height, 
 			GeneralConfig.board.color);
 
 		const textStyle = {
@@ -37,17 +36,19 @@ class Position extends Phaser.GameObjects.Container {
 			wordWrap: {width: this.background.width, useAdvancedWrap: true}
 		};
 
-		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y+25, name, textStyle);
+		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, textStyle);
 		this.background.setStrokeStyle(3, 0x000000);
 		this.background.setOrigin(0);
 		this.text.setOrigin(0);
 		this.add([this.background, this.text]);
 
-		if(buyable && group != "Utilities" && group != "Station") {
-			const color = GeneralConfig.groups[group];
+		if(config.buy && config.group != "Utilities" && config.group != "Station") {
+			const color = GeneralConfig.groups[config.group];
 			this.property = new Property(this, color);
 			this.add(this.property);
 		}
+
+		this.players = [];
 	}
 
 	/**
@@ -74,6 +75,19 @@ class Position extends Phaser.GameObjects.Container {
 
 		return [x, y];
 	}
+
+	onPassed(player) {
+		console.log(player, "passed", this);
+	}
+
+	onLanded(player) {
+		console.log(player, "landed", this);
+		
+		this.players.push(player);
+
+		const index = player.tile.players.indexOf(player);
+		player.tile.players.splice(index, 1);
+	}
 }
 
-export default Position;
+export default Tile;
