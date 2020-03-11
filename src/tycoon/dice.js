@@ -161,6 +161,7 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceTwoSprite.setPosition(0, 0);
 
 		this.rollSprite.setScale(1);
+		this.scene.children.bringToTop(this.rollSprite);
 	}
 }
 
