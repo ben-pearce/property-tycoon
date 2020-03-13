@@ -19,21 +19,12 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	/**
-	 * Sets a players tile.
-	 * 
-	 * @param {Tile} tile The tile the player has moved to.
-	 */
-	setTile(tile) {
-		this.tile = tile;
-	}
-
-	/**
 	 * Instantly (without tweening) moves a player to a tile on the board.
 	 * 
 	 * @param {Tile} tile The tile to move to.
 	 */
 	teleportToTile(tile) {
-		this.setTile(tile);
+		tile.onLanded(this);
 		this.setPosition(...tile.getPlayerXY());
 	}
 
@@ -63,12 +54,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		timeline.setCallback("onComplete", () => {
-			this.tile.onLanded(this);
+			tile.onLanded(this);
 			callback();
 		});
 		timeline.play();
-
-		this.setTile(tile);
 	}
 
 	/**
