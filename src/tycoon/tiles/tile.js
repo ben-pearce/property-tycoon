@@ -54,23 +54,52 @@ class Tile extends Phaser.GameObjects.Container {
 	/**
 	 * Returns an X,Y coord for a player to be moved
 	 * to.
+	 * 
+	 * posRange indicates a variance to add or subtract from the
+	 * XY coords so that player tokens don't just sit on top of
+	 * eachother.
+	 * 
+	 * i.e. One entry in posRange is a positive or negative percentage
+	 * to be added to the tile dimensions.
+	 * 
+	 * 	[+/-x%, +/-y%]
+	 * 
+	 * If there is already a player on the tile, this function also
+	 * introduces some random variance in the coordiantes to make
+	 * the movement seem more natural.
 	 */
 	getPlayerXY() {
 		let x = this.board.x + this.x;
 		let y = this.board.y + this.y;
 
+		let posRange = [
+			[0, 0],
+			[0, -0.25],
+			[0, +0.25],
+			[-0.25, -0.15],
+			[-0.25, +0.15],
+			[+0.25, 0]
+		];
+
+		let [varX, varY] = posRange[this.players.length];
+
+		if(this.players.length > 0) {
+			varX += Math.random() * (0.1) - 0.05;
+			varY += Math.random() * (0.1) - 0.05;			
+		}
+
 		if(this.angle == 0) {
-			x += (this.background.width / 2);
-			y += (this.background.height / 2);
+			x += (this.background.width / 2) + (this.background.width * varX);
+			y += (this.background.height / 2) + (this.background.height * varY);
 		} else if(this.angle == 90) {
-			x -= (this.background.height / 2);
-			y += (this.background.width / 2);
+			x -= (this.background.height / 2) - (this.background.height * varY);
+			y += (this.background.width / 2) + (this.background.width * varX);
 		} else if(this.angle == -180) {
-			x -= (this.background.width / 2);
-			y -= (this.background.height / 2);
+			x -= (this.background.width / 2) - (this.background.width * varX);
+			y -= (this.background.height / 2) - (this.background.height * varY);
 		} else if(this.angle == -90) {
-			x += (this.background.height / 2);
-			y -= (this.background.width / 2);
+			x += (this.background.height / 2) + (this.background.height * varY);
+			y -= (this.background.width / 2) - (this.background.width * varX);
 		}
 
 		return [x, y];
