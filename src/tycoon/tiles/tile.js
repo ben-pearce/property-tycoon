@@ -85,8 +85,12 @@ class Tile extends Phaser.GameObjects.Container {
 		
 		this.players.push(player);
 
-		const index = player.tile.players.indexOf(player);
-		player.tile.players.splice(index, 1);
+		if(player.tile !== null) {
+			const index = player.tile.players.indexOf(player);
+			player.tile.players.splice(index, 1);
+		}
+
+		player.tile = this;
 	}
 }
 
