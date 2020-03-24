@@ -1,32 +1,87 @@
 import Phaser from "phaser";
+import GeneralConfig from "../general";
 
 
 class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * This class represents a player.
-	 * @param {Board} board The board this player belongs to.
+	 * @param {GameManager} game The game this player belongs to.
 	 */
-	constructor(board) {
-		super(board.scene, 0, 0, "tokens", "cat");
-		this.board = board;
-		this.scene = board.scene;
-		this.position = 0;
+	constructor(game, id) {
+		super(game.scene, 0, 0, "tokens", GeneralConfig.player.token[id]);
+
+		this.id = id;
+		this.game = game;
+		this.scene = game.scene;
+		this.tile = null;
 
 		this.scene.add.existing(this);
 	}
 
 	/**
-	 * Moves a player to a new position on the board.
+	 * Instantly (without tweening) moves a player to a tile on the board.
 	 * 
-	 * TODO:Definitely use tweening here!
-	 * 
-	 * @param {Integer} pos The position index to move to
+	 * @param {Tile} tile The tile to move to.
 	 */
-	moveToPosition(pos) {
-		this.position = pos;
-		let position = this.board.positions[pos];
-		let newPos = position.getPlayerXY();
-		this.setPosition(...newPos);
+	teleportToTile(tile) {
+		tile.onLanded(this);
+		this.setPosition(...tile.getPlayerXY());
+	}
+
+	/**
+	 * Moves and animates a player to a new tile on the board.
+	 * 
+	 * Once animation is complete callback is invoked.
+	 * 
+	 * @param {Tile} tile The tile to move to.
+	 * @param {Callable} callback The callback to invoke after animation completes.
+	 * @param {Integer} direction The direction to move around the board i.e. +1 = forwards 1 step, -1 = backwards 1 step.
+	 */
+	moveToTile(tile, callback, direction=1) {
+		let timeline = this.scene.tweens.createTimeline();
+		let length = this.game.board.tiles.length;
+
+		for(let i = (this.tile.id + direction) % length; i - direction != tile.id; i = (i + direction) % length) {
+			let tempTile = this.game.board.tiles[i];
+			let [x, y] = tempTile.getPlayerXY();
+
+			timeline.add({
+				targets: this,
+				ease: "Cubic.easeOut", 
+				x: x, y: y,
+				onComplete: () => tempTile.onPassed(this)
+			});
+		}
+
+		timeline.setCallback("onComplete", () => {
+			tile.onLanded(this);
+			callback();
+		});
+		timeline.play();
+	}
+
+	/**
+	 * Wrapper function for moving player forward n tiles.
+	 * 
+	 * @param {Integer} steps Steps to move forward.
+	 * @param {Callable} callback The callback to invoke after animation completes.
+	 */
+	moveForwards(steps, callback) {
+		let newTileIndex = (this.tile.id + steps) % this.game.board.tiles.length;
+		let newTile = this.game.board.tiles[newTileIndex];
+		this.moveToTile(newTile, callback);
+	}
+
+	/**
+	 * Wrapper function for moving player backward n tiles.
+	 * 
+	 * @param {Integer} steps Steps to move backward.
+	 * @param {Callable} callback The callback to invoke after animation completes.
+	 */
+	moveBackwards(steps, callback) {
+		let newTileIndex = (this.tile.id - steps) % this.game.board.tiles.length;
+		let newTile = this.game.board.tiles[newTileIndex];
+		this.moveToTile(newTile, callback, -1);
 	}
 }
 

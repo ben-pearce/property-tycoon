@@ -1,26 +1,26 @@
-import Go from "./tycoon/positions/go";
-import Jail from "./tycoon/positions/jail";
+import Go from "./tycoon/tiles/go";
+import Jail from "./tycoon/tiles/jail";
 
-import Opportunity from "./tycoon/positions/opportunity";
-import Luck from "./tycoon/positions/luck";
+import Opportunity from "./tycoon/tiles/opportunity";
+import Luck from "./tycoon/tiles/luck";
 
-import Parking from "./tycoon/positions/parking";
-import Tax from "./tycoon/positions/tax";
+import Parking from "./tycoon/tiles/parking";
+import Tax from "./tycoon/tiles/tax";
 
-import Rentable from "./tycoon/positions/rentable";
-import Station from "./tycoon/positions/station";
-import Utility from "./tycoon/positions/utility";
+import Rentable from "./tycoon/tiles/rentable";
+import Station from "./tycoon/tiles/station";
+import Utility from "./tycoon/tiles/utility";
 
 export default [
 	{
-		id: 1,
+		id: 0,
 		name: "Go",
 		buy: false,
 		action: "Collect \u00a3200",
 		type: Go
 	},
 	{
-		id: 2,
+		id: 1,
 		name: "Crapper Street",
 		buy: true,
 		group: "Brown",
@@ -29,14 +29,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 3,
+		id: 2,
 		name: "Pot Luck",
 		buy: false,
 		action: "Take card",
 		type: Luck
 	},
 	{
-		id: 4,
+		id: 3,
 		name: "Gangsters Paradise",
 		buy: true,
 		group: "Brown",
@@ -45,14 +45,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 5,
+		id: 4,
 		name: "Income Tax",
 		buy: false,
 		action: "Pay \u00a3200",
 		type: Tax
 	},
 	{
-		id: 6,
+		id: 5,
 		name: "Brighton Station",
 		buy: true,
 		group: "Station",
@@ -60,7 +60,7 @@ export default [
 		type: Station
 	},
 	{
-		id: 7,
+		id: 6,
 		name: "Weeping Angel",
 		buy: true,
 		group: "Blue",
@@ -69,14 +69,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 8,
+		id: 7,
 		name: "Opportunity Knocks",
 		buy: false,
 		action: "Take card",
 		type: Opportunity
 	},
 	{
-		id: 9,
+		id: 8,
 		name: "Potts Avenue",
 		buy: true,
 		group: "Blue",
@@ -85,7 +85,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 10,
+		id: 9,
 		name: "Nardole Drive",
 		buy: true,
 		group: "Blue",
@@ -94,14 +94,14 @@ export default [
 		type: Rentable,
 	},
 	{
-		id: 11,
+		id: 10,
 		name: "Jail/Just visiting",
 		buy: false,
 		action: "",
 		type: Jail
 	},
 	{
-		id: 12,
+		id: 11,
 		name: "Skywalker Drive",
 		buy: true,
 		group: "Purple",
@@ -110,7 +110,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 13,
+		id: 12,
 		name: "Tesla Power Co",
 		buy: true,
 		group: "Utilities",
@@ -118,7 +118,7 @@ export default [
 		type: Utility
 	},
 	{
-		id: 14,
+		id: 13,
 		name: "Wookie Hole",
 		buy: true,
 		group: "Purple",
@@ -127,7 +127,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 15,
+		id: 14,
 		name: "Rey Lane",
 		buy: true,
 		group: "Purple",
@@ -136,7 +136,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 16,
+		id: 15,
 		name: "Hove Station",
 		buy: true,
 		group: "Station",
@@ -144,7 +144,7 @@ export default [
 		type: Station
 	},
 	{
-		id: 17,
+		id: 16,
 		name: "Cooper Drive",
 		buy: true,
 		group: "Orange",
@@ -153,14 +153,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 18,
+		id: 17,
 		name: "Pot Luck",
 		buy: false,
 		action: "Take card",
 		type: Luck
 	},
 	{
-		id: 19,
+		id: 18,
 		name: "Wolowitz Street",
 		buy: true,
 		group: "Orange",
@@ -169,7 +169,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 20,
+		id: 19,
 		name: "Penny Lane",
 		buy: true,
 		group: "Orange",
@@ -178,14 +178,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 21,
+		id: 20,
 		name: "Free Parking",
 		buy: false,
 		action: "Collect fines",
 		type: Parking
 	},
 	{
-		id: 22,
+		id: 21,
 		name: "Yue Fei Square",
 		buy: true,
 		group: "Red",
@@ -194,14 +194,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 23,
+		id: 22,
 		name: "Opportunity Knocks",
 		buy: false,
 		action: "Take card",
 		type: Opportunity
 	},
 	{
-		id: 24,
+		id: 23,
 		name: "Mulan Rouge",
 		buy: true,
 		group: "Red",
@@ -210,7 +210,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 25,
+		id: 24,
 		name: "Han Xin Gardens",
 		buy: true,
 		group: "Red",
@@ -219,7 +219,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 26,
+		id: 25,
 		name: "Falmer Station",
 		buy: true,
 		group: "Station",
@@ -227,7 +227,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 27,
+		id: 26,
 		name: "Kirk Close",
 		buy: true,
 		group: "Yellow",
@@ -236,7 +236,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 28,
+		id: 27,
 		name: "Picard Avenue",
 		buy: true,
 		group: "Yellow",
@@ -245,7 +245,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 29,
+		id: 28,
 		name: "Edison Water",
 		buy: true,
 		group: "Utilities",
@@ -253,7 +253,7 @@ export default [
 		type: Utility
 	},
 	{
-		id: 30,
+		id: 29,
 		name: "Crusher Creek",
 		buy: true,
 		group: "Yellow",
@@ -262,14 +262,14 @@ export default [
 		type: Utility
 	},
 	{
-		id: 31,
+		id: 30,
 		name: "Go to Jail",
 		buy: false,
 		action: "",
 		type: Jail
 	},
 	{
-		id: 32,
+		id: 31,
 		name: "Sirat Mews",
 		buy: true,
 		group: "Green",
@@ -278,7 +278,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 33,
+		id: 32,
 		name: "Ghengis Crescent",
 		buy: true,
 		group: "Green",
@@ -287,14 +287,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 34,
+		id: 33,
 		name: "Pot Luck",
 		buy: false,
 		action: "Take card",
 		type: Luck
 	},
 	{
-		id: 35,
+		id: 34,
 		name: "Ibis Close",
 		buy: true,
 		group: "Green",
@@ -303,7 +303,7 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 36,
+		id: 35,
 		name: "Lewes Station",
 		buy: true,
 		group: "Station",
@@ -311,14 +311,14 @@ export default [
 		type: Station
 	},
 	{
-		id: 37,
+		id: 36,
 		name: "Opportunity Knocks",
 		buy: false,
 		action: "",
 		type: Opportunity
 	},
 	{
-		id: 38,
+		id: 37,
 		name: "Hawking Way",
 		buy: true,
 		group: "Deep blue",
@@ -327,14 +327,14 @@ export default [
 		type: Rentable
 	},
 	{
-		id: 39,
+		id: 38,
 		name: "Super Tax",
 		buy: false,
 		action: "Pay \u00a3100",
 		type: Tax
 	},
 	{
-		id: 40,
+		id: 39,
 		name: "Turing Heights",
 		buy: true,
 		group: "Deep blue",

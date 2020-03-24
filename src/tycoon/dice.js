@@ -24,13 +24,13 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * dice.result always stores the latest result but does not
 	 * update until the dice have landed!
 	 * 
-	 * @param {Board} board The board the Dice belongs to
+	 * @param {GameManager} game The game manager the Dice belongs to.
 	 */
-	constructor(board) {
+	constructor(game) {
 		super();
 
-		this.board = board;
-		this.scene = board.scene;
+		this.game = game;
+		this.scene = game.scene;
 
 		this.result = (null, null);
 
@@ -105,10 +105,10 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceOneSprite.setPosition(pointer.x, pointer.y);
 		this.diceTwoSprite.setPosition(pointer.x, pointer.y);
 
-		let minx = this.board.x + this.board.background.x;
-		let miny = this.board.y + this.board.background.y;
-		let maxx = this.board.x + this.board.background.x + this.board.background.width;
-		let maxy = this.board.y + this.board.background.y + this.board.background.height;
+		let minx = this.game.board.x + this.game.board.background.x;
+		let miny = this.game.board.y + this.game.board.background.y;
+		let maxx = this.game.board.x + this.game.board.background.x + this.game.board.background.width;
+		let maxy = this.game.board.y + this.game.board.background.y + this.game.board.background.height;
 
 		this.scene.tweens.add({
 			targets: this.diceOneSprite,
@@ -161,6 +161,7 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceTwoSprite.setPosition(0, 0);
 
 		this.rollSprite.setScale(1);
+		this.scene.children.bringToTop(this.rollSprite);
 	}
 }
 
