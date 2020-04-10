@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import BoardConfig from "../tiles";
 import GeneralConfig from "../general";
-import Tile from "./tiles/tile";
 
 
 class Board extends Phaser.GameObjects.Container {
@@ -55,7 +54,8 @@ class Board extends Phaser.GameObjects.Container {
 		const tiles = [];
 		for(let tile in BoardConfig) {
 			let tileConfig = BoardConfig[tile];
-			let t = new Tile(this, tileConfig);
+			let tileClass = tileConfig.type;
+			let t = new tileClass(this, tileConfig);
 			tiles.push(t);
 		}
 		return tiles;
