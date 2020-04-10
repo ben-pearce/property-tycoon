@@ -1,132 +1,177 @@
+import AllPlayersPayPlayer from "./tycoon/actions/allPlayersPayPlayer";
+import BankPayPlayer from "./tycoon/actions/bankPayPlayer";
+import FineOrOpportunity from "./tycoon/actions/fineOrOpportunity";
+import GetOutOfJail from "./tycoon/actions/getOutOfJail";
+import PlayerGoToJail from "./tycoon/actions/playerGoToJail";
+import PlayerMove from "./tycoon/actions/playerMove";
+import PlayerMoveToTile from "./tycoon/actions/playerMoveToTile";
+import PlayerPayBank from "./tycoon/actions/playerPayBank";
+import PlayerPayFine from "./tycoon/actions/playerPayFine";
+import PlayerPayRepair from "./tycoon/actions/playerPayRepair";
+
+
 module.exports = {
 	potluck: [
 		{
-			"name": "You inherit \u00a3100",
-			"action": "Bank pays player \u00a3100"
+			"name": "You inherit £100",
+			"description": "Bank pays player £100",
+			"action": BankPayPlayer(100)
 		},
 		{
-			"name": "You have won 2nd prize in a beauty contest, collect \u00a320",
-			"action": "Bank pays player \u00a320"
+			"name": "You have won 2nd prize in a beauty contest, collect £20",
+			"description": "Bank pays player £20",
+			"action": BankPayPlayer(20)
 		},
 		{
 			"name": "Go back to Crapper Street",
-			"action": "Player token moves backwards to Crapper Street"
+			"description": "Player token moves backwards to Crapper Street",
+			"action": PlayerMoveToTile(1, -1)
 		},
 		{
-			"name": "Student loan refund. Collect \u00a320",
-			"action": "Bank pays player \u00a320"
+			"name": "Student loan refund. Collect £20",
+			"description": "Bank pays player £20",
+			"action": BankPayPlayer(20)
 		},
 		{
-			"name": "Bank error in your favour. Collect \u00a3200",
-			"action": "Bank pays player \u00a3200"
+			"name": "Bank error in your favour. Collect £200",
+			"description": "Bank pays player £200",
+			"action": BankPayPlayer(200)
 		},
 		{
-			"name": "Pay bill for text books of \u00a3100",
-			"action": "Player pays \u00a3100 to the bank"
+			"name": "Pay bill for text books of £100",
+			"description": "Player pays £100 to the bank",
+			"action": PlayerPayBank(100)
 		},
 		{
-			"name": "Mega late night taxi bill pay \u00a350",
-			"action": "Player pays \u00a350 to the bank"
+			"name": "Mega late night taxi bill pay £50",
+			"description": "Player pays £50 to the bank",
+			"action": PlayerPayBank(50)
 		},
 		{
 			"name": "Advance to go",
-			"action": "Player moves forwards to GO"
+			"description": "Player moves forwards to GO",
+			"action": PlayerMoveToTile(0)
 		},
 		{
-			"name": "From sale of Bitcoin you get \u00a350",
-			"action": "Bank pays player \u00a350"
+			"name": "From sale of Bitcoin you get £50",
+			"description": "Bank pays player £50",
+			"action": BankPayPlayer(50)
 		},
 		{
-			"name": "Pay a \u00a310 fine or take opportunity knocks",
-			"action": "If fine paid, player puts \u00a310 on free parking"
+			"name": "Pay a £10 fine or take opportunity knocks",
+			"description": "If fine paid, player puts £10 on free parking",
+			"action": FineOrOpportunity(10)
 		},
 		{
-			"name": "Pay insurance fee of \u00a350",
-			"action": "Player puts \u00a350 on free parking"
+			"name": "Pay insurance fee of £50",
+			"description": "Player puts £50 on free parking",
+			"action": PlayerPayFine(50)
 		},
 		{
-			"name": "Savings bond matures, collect \u00a3100",
-			"action": "Bank pays \u00a3100 to the player"
+			"name": "Savings bond matures, collect £100",
+			"description": "Bank pays £100 to the player",
+			"action": BankPayPlayer(100)
 		},
 		{
-			"name": "Go to jail. Do not pass GO, do not collect \u00a3200",
-			"action": "As the card says"
+			"name": "Go to jail. Do not pass GO, do not collect £200",
+			"description": "As the card says",
+			"action": PlayerGoToJail()
 		},
 		{
-			"name": "Received interest on shares of \u00a325",
-			"action": "Bank pays player \u00a325"
+			"name": "Received interest on shares of £25",
+			"description": "Bank pays player £25",
+			"action": BankPayPlayer(25)
 		},
 		{
-			"name": "It's your birthday. Collect \u00a310 from each player",
-			"action": "Player receives \u00a310 from each player"
+			"name": "It's your birthday. Collect £10 from each player",
+			"description": "Player receives £10 from each player",
+			"action": AllPlayersPayPlayer(10)
 		},
 		{
 			"name": "Get out of jail free",
-			"action": "Retained by the player until needed. No resale or trade value"
+			"description": "Retained by the player until needed. No resale or trade value",
+			"action": GetOutOfJail()
 		}],
 	opportunity: [
 		{
-			"name": "Bank pays you divided of \u00a350",
-			"action": "Bank pays player \u00a350"
+			"name": "Bank pays you divided of £50",
+			"description": "Bank pays player £50",
+			"action": BankPayPlayer(50)
 		},
 		{
-			"name": "You have won a lip sync battle. Collect \u00a3100",
-			"action": "Bank pays player \u00a3100"
+			"name": "You have won a lip sync battle. Collect £100",
+			"description": "Bank pays player £100",
+			"action": BankPayPlayer(100)
 		},
 		{
 			"name": "Advance to Turing Heights",
-			"action": "Player token moves forwards to Turing Heights"
+			"description": "Player token moves forwards to Turing Heights",
+			"action": PlayerMoveToTile(39)
 		},
 		{
-			"name": "Advance to Han Xin Gardens. If you pass GO, collect \u00a3200",
-			"action": "Player moves token"
+			"name": "Advance to Han Xin Gardens. If you pass GO, collect £200",
+			"description": "Player moves token",
+			"action": PlayerMoveToTile(24)
 		},
 		{
-			"name": "Fined \u00a315 for speeding",
-			"action": "Player puts \u00a315 on free parking"
+			"name": "Fined £15 for speeding",
+			"description": "Player puts £15 on free parking",
+			"action": PlayerPayFine(15)
 		},
 		{
-			"name": "Pay university fees of \u00a3150",
-			"action": "Player pays \u00a3150 to the bank"
+			"name": "Pay university fees of £150",
+			"description": "Player pays £150 to the bank",
+			"action": PlayerPayBank(150)
+	
 		},
 		{
-			"name": "Take a trip to Hove station. If you pass GO collect \u00a3200",
-			"action": "Player moves token"
+			"name": "Take a trip to Hove station. If you pass GO collect £200",
+			"description": "Player moves token",
+			"action": PlayerMoveToTile(15)
 		},
 		{
-			"name": "Loan matures, collect \u00a3150",
-			"action": "Bank pays \u00a3150 to the player"
+			"name": "Loan matures, collect £150",
+			"description": "Bank pays £150 to the player",
+			"action": BankPayPlayer(150)
 		},
 		{
-			"name": "You are assessed for repairs, \u00a340/house, \u00a3115/hotel",
-			"action": "Player pays money to the bank"
+			"name": "You are assessed for repairs, £40/house, £115/hotel",
+			"description": "Player pays money to the bank",
+			"action": PlayerPayRepair(40, 115)
 		},
 		{
 			"name": "Advance to GO",
-			"action": "Player moves token"
+			"description": "Player moves token",
+			"action": PlayerMoveToTile(0)
 		},
 		{
-			"name": "You are assessed for repairs, \u00a325/house, \u00a3100/hotel",
-			"action": "Player pays money to the bank"
+			"name": "You are assessed for repairs, £25/house, £100/hotel",
+			"description": "Player pays money to the bank",
+			"action": PlayerPayRepair(25, 100)
 		},
 		{
 			"name": "Go back 3 spaces",
-			"action": "Player moves token"
+			"description": "Player moves token",
+			"action": PlayerMove(3, -1)
 		},
 		{
-			"name": "Advance to Skywalker Drive. If you pass GO collect \u00a3200",
-			"action": "Player moves token"
+			"name": "Advance to Skywalker Drive. If you pass GO collect £200",
+			"description": "Player moves token",
+			"action": PlayerMoveToTile(11)
 		},
 		{
-			"name": "Go to jail. Do not pass GO, do not collect \u00a3200",
-			"action": "As the card says"
+			"name": "Go to jail. Do not pass GO, do not collect £200",
+			"description": "As the card says",
+			"action": PlayerGoToJail()
 		},
 		{
-			"name": "Drunk in charge of a skateboard. Fine \u00a320",
-			"action": "Player puts \u00a320 on free parking"
+			"name": "Drunk in charge of a skateboard. Fine £20",
+			"description": "Player puts £20 on free parking",
+			"action": PlayerPayFine(20)
 		},
 		{
 			"name": "Get out of jail free",
-			"action": "Retained by the player until needed. No resale or trade value"
+			"description": "Retained by the player until needed. No resale or trade value",
+			"action": GetOutOfJail()
 		}]
 };
