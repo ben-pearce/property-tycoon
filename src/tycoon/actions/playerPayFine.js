@@ -1,16 +1,16 @@
 import BaseAction from "./action";
 
 
-class FineOrOpportunity extends BaseAction {
+class PlayerPayFine extends BaseAction {
 	constructor(fine) {
 		super();
 		this.fine = fine;
 	}
 
 	do(game, player) {
-		// ask player to pay this.fine or pick up opportunity card
+		// player places this.fine on free parking value
 		console.log(player);
 	}
 }
 
-export default FineOrOpportunity;
+export default PlayerPayFine;
