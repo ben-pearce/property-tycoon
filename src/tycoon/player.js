@@ -24,8 +24,8 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Tile} tile The tile to move to.
 	 */
 	teleportToTile(tile) {
-		tile.onLanded(this);
 		this.setPosition(...tile.getPlayerXY());
+		tile.onLanded(this);
 	}
 
 	/**
