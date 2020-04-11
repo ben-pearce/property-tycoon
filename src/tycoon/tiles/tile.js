@@ -38,6 +38,16 @@ class Tile extends Phaser.GameObjects.Container {
 		this.add([this.background, this.text]);
 
 		this.players = [];
+
+		this.posRange = [
+			[0, 0],
+			[0, -0.25],
+			[0, +0.25],
+			[-0.25, -0.15],
+			[-0.25, +0.15],
+			[+0.25, 0]
+		];
+
 	}
 
 	/**
@@ -61,16 +71,7 @@ class Tile extends Phaser.GameObjects.Container {
 		let x = this.board.x + this.x;
 		let y = this.board.y + this.y;
 
-		let posRange = [
-			[0, 0],
-			[0, -0.25],
-			[0, +0.25],
-			[-0.25, -0.15],
-			[-0.25, +0.15],
-			[+0.25, 0]
-		];
-
-		let [varX, varY] = posRange[this.players.length];
+		let [varX, varY] = this.posRange[this.players.length];
 
 		if(this.players.length > 0) {
 			varX += Math.random() * (0.1) - 0.05;
