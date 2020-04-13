@@ -1,6 +1,5 @@
-import Phaser from "phaser";
-
 import Board from "./board";
+import GameHud from "./gameHud";
 import Dice from "./dice";
 import Player from "./player";
 
@@ -34,26 +33,11 @@ class GameManager {
 			this.players.push(p);
 		}
 
+		this.hud = new GameHud(this);
+		this.scene.add.existing(this.hud);
+
 		this.dice.requestRoll();
 		this.dice.on("landed", this.playerRolled.bind(this));
-	
-		this.scene.add.existing(new Phaser.GameObjects.Rectangle(this.scene, 1300, 100, 300, 100, 0x000000, 0.5)); // hud
-		this.scene.add.existing(new Phaser.GameObjects.Sprite(this.scene, 1190, 90, "tokens", "cat"));
-		const textStyle = {
-			fontFamily: "Arial",
-			color: "#FFFFFF", 
-			fontSize: "30px"
-		};
-	
-		const cashStyle = {
-			fontFamily: "Arial",
-			color: "#FFFFFF", 
-			fontSize: "10px"
-		};
-	
-		let text = this.scene.add.existing(new Phaser.GameObjects.Text(this.scene, 1230, 60, "Player 1", textStyle));
-		this.scene.add.existing(new Phaser.GameObjects.Text(this.scene, 1230, 100, "Cash: $1500", cashStyle)); // cash
-		text.setStroke(0x000000, 3);
 	}
 
 	playerRolled(roll) {
