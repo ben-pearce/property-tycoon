@@ -7,6 +7,12 @@ class Jail extends Tile {
 
 		this.text.setVisible(false);
 
+		let graphic = new Phaser.GameObjects.Sprite(
+			this.scene, 
+			this.background.x + (this.background.width / 3), 
+			this.background.y + (this.background.height / 3), 
+			"tiles", "jail");
+
 		this.jailPlatform = new Phaser.GameObjects.Rectangle(
 			this.board.scene, 
 			this.x, this.y, 
@@ -15,7 +21,7 @@ class Jail extends Tile {
 		);
 		this.jailPlatform.setOrigin(0);
 		this.jailPlatform.setStrokeStyle(3, 0x000000);
-		this.add(this.jailPlatform);
+		this.add([this.jailPlatform, graphic]);
 	}
 
 	getPlayerJailXY() {
