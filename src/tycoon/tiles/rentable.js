@@ -8,7 +8,13 @@ class Rentable extends Purchasable {
 
 		const color = GeneralConfig.groups[options.group];
 		this.property = new Property(this, color);
-		this.add(this.property);
+		this.add([this.property, this.property.houseGraphic]);
+	}
+
+	onLanded(player) {
+		super.onLanded(player);
+
+		this.property.upgrade();
 	}
 }
 
