@@ -20,7 +20,7 @@ class GameManager {
 			(game.config.width / 2) - boardDimensions.width / 2, 
 			(game.config.height / 2) - boardDimensions.height / 2
 		);
-	
+
 		this.dice = new Dice(this);
 
 		this.players = [];
@@ -28,6 +28,7 @@ class GameManager {
 
 		for(let i = 0; i < playerCount; i++) {
 			let p = new Player(this, i);
+			p.deposit(1500);
 			p.teleportToTile(this.board.tiles[0]);
 
 			this.players.push(p);

@@ -13,9 +13,20 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.id = id;
 		this.game = game;
 		this.scene = game.scene;
+
+		this.cash = null;
 		this.tile = null;
 
 		this.scene.add.existing(this);
+	}
+
+	/**
+	 * Deposits some cash into player bank account.
+	 * 
+	 * @param {Integer} sum Amount of cash deposit.
+	 */
+	deposit(sum) {
+		this.cash += sum;
 	}
 
 	/**
