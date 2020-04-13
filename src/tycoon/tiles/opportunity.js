@@ -13,7 +13,7 @@ class Opportunity extends Tile {
 			this.scene, 
 			this.background.x + (this.background.width / 2), 
 			this.background.y + (this.background.height / 2) + 15, 
-			"tiles", "opportunity");
+			"tiles", options.graphic);
 		this.add(graphic);
 		
 	}
