@@ -29,15 +29,10 @@ class Board extends Phaser.GameObjects.Container {
 			this.background.x + (this.background.width / 2), 
 			this.background.y + (this.background.height / 2), 
 			"wallpaper");
-		let logo = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + 490, 
-			this.background.y + 490, 
-			"watson");
 
 		this.tiles = this.drawTiles();
 
-		this.add([this.background, this.wallpaper, logo, ...this.tiles]);
+		this.add([this.background, this.wallpaper, ...this.tiles]);
 		this.moveTiles();
 	}
 
