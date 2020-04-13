@@ -17,6 +17,7 @@ module.exports = {
 		"Red": 0xff0000
 	},
 	player: {
-		token: ["boot", "cat", "goblet", "hatstand", "smartphone"]
+		token: ["boot", "cat", "goblet", "hatstand", "smartphone"],
+		titles: ["Boot", "Cat", "Goblet", "Hatstand", "Smartphone"]
 	}
 };
