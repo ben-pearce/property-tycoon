@@ -12,7 +12,6 @@ const CashTextStyle = {
 	align: "center"
 };
 
-
 const CashUpdateStyle = {
 	fontFamily: "Arial",
 	fontStyle: "bold",
@@ -20,8 +19,22 @@ const CashUpdateStyle = {
 	align: "center"
 };
 
+const PlayerNameStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "30px"
+};
+
+const PlayerCashStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "15px"
+};
+
 export {
 	TileTextStyle,
 	CashTextStyle,
-	CashUpdateStyle
+	CashUpdateStyle,
+	PlayerNameStyle,
+	PlayerCashStyle
 };
