@@ -42,6 +42,7 @@ export default [
 	{
 		id: 4,
 		name: "Income Tax",
+		graphic: "tax",
 		cost: 100,
 		type: Tax
 	},
@@ -63,6 +64,7 @@ export default [
 	{
 		id: 7,
 		name: "Opportunity Knocks",
+		graphic: "opportunity",
 		type: Opportunity
 	},
 	{
@@ -97,7 +99,7 @@ export default [
 	{
 		id: 12,
 		name: "Tesla Power Co",
-		group: "Utilities",
+		graphic: "electric",
 		cost: 150,
 		type: Utility
 	},
@@ -169,6 +171,7 @@ export default [
 	{
 		id: 22,
 		name: "Opportunity Knocks",
+		graphic: "opportunity2",
 		type: Opportunity
 	},
 	{
@@ -213,8 +216,8 @@ export default [
 	{
 		id: 28,
 		name: "Edison Water",
-		group: "Utilities",
 		cost: 150,
+		graphic: "water",
 		type: Utility
 	},
 	{
@@ -269,6 +272,7 @@ export default [
 	{
 		id: 36,
 		name: "Opportunity Knocks",
+		graphic: "opportunity3",
 		type: Opportunity
 	},
 	{
@@ -282,6 +286,7 @@ export default [
 	{
 		id: 38,
 		name: "Super Tax",
+		graphic: "luxury",
 		cost: 200,
 		type: Tax
 	},
