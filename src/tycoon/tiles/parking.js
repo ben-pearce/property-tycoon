@@ -13,6 +13,20 @@ class Parking extends Tile {
 		
 		this.text.setVisible(false);
 		this.add(graphic);
+
+		this.cash = 0;
+	}
+
+	pay(fee) {
+		this.cash += fee;
+
+		this.emit("fee", fee);
+	}
+
+	collect() {
+		this.cash = 0;
+
+		this.emit("collect");
 	}
 
 	onLanded(player) {
