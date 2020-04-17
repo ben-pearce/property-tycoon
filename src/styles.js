@@ -31,10 +31,33 @@ const PlayerCashStyle = {
 	fontSize: "15px"
 };
 
+const BankCashStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "25px"
+};
+
+const TimerStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "50px",
+	align: "center"
+};
+
+const MenuStyle = {
+	fontFamily: "Arial",
+	color: "#000000", 
+	fontSize: "30px",
+};
+
+
 export {
 	TileTextStyle,
 	CashTextStyle,
 	CashUpdateStyle,
 	PlayerNameStyle,
-	PlayerCashStyle
+	PlayerCashStyle,
+	BankCashStyle,
+	TimerStyle,
+	MenuStyle
 };
