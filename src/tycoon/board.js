@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import BoardConfig from "../tiles";
-import GeneralConfig from "../general";
+import {Tiles} from "../constants";
 
 
 class Board extends Phaser.GameObjects.Container {
@@ -17,11 +17,11 @@ class Board extends Phaser.GameObjects.Container {
 
 		this.background = new Phaser.GameObjects.Rectangle(
 			this.scene, 
-			GeneralConfig.tiles.height,
-			GeneralConfig.tiles.height, 
-			GeneralConfig.tiles.width*(this.dimension-1), 
-			GeneralConfig.tiles.width*(this.dimension-1), 
-			GeneralConfig.board.color);
+			Tiles.HEIGHT,
+			Tiles.HEIGHT, 
+			Tiles.WIDTH*(this.dimension-1), 
+			Tiles.WIDTH*(this.dimension-1), 
+			Tiles.COLOR);
 		this.background.setOrigin(0);
 		
 		this.wallpaper = new Phaser.GameObjects.Sprite(
@@ -63,8 +63,8 @@ class Board extends Phaser.GameObjects.Container {
 	 * It works around the board from bottom right anti-clockwise.
 	 */
 	moveTiles() { 
-		const tileHeight = GeneralConfig.tiles.height;
-		const tileWidth = GeneralConfig.tiles.width;
+		const tileHeight = Tiles.HEIGHT;
+		const tileWidth = Tiles.WIDTH;
 		for(let i = 0; i < this.dimension; i++) {
 			this.tiles[i].setPosition(tileWidth*(9-i) + tileHeight, tileWidth*(this.dimension-1) + tileHeight);
 			this.tiles[i+this.dimension].setAngle(90);
