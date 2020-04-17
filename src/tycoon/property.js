@@ -53,6 +53,34 @@ class Property extends Phaser.GameObjects.Rectangle {
 	}
 
 	/**
+	 * This returns the upgrade value of the property.
+	 * 
+	 * Needed to calculate the total value of a property
+	 * after upgrades.
+	 * 
+	 * The value of the upgrades is calculated by multiplying
+	 * the original cost of the property it belongs to by the
+	 * number of upgrades made.
+	 * 
+	 * i.e.
+	 * Property original cost = £300
+	 * Upgraded to 2 houses = 2 * £300 = £600
+	 * Upgraded to hotel = 5 * £300 = £1500
+	 * 
+	 * (note this does NOT return the total value of the 
+	 * property, use Rentable.getValue() for that.)
+	 * 
+	 * @returns {Integer} The value of all the upgrades.
+	 */
+	getValue() {
+		let value = this.houses * this.tile.cost;
+		if(this.isHotel) {
+			return value + this.tile.cost;
+		}
+		return value;
+	}
+
+	/**
 	 * Called to upgrade the property to the next stage.
 	 * 
 	 * i.e. 
