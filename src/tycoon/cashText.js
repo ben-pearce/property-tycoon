@@ -1,24 +1,39 @@
 import Phaser from "phaser";
+import {CashUpdateStyle} from "../styles";
 
+/**
+ * A special animated text for when players earn
+ * and lose cash.
+ * 
+ * Text "floats up" from the target movieclip and then
+ * quickly fades away.
+ * 
+ * This will destroy itself after animation completes.
+ */
 class CashText extends Phaser.GameObjects.Text{
 
+	/**
+	 * Takes a target movieclip and integer cash value.
+	 * 
+	 * @param {Phaser.GameObjects.Sprite} target The target movieclip to float from.
+	 * @param {Integer} cash The cash value.
+	 */
 	constructor(target, cash) {
 		let sign = (cash > 0) ? "+" : "-";
 		let amount = Math.abs(cash);
 		let string = `Cash: ${sign}$${amount}`;
-
-		super(target.scene, target.x - target.width, target.y - target.height, string, {
-			fontFamily: "Arial",
-			fontStyle: "bold",
+		let style = Object.assign({
 			color: (cash > 0) ? "#008C00" : "#FF0000",
-			fontSize: "15px",
-			align: "center"
-		});
+		}, CashUpdateStyle);
+		super(target.scene, target.x - target.width, target.y - target.height, string, style);
 
 		this.target = target;
 		this.cash = cash;
 	}
 
+	/**
+	 * Call to start animation.
+	 */
 	play() {
 		let timeline = this.scene.tweens.createTimeline();
 

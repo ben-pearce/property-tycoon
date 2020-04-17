@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-import GeneralConfig from "../general";
-
+import {getTokenSpriteByPlayerId} from "./utils";
 
 class Player extends Phaser.GameObjects.Sprite {
 	/**
@@ -8,14 +7,36 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {GameManager} game The game this player belongs to.
 	 */
 	constructor(game, id) {
-		super(game.scene, 0, 0, "tokens", GeneralConfig.player.token[id]);
+		super(game.scene, 0, 0, "tokens", getTokenSpriteByPlayerId(id));
 
 		this.id = id;
 		this.game = game;
 		this.scene = game.scene;
-		this.tile = null;
 
-		this.scene.add.existing(this);
+		this.cash = null;
+		this.tile = null;
+	}
+
+	/**
+	 * Deposits some cash into player bank account.
+	 * 
+	 * @param {Integer} sum Amount of cash deposit.
+	 */
+	deposit(sum) {
+		this.cash += sum;
+
+		this.emit("deposit", sum);
+	}
+
+	/**
+	 * Withdraws some cash from player bank account.
+	 * 
+	 * @param {Integer} sum Amount of cash withdrawal.
+	 */
+	withdraw(sum) {
+		this.cash -= sum;
+
+		this.emit("withdraw", sum);
 	}
 
 	/**
@@ -24,8 +45,8 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Tile} tile The tile to move to.
 	 */
 	teleportToTile(tile) {
-		tile.onLanded(this);
 		this.setPosition(...tile.getPlayerXY());
+		tile.onLanded(this);
 	}
 
 	/**
@@ -41,7 +62,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		let timeline = this.scene.tweens.createTimeline();
 		let length = this.game.board.tiles.length;
 
-		for(let i = (this.tile.id + direction) % length; i - direction != tile.id; i = (i + direction) % length) {
+		for(let i = (this.tile.id + direction) % length; i != (tile.id + direction) % length; i = (i + direction) % length) {
 			let tempTile = this.game.board.tiles[i];
 			let [x, y] = tempTile.getPlayerXY();
 

@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import Property from "../property";
-import GeneralConfig from "../../general";
+import {Tiles} from "../../constants";
+import {TileTextStyle} from "../../styles";
 
 
 class Tile extends Phaser.GameObjects.Container {
@@ -23,32 +23,31 @@ class Tile extends Phaser.GameObjects.Container {
 		this.background = new Phaser.GameObjects.Rectangle(
 			board.scene, 
 			this.x, this.y, 
-			(config.id % 10 == 0) ? GeneralConfig.tiles.height : GeneralConfig.tiles.width, 
-			GeneralConfig.tiles.height, 
-			GeneralConfig.board.color);
-
-		const textStyle = {
-			fontFamily: "Sans",
-			color: "#000000", 
-			fontSize: "10px", 
-			align: "center", 
+			(config.id % 10 == 0) ? Tiles.HEIGHT : Tiles.WIDTH, 
+			Tiles.HEIGHT, 
+			Tiles.COLOR);
+		
+		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, TileTextStyle);
+		this.text.setStyle({
 			fixedWidth: this.background.width,
-			wordWrap: {width: this.background.width, useAdvancedWrap: true}
-		};
-
-		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, textStyle);
+			wordWrap: {width: this.background.width - 8, useAdvancedWrap: true}
+		});
 		this.background.setStrokeStyle(3, 0x000000);
 		this.background.setOrigin(0);
 		this.text.setOrigin(0);
 		this.add([this.background, this.text]);
 
-		if(config.buy && config.group != "Utilities" && config.group != "Station") {
-			const color = GeneralConfig.groups[config.group];
-			this.property = new Property(this, color);
-			this.add(this.property);
-		}
-
 		this.players = [];
+
+		this.posRange = [
+			[0, 0],
+			[0, -0.25],
+			[0, +0.25],
+			[-0.25, -0.15],
+			[-0.25, +0.15],
+			[+0.25, 0]
+		];
+
 	}
 
 	/**
@@ -72,16 +71,7 @@ class Tile extends Phaser.GameObjects.Container {
 		let x = this.board.x + this.x;
 		let y = this.board.y + this.y;
 
-		let posRange = [
-			[0, 0],
-			[0, -0.25],
-			[0, +0.25],
-			[-0.25, -0.15],
-			[-0.25, +0.15],
-			[+0.25, 0]
-		];
-
-		let [varX, varY] = posRange[this.players.length];
+		let [varX, varY] = this.posRange[this.players.length];
 
 		if(this.players.length > 0) {
 			varX += Math.random() * (0.1) - 0.05;
@@ -105,10 +95,29 @@ class Tile extends Phaser.GameObjects.Container {
 		return [x, y];
 	}
 
+	/**
+	 * This method is called when a player has "passed"
+	 * this tile, i.e. they have rolled the dice and need
+	 * to move past this tile to get to their target tile.
+	 * 
+	 * It is ALSO called when  the player lands on the target
+	 * tile. So when a player lands both `onPassed()` and 
+	 * `onLanded()` will be invoked.
+	 * 
+	 * @param {Player} player The player that passed the tile.
+	 */
 	onPassed(player) {
 		console.log(player, "passed", this);
 	}
 
+	/**
+	 * This method is called when a player has "landed"
+	 * on this tile, i.e. they have rolled the dice and this
+	 * tile is their target tile and player has finished
+	 * progressing to this tile.
+	 * 
+	 * @param {Player} player The player that landed on this tile.
+	 */
 	onLanded(player) {
 		console.log(player, "landed", this);
 		
