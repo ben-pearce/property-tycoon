@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-import GeneralConfig from "../general";
-
+import {getTokenSpriteByPlayerId} from "./utils";
 
 class Player extends Phaser.GameObjects.Sprite {
 	/**
@@ -8,7 +7,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {GameManager} game The game this player belongs to.
 	 */
 	constructor(game, id) {
-		super(game.scene, 0, 0, "tokens", GeneralConfig.player.token[id]);
+		super(game.scene, 0, 0, "tokens", getTokenSpriteByPlayerId(id));
 
 		this.id = id;
 		this.game = game;
@@ -16,8 +15,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.cash = null;
 		this.tile = null;
-
-		this.scene.add.existing(this);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import GeneralConfig from "../../general";
+import {Tiles} from "../../constants";
 import {TileTextStyle} from "../../styles";
 
 
@@ -23,9 +23,9 @@ class Tile extends Phaser.GameObjects.Container {
 		this.background = new Phaser.GameObjects.Rectangle(
 			board.scene, 
 			this.x, this.y, 
-			(config.id % 10 == 0) ? GeneralConfig.tiles.height : GeneralConfig.tiles.width, 
-			GeneralConfig.tiles.height, 
-			GeneralConfig.board.color);
+			(config.id % 10 == 0) ? Tiles.HEIGHT : Tiles.WIDTH, 
+			Tiles.HEIGHT, 
+			Tiles.COLOR);
 		
 		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, TileTextStyle);
 		this.text.setStyle({
