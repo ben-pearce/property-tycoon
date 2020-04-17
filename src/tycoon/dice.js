@@ -34,9 +34,9 @@ class Dice extends Phaser.Events.EventEmitter {
 
 		this.result = (null, null);
 
-		this.rollSprite = this.scene.add.sprite(0, 0, "dice", "roll");
-		this.diceOneSprite = this.scene.add.sprite(0, 0, "dice", "1");
-		this.diceTwoSprite = this.scene.add.sprite(0, 0, "dice", "1");
+		this.rollSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "roll");
+		this.diceOneSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "1");
+		this.diceTwoSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "1");
 
 		this.rollSprite.setInteractive({useHandCursor: true});
 		this.rollSprite.on("pointerdown", () => {
@@ -161,7 +161,6 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceTwoSprite.setPosition(0, 0);
 
 		this.rollSprite.setScale(1);
-		this.scene.children.bringToTop(this.rollSprite);
 	}
 }
 
