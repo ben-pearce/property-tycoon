@@ -24,6 +24,19 @@ class Player extends Phaser.GameObjects.Sprite {
 	 */
 	deposit(sum) {
 		this.cash += sum;
+
+		this.emit("deposit", sum);
+	}
+
+	/**
+	 * Withdraws some cash from player bank account.
+	 * 
+	 * @param {Integer} sum Amount of cash withdrawal.
+	 */
+	withdraw(sum) {
+		this.cash -= sum;
+
+		this.emit("withdraw", sum);
 	}
 
 	/**
