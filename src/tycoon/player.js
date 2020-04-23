@@ -22,7 +22,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.id = id;
 		this.game = game;
-		this.scene = game.scene;
 
 		this.cash = null;
 		this.tile = null;
