@@ -7,7 +7,9 @@ import Bank from "./bank";
 import Timer from "./timer";
 import CashText from "./ui/cashText";
 import Prompt from "./ui/prompt";
+import Rentable from "./tiles/rentable";
 import Cards from "../cards";
+import Luck from "./tiles/luck";
 
 /**
  * This is our Game Controller, it is in charge
@@ -17,6 +19,8 @@ import Cards from "../cards";
  * This class will initiate dice rolls, then ask for user
  * input and display prompts as appropriate.
  */
+class GameManager {
+	/**
 	 * @param {Phaser.Game} game The Phaser.Game instance.
 	 * @param {Object} config The options for this game instance.
 	 */
@@ -73,19 +77,20 @@ import Cards from "../cards";
 	 * This is called once a player has interacted with
 	 * the dice and they have landed.
 	 * 
-	 * @param {Tuple(Integer,Integer)} roll The first and second dice result as a tuple.
+	 * @param {integer[]} roll The first and second dice result as a tuple.
 	 */
 	playerRolled(roll) {
 		let p = this.players[this.currentPlayer];
 		this.playerContainer.bringToTop(p);
 
 		let [diceOne, diceTwo] = roll;
-		p.moveForwards(diceOne + diceTwo, () => {
-			p.deposit(500);
+		p.moveForwards(diceOne + diceTwo, this.playerMoved.bind(this, p));
+	}
 
-			this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
-			this.dice.requestRoll();
-		});
+	playerMoved(p) {
+		if(!(p.tile instanceof Rentable) && !(p.tile instanceof Luck)) {
+			this.nextPlayer();
+		}
 	}
 
 	playerDeposit(p, sum) {
@@ -98,6 +103,14 @@ import Cards from "../cards";
 		let c = new CashText(p, -sum);
 		this.playerContainer.add(c);
 		c.play();
+	}
+
+	/**
+	 * Advances the game turn.
+	 */
+	nextPlayer() {
+		this.dice.requestRoll();
+		this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
 	}
 }
 
