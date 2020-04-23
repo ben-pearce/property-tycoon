@@ -38,10 +38,10 @@ class Board extends Phaser.GameObjects.Container {
 			this.background.y + (this.background.height / 2), 
 			"wallpaper");
 
-		this.tiles = this.drawTiles();
+		this.tiles = this._drawTiles();
 
 		this.add([this.background, this.wallpaper, ...this.tiles]);
-		this.moveTiles();
+		this._moveTiles();
 	}
 
 	/**
@@ -52,8 +52,9 @@ class Board extends Phaser.GameObjects.Container {
 	 * tile (i.e. what type of tile is it? is it a corner peice? etc).
 	 * 
 	 * @returns {Tile[]} The new array of tile instances
+	 * @private
 	 */
-	drawTiles() {
+	_drawTiles() {
 		const tiles = [];
 		for(let tile in BoardConfig) {
 			let tileConfig = BoardConfig[tile];
@@ -69,8 +70,10 @@ class Board extends Phaser.GameObjects.Container {
 	 * the board.
 	 * 
 	 * It works around the board from bottom right anti-clockwise.
+	 * 
+	 * @private
 	 */
-	moveTiles() { 
+	_moveTiles() { 
 		const tileHeight = Tiles.HEIGHT;
 		const tileWidth = Tiles.WIDTH;
 		for(let i = 0; i < this.dimension; i++) {
