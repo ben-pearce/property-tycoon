@@ -1,20 +1,20 @@
 import Phaser from "phaser";
 
+/**
+ * This class is the internal representation 
+ * of the game bank.
+ * 
+ * Responsible for keeping track of amount of cash
+ * bank has spent and received.
+ * 
+ * @extends Phaser.Events.EventEmitter
+ * 
+ * @property {GameManager} game The game manager this instance belongs to.
+ * @property {integer} spent Amount of cash spent so far.
+ * @property {integer} cash Amount of cash being held.
+ */
 class Bank extends Phaser.Events.EventEmitter {
 	/**
-	 * This class is the internet representation 
-	 * of the game bank.
-	 * 
-	 * Responsible for keeping track of amount of cash
-	 * bank has spent and received.
-	 * 
-	 * It is also an EventEmitter, which registers two events:
-	 * 
-	 * 	- "deposit" - Fired when bank.deposit() is called and passes
-	 * the sum deposited as the parameter to the event callback.
-	 * 	- "withdraw" - Fired when bank.withdraw() is called and passed
-	 * the sum withdrawn ad the parameter to the event callback.
-	 * 
 	 * @param {GameManager} game The game manager instance this belongs to. 
 	 */
 	constructor(game) {
@@ -29,7 +29,8 @@ class Bank extends Phaser.Events.EventEmitter {
 	/**
 	 * Deposit cash into this bank.
 	 * 
-	 * @param {Integer} sum The amount to deposit.
+	 * @param {integer} sum The amount to deposit.
+	 * @fires Bank#deposit
 	 */
 	deposit(sum) {
 		this.cash += sum;
@@ -40,7 +41,8 @@ class Bank extends Phaser.Events.EventEmitter {
 	/**
 	 * Withdraw cash from this bank.
 	 * 
-	 * @param {Integer} sum The amount to withdraw.
+	 * @param {integer} sum The amount to withdraw.
+	 * @fires Bank#withdraw
 	 */
 	withdraw(sum) {
 		this.spent += sum;
@@ -49,5 +51,21 @@ class Bank extends Phaser.Events.EventEmitter {
 		this.emit("withdraw", sum);
 	}
 }
+
+/**
+ * Event fired when cash is deposited into the 
+ * bank.
+ * 
+ * @event Bank#deposit
+ * @param {integer} sum The amount deposited.
+ */
+
+/**
+ * Event fired when cash is withdrawn from the
+ * bank.
+ * 
+ * @event Bank#withdraw
+ * @param {integer} sum The amount withdrawn.
+ */
 
 export default Bank;

@@ -1,10 +1,22 @@
 import Phaser from "phaser";
 import Tile from "./tile";
 
-
+/**
+ * This class represents Cop or "Go To Jail" tile on
+ * the board.
+ * 
+ * @extends Tile
+ * @memberof Tiles
+ */
 class Cop extends Tile {
-	constructor(game, options) {
-		super(game, options);
+	/**
+	 * Adds the cop graphic to the tile.
+	 * 
+	 * @param {Board} board The board this tile is part of.
+	 * @param {TileConfig} config The tile configuration to observe.
+	 */
+	constructor(board, config) {
+		super(board, config);
 
 		let graphic = new Phaser.GameObjects.Sprite(
 			this.scene, 
@@ -15,7 +27,14 @@ class Cop extends Tile {
 		this.text.setVisible(false);
 		this.add(graphic);
 	}
-    
+	
+	/**
+	 * Sends a player to jail and sets their state
+	 * to jail.
+	 * 
+	 * @param {Player} player The player to send to jail.
+	 * @override
+	 */
 	onLanded(player) {
 		super.onLanded(player);
 

@@ -2,21 +2,29 @@ import Phaser from "phaser";
 import Tile from "./tile";
 import {CashTextStyle} from "../../styles";
 
+/**
+ * All "purchasable" tiles inherit this class.
+ * 
+ * @memberof Tiles
+ * @extends Tile
+ * 
+ * @property {integer} cost The cost of the purchasable.
+ * @property {?Player} owner The owner of the purchasable or null.
+ */
 class Purchasable extends Tile {
 	/**
-	 * All "purchasable" tiles inherit this class.
+	 * Adds a price text to the tile.
 	 * 
-	 * This includes:
-	 *  * Rentable/Upgradable properties
-	 *  * Stations
-	 *  * Utilities
+	 * @param {Board} board The board this tile belongs to.
+	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(game, options) {
-		super(game, options);
+	constructor(board, config) {
+		super(board, config);
 
-		this.cost = options.cost;
+		this.cost = config.cost;
+		this.owner = null;
 
-		let string = `$${this.cost}`;
+		let string = `£${this.cost}`;
 
 		let costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
 		costText.setStyle({
@@ -30,12 +38,24 @@ class Purchasable extends Tile {
 	 * property. Children of this call will simply
 	 * have a value equal to the purchase cost.
 	 * 
-	 * i.e. this.cost.
-	 * 
-	 * @returns {Integer} The value of this property.
+	 * @returns {integer} The value of this property.
 	 */
 	getValue() {
 		return this.cost;
+	}
+
+	/**
+	 * Sells this property to the player specified.
+	 * 
+	 * @param {Player} player The purchasing player.
+	 */
+	purchase(player) {
+		if(this.owner === null && player.cash > this.cost) {
+			player.withdraw(this.cost);
+			this.game.bank.deposit(this.cost);
+
+			this.owner = player;
+		}
 	}
 }
 

@@ -5,6 +5,13 @@ import Phaser from "phaser";
  * tiles will reference this class to give players a visual
  * representation and record of the property associated with 
  * the tile.
+ * 
+ * @extends Phaser.GameObjects.Rectangle
+ * 
+ * @property {Phaser.GameObjects.Sprite} houseGraphic The upgrade sprite.
+ * @property {integer} houses The number of houses on the property.
+ * @property {boolean} isHotel Is this property a hotel or not.
+ * @property {boolean} isUpgraded Has this property been upgraded.
  */
 class Property extends Phaser.GameObjects.Rectangle {
 	/**
@@ -70,7 +77,7 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * (note this does NOT return the total value of the 
 	 * property, use Rentable.getValue() for that.)
 	 * 
-	 * @returns {Integer} The value of all the upgrades.
+	 * @returns {integer} The value of all the upgrades.
 	 */
 	getValue() {
 		let value = this.houses * this.tile.cost;
@@ -78,6 +85,22 @@ class Property extends Phaser.GameObjects.Rectangle {
 			return value + this.tile.cost;
 		}
 		return value;
+	}
+
+	/**
+	 * This returns the "upgrade level" of this
+	 * property as a number. AKA the number of times
+	 * upgrade() has been used successfully.
+	 * 
+	 * No upgrades -> 0
+	 * 1 House -> 1
+	 * ...
+	 * Hotel -> 5
+	 * 
+	 * @returns {integer} The upgrade level of this property as a number.
+	 */
+	getUpgradeAsNumber() {
+		return this.houses + (this.isHotel ? 1 : 0);
 	}
 
 	/**
@@ -94,10 +117,10 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * but will still perform tween so it is best to check
 	 * this.isUpgradable() before calling this.
 	 * 
-	 * @param {Function} callback This will be called after any 
+	 * @param {?Property~animationCallback} cb This will be called after any 
 	 * animation has completed.
 	 */
-	upgrade(callback=null) {
+	upgrade(cb=null) {
 		let timeline = this.scene.tweens.createTimeline();
 
 		let hideTween = {
@@ -135,11 +158,16 @@ class Property extends Phaser.GameObjects.Rectangle {
 			scale: 1
 		});
 
-		if(callback !== null) {
-			timeline.setCallback("onComplete", callback);
+		if(cb !== null) {
+			timeline.setCallback("onComplete", cb);
 		}
 		timeline.play();
 	}
 }
+
+/**
+ * This callback is invoked once animations complete.
+ * @callback Property~animationCallback
+ */
 
 export default Property;
