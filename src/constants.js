@@ -1,10 +1,22 @@
-
+/**
+ * Enum for tile graphics.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {number}
+ */
 const Tiles = Object.freeze({
 	HEIGHT: 100,
 	WIDTH: 60,
 	COLOR: 0xcde6d0
 });
 
+/**
+ * Enum for property colors.
+ * 
+ * @readonly
+ * @enum {number}
+ */
 const Colors = Object.freeze({
 	DEEP_BLUE: 0x00008b,
 	YELLOW: 0xffff00,
@@ -16,6 +28,12 @@ const Colors = Object.freeze({
 	RED: 0xff0000
 });
 
+/**
+ * Enum for token sprite tags.
+ * 
+ * @readonly
+ * @enum {string}
+ */
 const TokenSprites = Object.freeze({
 	BOOT: "boot",
 	CAT: "cat",

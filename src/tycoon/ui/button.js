@@ -1,19 +1,27 @@
 import Phaser from "phaser";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
+/**
+ * Creates a visually appealing and scalable button.
+ * 
+ * @memberof UI
+ * @extends Phaser.GameObjects.Container
+ * 
+ * @property {integer} color The button color.
+ * @property {RoundRectangle} background The button background.
+ * @property {Phaser.GameObjects.Text} text The text on the button.
+ */
 class Button extends Phaser.GameObjects.Container {
 	/**
-	 * A game button.
+	 * Creates button background and text.
 	 * 
-	 * Creates a visually appealing and scalable button.
-	 * 
-	 * @param {Phaser.Scene} scene 
-	 * @param {Integer} x 
-	 * @param {Integer} y 
-	 * @param {Integer} width 
-	 * @param {Integer} height 
-	 * @param {String} text 
-	 * @param {Integer} color 
+	 * @param {Phaser.Scene} scene Button phaser scene.
+	 * @param {integer} x Button x-axis.
+	 * @param {integer} y Button y-axis.
+	 * @param {integer} width Button width
+	 * @param {integer} height Button height
+	 * @param {string} text Button text
+	 * @param {integer} color Button color
 	 */
 	constructor(scene, x, y, width, height, text, color) {
 		super(scene, x, y);
@@ -41,6 +49,8 @@ class Button extends Phaser.GameObjects.Container {
 
 	/**
 	 * Called on pointer hover.
+	 * 
+	 * @private
 	 */
 	_buttonPointerOut() {
 		this.background.setAlpha(0.5);
@@ -49,6 +59,8 @@ class Button extends Phaser.GameObjects.Container {
 
 	/**
 	 * Called on pointer rollout.
+	 * 
+	 * @private
 	 */
 	_buttonPointerOver() {
 		this.background.setAlpha(1);

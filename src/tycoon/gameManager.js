@@ -7,16 +7,14 @@ import Bank from "./bank";
 import Timer from "./timer";
 import CashText from "./cashText";
 
-
-class GameManager {
-	/**
-	 * This is our "Game Controller" it is in charge
-	 * of creating all the required objects and passing 
-	 * them information about the progress of the game.
-	 * 
-	 * This class will initiate dice rolls, then ask for user
-	 * input and display prompts as appropriate.
-	 * 
+/**
+ * This is our Game Controller, it is in charge
+ * of creating all the required objects and passing 
+ * them information about the progress of the game.
+ *  
+ * This class will initiate dice rolls, then ask for user
+ * input and display prompts as appropriate.
+ */
 	 * @param {Phaser.Game} game The Phaser.Game instance.
 	 * @param {Object} config The options for this game instance.
 	 */

@@ -9,6 +9,12 @@ import PlayerPayBank from "./tycoon/actions/playerPayBank";
 import PlayerPayFine from "./tycoon/actions/playerPayFine";
 import PlayerPayRepair from "./tycoon/actions/playerPayRepair";
 
+/**
+ * @typedef {Object} CardConfig
+ * @property {string} name The name of the card.
+ * @property {string} description The description of the action.
+ * @property {BaseAction} action The action instance.
+ */
 
 module.exports = {
 	potluck: [

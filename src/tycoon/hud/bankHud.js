@@ -3,13 +3,23 @@ import {PlayerNameStyle, BankCashStyle} from "../../styles";
 import {TokenSprites, TokenNames, Hud} from "../../constants";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
+/**
+ * This class represents the Banks HUD object
+ * in the HUD layer. It shows a bank icon, name
+ * and cash value that will show cash loss/gain
+ * temporarily before updating the cash displayed
+ * back to infinity.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Hud
+ * 
+ * @property {Hud} hud The hud layer this belongs to.
+ * @property {Bank} bank The internal bank object for the game.
+ */
 class BankHud extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents the Banks HUD object
-	 * in the HUD layer. It shows a bank icon, name
-	 * and cash value that will show cash loss/gain
-	 * temporarily before updating the cash displayed
-	 * back to infinity.
+	 * Creates a hud background, graphic, name text and 
+	 * cash text for the hud layer to represent the bank.
 	 * 
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Bank} bank The game bank instance.
@@ -36,10 +46,11 @@ class BankHud extends Phaser.GameObjects.Container {
 	/**
 	 * Sets cash displayed to cash value passed in.
 	 * 
-	 * A timeout will be set to call this.reset() after
-	 * Hud.CASH_UPDATE_TIMEOUT milliseconds.
+	 * A timeout will be set to call {@link reset}() after
+	 * {@link Hud#CASH_UPDATE_TIMEOUT} milliseconds.
 	 * 
-	 * @param {Integer} cash Cash value gained.
+	 * @private
+	 * @param {integer} cash Cash value gained.
 	 */
 	cashGained(cash) {
 		let string = `Cash +$${cash}`;
@@ -53,10 +64,11 @@ class BankHud extends Phaser.GameObjects.Container {
 	/**
 	 * Sets cash displayed to cash value passed in.
 	 * 
-	 * A timeout will be set to call this.reset() after
-	 * Hud.CASH_UPDATE_TIMEOUT milliseconds.
+	 * A timeout will be set to call {@link reset}() after
+	 * {@link Hud#CASH_UPDATE_TIMEOUT} milliseconds.
 	 * 
-	 * @param {Integer} cash Cash value lost.
+	 * @private
+	 * @param {integer} cash Cash value lost.
 	 */
 	cashLost(cash) {
 		let string = `Cash -$${cash}`;
@@ -69,6 +81,8 @@ class BankHud extends Phaser.GameObjects.Container {
 
 	/**
 	 * Resets cash value displayed back to infinity.
+	 * 
+	 * @private
 	 */
 	reset() {
 		this.cashText.setStyle({color: Hud.TEXT_COLOR});

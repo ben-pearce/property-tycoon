@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {CashUpdateStyle} from "../styles";
+import {CashUpdateStyle} from "../../styles";
 
 /**
  * A special animated text for when players earn
@@ -9,19 +9,24 @@ import {CashUpdateStyle} from "../styles";
  * quickly fades away.
  * 
  * This will destroy itself after animation completes.
+ * 
+ * @memberof UI
+ * @extends Phaser.GameObjects.Text
+ * 
+ * @param {Phaser.GameObjects.Sprite} target The target movieclip to float from.
+ * @param {integer} cash The cash value.
  */
-class CashText extends Phaser.GameObjects.Text{
-
+class CashText extends Phaser.GameObjects.Text {
 	/**
 	 * Takes a target movieclip and integer cash value.
 	 * 
 	 * @param {Phaser.GameObjects.Sprite} target The target movieclip to float from.
-	 * @param {Integer} cash The cash value.
+	 * @param {integer} cash The cash value.
 	 */
 	constructor(target, cash) {
 		let sign = (cash > 0) ? "+" : "-";
 		let amount = Math.abs(cash);
-		let string = `Cash: ${sign}$${amount}`;
+		let string = `Cash: ${sign}£${amount}`;
 		let style = Object.assign({
 			color: (cash > 0) ? "#008C00" : "#FF0000",
 		}, CashUpdateStyle);

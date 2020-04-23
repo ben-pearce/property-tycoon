@@ -14,6 +14,16 @@ import Utility from "./tycoon/tiles/utility";
 
 import {Colors} from "./constants";
 
+/**
+ * @typedef {Object} TileConfig
+ * @property {integer} id The unique ID.
+ * @property {Type} type The tile class.
+ * @property {Colors} color The color group.
+ * @property {string} graphic Sprite to use as graphic.
+ * @property {integer} cost The cost of property purchase.
+ * @property {integer[]} rent The cost of rent for each upgrade.
+ */
+
 export default [
 	{
 		id: 0,

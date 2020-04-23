@@ -4,10 +4,20 @@ import {getTokenNameByPlayerId, getTokenSpriteByPlayerId} from "../utils";
 import {Hud} from "../../constants";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
+/**
+ * This class represents a player HUD object in the 
+ * HUD layer.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Hud
+ * 
+ * @property {Hud} hud The hud layer this belongs to.
+ * @property {Player} player The player instance this observes.
+ * @property {integer} cash The cash held.
+ */
 class PlayerHud extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a player HUD object in the
-	 * HUD layer. Shows the player token, their cash and 
+	 * Creates the player token, their cash and 
 	 * allows the user to see owned properties.
 	 * 
 	 * @param {Hud} hud The parent hud object.
