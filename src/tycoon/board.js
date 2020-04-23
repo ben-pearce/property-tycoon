@@ -98,8 +98,8 @@ class Board extends Phaser.GameObjects.Container {
 	 */
 	getRentableTilesByColor(color) {
 		const rentableTiles = [];
-		for(let i = 0; i < this.board.tiles.length; i++) {
-			let t = this.board.tiles[i];
+		for(let i = 0; i < this.tiles.length; i++) {
+			let t = this.tiles[i];
 			if(t instanceof Rentable && t.color == color) {
 				rentableTiles.push(t);
 			}
@@ -119,8 +119,8 @@ class Board extends Phaser.GameObjects.Container {
 	 */
 	getTilesByType(type) {
 		const tiles = [];
-		for(let i = 0; i < this.board.tiles.length; i++) {
-			let t = this.board.tiles[i];
+		for(let i = 0; i < this.tiles.length; i++) {
+			let t = this.tiles[i];
 			if(t instanceof type) {
 				tiles.push(t);
 			}
@@ -139,8 +139,8 @@ class Board extends Phaser.GameObjects.Container {
 	 * @returns {Tile} The matching tile.
 	 */
 	getSingletonTileByType(type) {
-		for(let i = 0; i < this.board.tiles.length; i++) {
-			let t = this.board.tiles[i];
+		for(let i = 0; i < this.tiles.length; i++) {
+			let t = this.tiles[i];
 			if(t instanceof type) {
 				return t;
 			}
@@ -163,8 +163,8 @@ class Board extends Phaser.GameObjects.Container {
 	 */
 	getMonopolyOwner(tile) {
 		let monopolyOwner = null;
-		for(let i = 0; i < this.board.tiles.length; i++) {
-			let t = this.board.tiles[i];
+		for(let i = 0; i < this.tiles.length; i++) {
+			let t = this.tiles[i];
 			if(t.color === tile.color) {
 				if(t.owner === null || (monopolyOwner !== null && monopolyOwner !== t.owner)) {
 					return null;
