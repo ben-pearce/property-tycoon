@@ -40,10 +40,19 @@ class Tax extends Tile {
 		this.add([graphic, costText]);
 	}
 
+	/**
+	 * Withdraws tax fee from player and deposits fee
+	 * onto the Free Parking tile.
+	 * 
+	 * @param {Player} player The player to charge tax on.
+	 * @override
+	 */
 	onLanded(player) {
 		super.onLanded(player);
 
-		// action: "Pay cost",
+		let freeParking = this.game.board.getSingletonTileByType(Parking);
+		freeParking.pay(this.cost);
+		player.withdraw(this.cost);
 	}
 }
 
