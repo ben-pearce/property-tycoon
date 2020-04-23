@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import BoardConfig from "../tiles";
 import {Tiles} from "../constants";
+import Rentable from "./tiles/rentable";
 
 /**
  * This class represents our game board.
@@ -85,6 +86,94 @@ class Board extends Phaser.GameObjects.Container {
 			this.tiles[i+this.dimension*3].setAngle(270);
 			this.tiles[i+this.dimension*3].setPosition(tileHeight + tileWidth*(this.dimension-1), tileHeight + tileWidth*i);
 		}
+	}
+
+
+	/**
+	 * Gets all the rentable tiles matching a specified
+	 * property color.
+	 * 
+	 * @param {Color} color The color to returns the tiles for.
+	 * @returns {Rentable[]} The matching rentable tiles.
+	 */
+	getRentableTilesByColor(color) {
+		const rentableTiles = [];
+		for(let i = 0; i < this.board.tiles.length; i++) {
+			let t = this.board.tiles[i];
+			if(t instanceof Rentable && t.color == color) {
+				rentableTiles.push(t);
+			}
+		}
+		return rentableTiles;
+	}
+
+	/**
+	 * Gets all the tiles matching a specified tile
+	 * type.
+	 * 
+	 * Used for fetching tiles that can have multiple
+	 * instances such as Rentable or Utility.
+	 * 
+	 * @param {Type} type The type of tiles to return.
+	 * @returns {Tile[]} The matching tiles.
+	 */
+	getTilesByType(type) {
+		const tiles = [];
+		for(let i = 0; i < this.board.tiles.length; i++) {
+			let t = this.board.tiles[i];
+			if(t instanceof type) {
+				tiles.push(t);
+			}
+		}
+		return tiles;
+	}
+
+	/**
+	 * Gets a singleton (the only) tile that matches
+	 * the specified tile type.
+	 * 
+	 * Used for fetching tiles that only have a single
+	 * instance such as Jail or Free Parking.
+	 * 
+	 * @param {Type} type The type of tile to return.
+	 * @returns {Tile} The matching tile.
+	 */
+	getSingletonTileByType(type) {
+		for(let i = 0; i < this.board.tiles.length; i++) {
+			let t = this.board.tiles[i];
+			if(t instanceof type) {
+				return t;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the owner of a Monopoly which the tile
+	 * passed in takes part in.
+	 * 
+	 * Returns the owners Player instance if they own
+	 * all properties belonging to the same color-group.
+	 * 
+	 * Will return null if there is no monopoly.
+	 * 
+	 * Only works for tiles of type Rentable.
+	 * 
+	 * @param {Rentable} tile The rentable tile to get the monopoly owner for.
+	 */
+	getMonopolyOwner(tile) {
+		let monopolyOwner = null;
+		for(let i = 0; i < this.board.tiles.length; i++) {
+			let t = this.board.tiles[i];
+			if(t.color === tile.color) {
+				if(t.owner === null || (monopolyOwner !== null && monopolyOwner !== t.owner)) {
+					return null;
+				} else {
+					monopolyOwner = t.owner;
+				}
+			}
+		}
+		return monopolyOwner;
 	}
 }
 
