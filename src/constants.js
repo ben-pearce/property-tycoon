@@ -57,11 +57,17 @@ const TokenNames = Object.freeze({
 });
 
 const Hud = Object.freeze({
-	BANK_DEFAULT_TEXT: "Cash $∞",
+	BANK_DEFAULT_TEXT: "Cash £∞",
 	TEXT_COLOR: "#FFFFFF",
 	POSITIVE_COLOR: "#008C00",
 	NEGATIVE_COLOR: "#FF0000",
 	CASH_UPDATE_TIMEOUT: 2500
+});
+
+const Cards = Object.freeze({
+	WIDTH: 400,
+	HEIGHT: 600,
+	COLOR: 0xFFFFFF
 });
 
 export {
@@ -69,5 +75,6 @@ export {
 	Colors,
 	TokenSprites,
 	TokenNames,
-	Hud
+	Hud,
+	Cards
 };
