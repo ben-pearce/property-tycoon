@@ -1,5 +1,6 @@
 import Purchasable from "./purchasable";
 import Property from "../property";
+import RentableCard from "../cards/rentableCard";
 
 /**
  * Represents a Rentable tile.
@@ -58,6 +59,43 @@ class Rentable extends Purchasable {
 		return 0;
 	}
 
+	/**
+	 * If the property is owned and player is not the owner,
+	 * charge rent.
+	 * 
+	 * If the property is owned and player is the owner, offer
+	 * upgrade, sale or mortgage procedure.
+	 * 
+	 * @param {Player} player The player to charge or offer sale.
+	 * @override
+	 */
+	onLanded(player) {
+		super.onLanded(player);
+		if(this.owner !== null) {
+			let rentCharged = this.getRent();
+			let monopolyOwner = this.game.board.getMonopolyOwner(this);
+			if(monopolyOwner !== null) {
+				let coloredTiles = this.game.board.getRentableTilesByColor(this.color);
+				let totalUpgrades = coloredTiles.reduce((upgrades, tile) => upgrades + tile.property.getUpgradeAsNumber());
+				if(totalUpgrades == 0) {
+					rentCharged *= 2;
+				}
+			}
+			player.withdraw(rentCharged);
+			this.owner.deposit(rentCharged);
+			this.game.nextPlayer();
+		} else {
+			let rentCard = new RentableCard(this.game, this, player);
+			rentCard.buyButton.setEnabled(player.cash > this.cost);
+			rentCard.buyButton.on("pointerup", () => {
+				this.game.prompt.closeWithAnim(() => {
+					this.purchase(player);
+					this.game.nextPlayer();
+				});
+			});
+			this.game.prompt.showWithAnim(rentCard);
+		}
+	}
 }
 
 export default Rentable;
