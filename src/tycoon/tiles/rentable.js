@@ -41,6 +41,23 @@ class Rentable extends Purchasable {
 	getValue() {
 		return this.cost + this.property.getValue();
 	}
+
+	/**
+	 * This returns the cost of rent for a property. If the
+	 * property is not owned by anyone this will return 0.
+	 * 
+	 * Cost will depend on the number of times the property has
+	 * been upgraded.
+	 * 
+	 * @returns {integer} The cost of rent.
+	 */
+	getRent() {
+		if(this.owner !== null) {
+			return this.rent[this.property.getUpgradeAsNumber()];
+		}
+		return 0;
+	}
+
 }
 
 export default Rentable;
