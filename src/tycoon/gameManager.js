@@ -7,6 +7,7 @@ import Bank from "./bank";
 import Timer from "./timer";
 import CashText from "./ui/cashText";
 import Prompt from "./ui/prompt";
+import Cards from "../cards";
 
 /**
  * This is our Game Controller, it is in charge
@@ -60,6 +61,9 @@ import Prompt from "./ui/prompt";
 		this.scene.add.existing(this.dice.diceTwoSprite);
 		this.scene.add.existing(this.hud);
 		this.scene.add.existing(this.prompt);
+
+		this.opportunityCards = Cards.opportunity.slice();
+		this.potluckCards = Cards.potluck.slice();
 
 		this.dice.requestRoll();
 		this.dice.on("landed", this.playerRolled.bind(this));
