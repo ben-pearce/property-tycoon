@@ -35,13 +35,9 @@ class Go extends Tile {
 	 */
 	onPassed(player) {
 		super.onPassed(player);
-
-		// action: "Collect £200",
-	}
-
-	onLanded(player) {
-		super.onLanded(player);
-
+		
+		this.game.bank.withdraw(200);
+		player.deposit(200);
 	}
 }
 
