@@ -2,11 +2,19 @@ import Phaser from "phaser";
 import {TimerStyle} from "../../styles";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
+/**
+ * This class represents a timer HUD in the HUD layer.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Hud
+ * 
+ * @property {Phaser.GameObjects.Text} timerText The text object 
+ * showing the remaining time.
+ */
 class TimerHud extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a timer HUD in the HUD layer.
-	 * 
-	 * Shows the time remaining on the game timer.
+	 * Creates a background and a text object to
+	 * show the remaining time.
 	 * 
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Player} timer The timer object to represent.
@@ -28,24 +36,28 @@ class TimerHud extends Phaser.GameObjects.Container {
 		
 		this.add([background, this.timerText]);
 
-		this.timer.on("tick", this.update.bind(this));
-		this.timer.on("complete", this.complete.bind(this));
+		this.timer.on("tick", this._update.bind(this));
+		this.timer.on("complete", this._complete.bind(this));
 	}
 
 	/**
 	 * Updates the timer text.
 	 * 
-	 * @param {String} text Text to update to.
+	 * @param {string} text Text to update to.
+	 * 
+	 * @private
 	 */
-	update(text) {
+	_update(text) {
 		this.timerText.setText(text);
 	}
 
 	/**
 	 * Calling this will make the timer text flash to
 	 * indicate to the user the timer has now elapsed.
+	 * 
+	 * @private
 	 */
-	complete() {
+	_complete() {
 		setInterval(() => {
 			this.timerText.setVisible(!this.timerText.visible);
 		}, 500);

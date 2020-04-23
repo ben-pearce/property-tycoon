@@ -2,16 +2,33 @@ import Phaser from "phaser";
 import {Tiles} from "../../constants";
 import {TileTextStyle} from "../../styles";
 
+/**
+ * @namespace Tiles
+ */
 
+/**
+ * This class represents a tile on the board. 
+ * 
+ * Intended to be inherited by specialised tile classes.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Tiles
+ * 
+ * @property {Board} board The board this tile is part of.
+ * @property {GameManager} game The game manager instance.
+ * @property {integer} id The unique tile ID.
+ * @property {string} name The name of the tile.
+ * @property {Player[]} players Players currently on the tile.
+ * @property {Phaser.GameObjects.Rectangle} background The background of the tile.
+ * @property {Phaser.GameObjects.Text} text The text on the tile.
+ */
 class Tile extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a tile on the board. 
-	 * 
-	 * This class will not be used alone, there will be classes
-	 * that inherit this class to give further functionality (i.e. Jail, Station etc).
+	 * Creates the tile background and text and initiates 
+	 * class variables.
 	 * 
 	 * @param {Board} board The board object this belongs to.
-	 * @param {Object} config Configuration options for this tile.
+	 * @param {TileConfig} config The tile configuration to observe.
 	 */
 	constructor(board, config) {
 		super(board.scene, 0, 0);
@@ -19,6 +36,7 @@ class Tile extends Phaser.GameObjects.Container {
 		this.board = board;
 		this.game = board.game;
 		this.id = config.id;
+		this.name = config.name;
 
 		this.background = new Phaser.GameObjects.Rectangle(
 			board.scene, 
@@ -47,7 +65,6 @@ class Tile extends Phaser.GameObjects.Container {
 			[-0.25, +0.15],
 			[+0.25, 0]
 		];
-
 	}
 
 	/**
@@ -66,6 +83,8 @@ class Tile extends Phaser.GameObjects.Container {
 	 * If there is already a player on the tile, this function also
 	 * introduces some random variance in the coordiantes to make
 	 * the movement seem more natural.
+	 * 
+	 * @returns {integer[]} The XY coordinates.
 	 */
 	getPlayerXY() {
 		let x = this.board.x + this.x;
@@ -107,7 +126,7 @@ class Tile extends Phaser.GameObjects.Container {
 	 * @param {Player} player The player that passed the tile.
 	 */
 	onPassed(player) {
-		console.log(player, "passed", this);
+		return player;
 	}
 
 	/**
@@ -119,8 +138,6 @@ class Tile extends Phaser.GameObjects.Container {
 	 * @param {Player} player The player that landed on this tile.
 	 */
 	onLanded(player) {
-		console.log(player, "landed", this);
-		
 		this.players.push(player);
 
 		if(player.tile !== null) {

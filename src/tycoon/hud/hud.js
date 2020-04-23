@@ -3,15 +3,28 @@ import PlayerHud from "./playerHud";
 import BankHud from "./bankHud";
 import ParkingHud from "./parkingHud";
 import TimerHud from "./timerHud";
+import Parking from "../tiles/parking";
 
+/**
+ * @namespace Hud
+ */
 
+/**
+ * This class represents our game HUD (heads-up-display) 
+ * which is used to display all information about current 
+ * progression of the game and player status.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Hud
+ * 
+ * @property {PlayerHud[]} players The player HUDs array.
+ * @property {BankHud} bankHud The HUD that represents the bank.
+ * @property {ParkingHud} parkingHud The HUD that represents the free parking space.
+ * @property {TimerHud} timerHud The HUD that represents the timer.
+ */
 class Hud extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents our game HUD (heads-up-display)
-	 * which is used to display all information about current
-	 * progression of the game and player status.
-	 * 
-	 * Constructor will create all components of the HUD
+	 * Creates all components of the HUD
 	 * including player, bank, free parking and timer HUDs.
 	 * 
 	 * @param {GameManager} game The game manager instance associated
@@ -34,7 +47,7 @@ class Hud extends Phaser.GameObjects.Container {
 			let player = game.players[i];
 			let playerHud = new PlayerHud(this, player);
 			
-			let playerY = (playerHud.getBounds().height * i) + (50 * i) + 35;
+			let playerY = (playerHud.getBounds().height * i) + (15 * i) + 35;
 			playerHud.setPosition(rightX, playerY);
 
 			this.players.push(playerHud);
@@ -43,7 +56,7 @@ class Hud extends Phaser.GameObjects.Container {
 		this.bank = new BankHud(this, game.bank);
 		this.bank.setPosition(leftX, bankY);
 		
-		this.parking = new ParkingHud(this, game.board.tiles[20]);
+		this.parking = new ParkingHud(this, game.board.getSingletonTileByType(Parking));
 		this.parking.setPosition(leftX, parkingY);
 
 		this.timer = new TimerHud(this, game.timer);

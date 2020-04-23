@@ -1,10 +1,22 @@
 import Phaser from "phaser";
 import Tile from "./tile";
+import OpportunityCard from "../cards/actionCard";
 
-
+/**
+ * This class represents a Pot Luck tile.
+ * 
+ * @extends Tile
+ * @memberof Tiles
+ */
 class Luck extends Tile {
-	constructor(game, options) {
-		super(game, options);
+	/**
+	 * Adds the chest graphic to the tile.
+	 * 
+	 * @param {Board} board The board this tile belongs to.
+	 * @param {TileConfig} config The tile configuration to observe.
+	 */
+	constructor(board, config) {
+		super(board, config);
 
 		this.text.setY(this.y + 10);
 
@@ -16,10 +28,26 @@ class Luck extends Tile {
 		this.add(graphic);
 	}
 
+	/**
+	 * Shows the card and performs action once player
+	 * has pressed continue button.
+	 * 
+	 * @param {Player} player The player to perform the action upon.
+	 * @override
+	 */
 	onLanded(player) {
 		super.onLanded(player);
 
-		// action: "Take card",
+		let potluckCard = this.game.potluckCards.shift();
+		let actionCard = new OpportunityCard(this.game, potluckCard, player);
+		actionCard.continueButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				potluckCard.action.do(this.game, player);
+				this.game.nextPlayer();
+				this.game.potluckCards.push(potluckCard);
+			});
+		});
+		this.game.prompt.showWithAnim(actionCard);
 	}
 }
 

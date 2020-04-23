@@ -50,6 +50,12 @@ const MenuStyle = {
 	fontSize: "30px",
 };
 
+const CardStyle = {
+	fontFamily: "Arial",
+	color: "#000000", 
+	fontSize: "30px",
+	align: "center"
+};
 
 export {
 	TileTextStyle,
@@ -59,5 +65,6 @@ export {
 	PlayerCashStyle,
 	BankCashStyle,
 	TimerStyle,
-	MenuStyle
+	MenuStyle,
+	CardStyle
 };

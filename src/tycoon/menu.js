@@ -2,20 +2,13 @@ import Phaser from "phaser";
 import {MenuStyle} from "../styles";
 import {getTokenSpriteByPlayerId, getTimerSecondsByOption} from "./utils";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
-import Button from "./button";
+import Button from "./ui/button";
 
+/**
+ * This class represents the game menu.
+ */
 class Menu extends Phaser.GameObjects.Container {
 	/**
-	 * This class contains the code for the game menu,
-	 * 
-	 * Fires an event once the player has finished with the
-	 * menu and clicked play:
-	 * 
-	 * 	menu.on("start", callback)
-	 * 
-	 * The callback will be passed a game configuration
-	 * object.
-	 * 
 	 * @param {Phaser.Scene} scene The phaser scene.
 	 */
 	constructor(scene) {
@@ -52,8 +45,10 @@ class Menu extends Phaser.GameObjects.Container {
 	/**
 	 * Create the timer option UI elements.
 	 * 
-	 * @param {Integer} x The X position.
-	 * @param {Integer} y The Y position.
+	 * @param {integer} x The X position.
+	 * @param {integer} y The Y position.
+	 * 
+	 * @private
 	 */
 	_setupTimerOptions(x, y) {
 		this.slider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, 0xF2BB26, 0.5);
@@ -78,9 +73,11 @@ class Menu extends Phaser.GameObjects.Container {
 	/**
 	 * Create player option UI elements.
 	 * 
-	 * @param {Integer} x The X position.
-	 * @param {Integer} y The Y position for player.
-	 * @param {Integer} y2 The Y position for computer.
+	 * @param {integer} x The X position.
+	 * @param {integer} y The Y position for player.
+	 * @param {integer} y2 The Y position for computer.
+	 * 
+	 * @private
 	 */
 	_setupPlayerOptions(x, y, y2) {
 		this.playerSlider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, 0xF2BB26, 0.5);
@@ -124,6 +121,8 @@ class Menu extends Phaser.GameObjects.Container {
 	 * 
 	 * Emits the "start" event to let the outside know the
 	 * user is now finished with the menu.
+	 * 
+	 * @fires Menu#start
 	 */
 	playButtonPressed() {
 		this.emit("start", {
@@ -166,7 +165,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * This also moves the slider but does not tween. So
 	 * this function basically makes the choice "permanent".
 	 * 
-	 * @param {Integer} count The player count.
+	 * @param {integer} count The player count.
 	 */
 	setPlayerCount(count) {
 		let firstPlayer = this.playerTokens[0];
@@ -189,7 +188,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * This also moves the slider but does not tween. So
 	 * this function basically makes the choice "permanent".
 	 * 
-	 * @param {Integer} count The computer player count.
+	 * @param {integer} count The computer player count.
 	 */
 	setComputerCount(count) {
 		if(this.playerCount < this.computerTokens.length) {
@@ -211,7 +210,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * This also moves the slider but does not tween. So
 	 * this function basically makes the choice "permanent".
 	 * 
-	 * @param {Integer} option The timer option.
+	 * @param {integer} option The timer option.
 	 */
 	setTimerOption(option) {
 		let oldOptionText = this.timerOptions[this.timerOption];
@@ -227,7 +226,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * Moves & tweens the player slider to the correct 
 	 * state based on the player count passed in.
 	 * 
-	 * @param {Integer} count The player count.
+	 * @param {integer} count The player count.
 	 */
 	movePlayerSlider(count) {
 		let firstPlayer = this.playerTokens[0];
@@ -243,7 +242,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * Moves & tweens the computer player slider to the correct 
 	 * state based on the player count passed in.
 	 * 
-	 * @param {Integer} count The computer player count.
+	 * @param {integer} count The computer player count.
 	 */
 	moveComputerSlider(count) {
 		this.computerSlider.setVisible(count > 0);
@@ -262,7 +261,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * Moves & tweens the timer slider to the correct state based
 	 * on the timer option passed in.
 	 * 
-	 * @param {Integer} option The timer option.
+	 * @param {integer} option The timer option.
 	 */
 	moveTimerSlider(option) {
 		let text = this.timerOptions[option];
@@ -322,5 +321,20 @@ class Menu extends Phaser.GameObjects.Container {
 		this.setTimerOption(0);
 	}
 }
+
+/**
+ * @typedef {Object} GameConfig
+ * @property {integer} playerCount Number of human players.
+ * @property {integer} computerCount Number of computer players.
+ * @property {?integer} timer The length of timer in seconds.
+ */
+
+/**
+ * Event fires once the player has finished with the
+ * menu and clicked play.
+ * 
+ * @event Menu#start
+ * @type {GameConfig}
+ */
 
 export default Menu;
