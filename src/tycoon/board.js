@@ -32,7 +32,7 @@ class Board extends Phaser.GameObjects.Container {
 			Tiles.COLOR);
 		this.background.setOrigin(0);
 		
-		this.wallpaper = new Phaser.GameObjects.Sprite(
+		let wallpaper = new Phaser.GameObjects.Sprite(
 			this.scene, 
 			this.background.x + (this.background.width / 2), 
 			this.background.y + (this.background.height / 2), 
@@ -40,7 +40,7 @@ class Board extends Phaser.GameObjects.Container {
 
 		this.tiles = this._drawTiles();
 
-		this.add([this.background, this.wallpaper, ...this.tiles]);
+		this.add([this.background, wallpaper, ...this.tiles]);
 		this._moveTiles();
 	}
 
