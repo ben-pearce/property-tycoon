@@ -6,6 +6,7 @@ import Player from "./player";
 import Bank from "./bank";
 import Timer from "./timer";
 import CashText from "./cashText";
+import Prompt from "./ui/prompt";
 
 /**
  * This is our Game Controller, it is in charge
@@ -48,8 +49,8 @@ import CashText from "./cashText";
 		this.dice = new Dice(this);
 		this.bank = new Bank(this);
 		this.timer = new Timer(this, config.timer);
-		
 		this.hud = new Hud(this);
+		this.prompt = new Prompt(this);
 
 		this.scene.add.existing(this.board);
 		this.scene.add.existing(this.playerContainer);
@@ -57,6 +58,7 @@ import CashText from "./cashText";
 		this.scene.add.existing(this.dice.diceOneSprite);
 		this.scene.add.existing(this.dice.diceTwoSprite);
 		this.scene.add.existing(this.hud);
+		this.scene.add.existing(this.prompt);
 
 		this.dice.requestRoll();
 		this.dice.on("landed", this.playerRolled.bind(this));
