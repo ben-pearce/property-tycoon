@@ -25,6 +25,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.cash = null;
 		this.tile = null;
+		this.jailed = false;
 	}
 
 	/**
