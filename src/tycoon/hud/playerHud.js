@@ -39,8 +39,8 @@ class PlayerHud extends Phaser.GameObjects.Container {
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
 		this.add([background, tokenGraphic, nameText, this.cashText]);
 
-		this.player.on("deposit", this.updateCash.bind(this));
-		this.player.on("withdraw", this.updateCash.bind(this));
+		this.player.on("deposit", this._updateCash.bind(this));
+		this.player.on("withdraw", this._updateCash.bind(this));
 	}
 
 	/**
@@ -50,23 +50,27 @@ class PlayerHud extends Phaser.GameObjects.Container {
 	 * reflect gain/loss. Then color will reset back
 	 * to default.
 	 * 
-	 * Timeout will be set to call this.reset() after
-	 * Hud.CASH_UPDATE_TIMEOUT milliseconds.
+	 * A timeout will be set to call {@link reset}() after
+	 * {@link Hud#CASH_UPDATE_TIMEOUT} milliseconds.
+	 * 
+	 * @private
 	 */
-	updateCash() {
+	_updateCash() {
 		let string = `Cash £${this.player.cash}`;
 		
 		this.cashText.setStyle({color: (this.player.cash > this.cash) ? Hud.POSITIVE_COLOR : Hud.NEGATIVE_COLOR});
 		this.cashText.setText(string);
 
 		this.cash = this.player.cash;
-		setTimeout(this.reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
+		setTimeout(this._reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
 	}
 
 	/**
 	 * Resets cash text color back to default.
+	 * 
+	 * @private
 	 */
-	reset() {
+	_reset() {
 		this.cashText.setStyle({color: Hud.TEXT_COLOR});
 	}
 }
