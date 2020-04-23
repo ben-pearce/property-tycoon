@@ -5,7 +5,7 @@ import Dice from "./dice";
 import Player from "./player";
 import Bank from "./bank";
 import Timer from "./timer";
-import CashText from "./cashText";
+import CashText from "./ui/cashText";
 import Prompt from "./ui/prompt";
 
 /**
@@ -40,7 +40,8 @@ import Prompt from "./ui/prompt";
 			p.deposit(1500);
 			p.teleportToTile(this.board.tiles[0]);
 
-			p.on("deposit", this.playerDeposited, p);
+			p.on("deposit", this.playerDeposit.bind(this, p));
+			p.on("withdraw", this.playerWithdraw.bind(this, p));
 
 			this.players.push(p);
 		}
@@ -83,15 +84,15 @@ import Prompt from "./ui/prompt";
 		});
 	}
 
-	playerDeposited(sum) {
-		let c = new CashText(this, sum);
-		this.scene.add.existing(c);
+	playerDeposit(p, sum) {
+		let c = new CashText(p, sum);
+		this.playerContainer.add(c);
 		c.play();
 	}
 
-	playerWithdraw(sum) {
-		let c = new CashText(this, -sum);
-		this.scene.add.existing(c);
+	playerWithdraw(p, sum) {
+		let c = new CashText(p, -sum);
+		this.playerContainer.add(c);
 		c.play();
 	}
 }
