@@ -30,7 +30,7 @@ class Tax extends Tile {
 		this.cost = config.cost;
 		this.text.setY(this.y + 10);
 
-		let string = `Pay $${this.cost}`;
+		let string = `Pay £${this.cost}`;
 
 		let costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
 		costText.setStyle({

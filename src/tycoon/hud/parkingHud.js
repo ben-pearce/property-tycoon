@@ -38,7 +38,7 @@ class ParkingHud extends Phaser.GameObjects.Container {
 		let nameText = new Phaser.GameObjects.Text(this.scene, 10, 120, TokenNames.PARKING, PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
-		this.cashText = new Phaser.GameObjects.Text(this.scene, 13, 155, `Cash $${this.parking.cash}`, BankCashStyle);
+		this.cashText = new Phaser.GameObjects.Text(this.scene, 13, 155, `Cash £${this.parking.cash}`, BankCashStyle);
 		this.add([background, graphic, this.cashText, nameText]);
 
 		this.parking.on("fee", this.updateCash.bind(this));
@@ -56,7 +56,7 @@ class ParkingHud extends Phaser.GameObjects.Container {
 	 * Hud.CASH_UPDATE_TIMEOUT milliseconds.
 	 */
 	updateCash() {
-		let string = `Cash $${this.parking.cash}`;
+		let string = `Cash £${this.parking.cash}`;
 		
 		this.cashText.setStyle({color: (this.parking.cash > this.cash) ? Hud.POSITIVE_COLOR : Hud.NEGATIVE_COLOR});
 		this.cashText.setText(string);

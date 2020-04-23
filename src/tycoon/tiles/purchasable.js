@@ -23,7 +23,7 @@ class Purchasable extends Tile {
 
 		this.cost = config.cost;
 
-		let string = `$${this.cost}`;
+		let string = `£${this.cost}`;
 
 		let costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
 		costText.setStyle({

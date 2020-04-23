@@ -36,7 +36,7 @@ class PlayerHud extends Phaser.GameObjects.Container {
 		let nameText = new Phaser.GameObjects.Text(this.scene, 80, 10, getTokenNameByPlayerId(player.id), PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
-		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash $${player.cash}`, PlayerCashStyle);
+		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
 		this.add([background, tokenGraphic, nameText, this.cashText]);
 
 		this.player.on("deposit", this.updateCash.bind(this));
@@ -54,7 +54,7 @@ class PlayerHud extends Phaser.GameObjects.Container {
 	 * Hud.CASH_UPDATE_TIMEOUT milliseconds.
 	 */
 	updateCash() {
-		let string = `Cash $${this.player.cash}`;
+		let string = `Cash £${this.player.cash}`;
 		
 		this.cashText.setStyle({color: (this.player.cash > this.cash) ? Hud.POSITIVE_COLOR : Hud.NEGATIVE_COLOR});
 		this.cashText.setText(string);
