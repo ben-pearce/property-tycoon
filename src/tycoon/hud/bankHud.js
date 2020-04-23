@@ -39,8 +39,8 @@ class BankHud extends Phaser.GameObjects.Container {
 		
 		this.add([background, graphic, nameText, this.cashText]);
 
-		this.bank.on("deposit", this.cashGained.bind(this));
-		this.bank.on("withdraw", this.cashLost.bind(this));
+		this.bank.on("deposit", this._cashGained.bind(this));
+		this.bank.on("withdraw", this._cashLost.bind(this));
 	}
 
 	/**
@@ -52,13 +52,13 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * @private
 	 * @param {integer} cash Cash value gained.
 	 */
-	cashGained(cash) {
-		let string = `Cash +$${cash}`;
+	_cashGained(cash) {
+		let string = `Cash +£${cash}`;
 		
 		this.cashText.setStyle({color: Hud.POSITIVE_COLOR });
 		this.cashText.setText(string);
 
-		setTimeout(this.reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
+		setTimeout(this._reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
 	}
 
 	/**
@@ -70,13 +70,13 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * @private
 	 * @param {integer} cash Cash value lost.
 	 */
-	cashLost(cash) {
-		let string = `Cash -$${cash}`;
+	_cashLost(cash) {
+		let string = `Cash -£${cash}`;
 		
 		this.cashText.setStyle({color: Hud.NEGATIVE_COLOR});
 		this.cashText.setText(string);
 
-		setTimeout(this.reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
+		setTimeout(this._reset.bind(this), Hud.CASH_UPDATE_TIMEOUT);
 	}
 
 	/**
@@ -84,7 +84,7 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * 
 	 * @private
 	 */
-	reset() {
+	_reset() {
 		this.cashText.setStyle({color: Hud.TEXT_COLOR});
 		this.cashText.setText(Hud.BANK_DEFAULT_TEXT);
 	}
