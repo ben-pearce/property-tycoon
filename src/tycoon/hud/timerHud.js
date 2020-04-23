@@ -2,11 +2,19 @@ import Phaser from "phaser";
 import {TimerStyle} from "../../styles";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
+/**
+ * This class represents a timer HUD in the HUD layer.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Hud
+ * 
+ * @property {Phaser.GameObjects.Text} timerText The text object 
+ * showing the remaining time.
+ */
 class TimerHud extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a timer HUD in the HUD layer.
-	 * 
-	 * Shows the time remaining on the game timer.
+	 * Creates a background and a text object to
+	 * show the remaining time.
 	 * 
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Player} timer The timer object to represent.

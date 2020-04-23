@@ -2,10 +2,18 @@ import Phaser from "phaser";
 import BoardConfig from "../tiles";
 import {Tiles} from "../constants";
 
-
+/**
+ * This class represents our game board.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * 
+ * @property {Phaser.GameObjects.Rectangle} background The board background.
+ * @property {Tile[]} tiles The tiles around the board.
+ * 
+ */
 class Board extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents our game "board".
+	 * Creates board background, tiles and adds logo.
 	 * 
 	 * @param {GameManager} game Game manager this board belongs to.
 	 */

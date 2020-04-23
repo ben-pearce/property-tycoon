@@ -1,28 +1,31 @@
 import Phaser from "phaser";
 
-
+/**
+ * This class represents our dice.
+ * 
+ * @extends Phaser.Events.EventEmitter
+ * 
+ * @property {integer[]} result Stores the result for most recent dice roll.
+ * @property {Phaser.GameObjects.Sprite} rollSprite The hand roll sprite.
+ * @property {Phaser.GameObjects.Sprite} diceOneSprite 
+ * @property {Phaser.GameObjects.Sprite} diceTwoSprite
+ */
 class Dice extends Phaser.Events.EventEmitter {
 	/**
-	 * This class represents our dice, it is an EventEmitter,
-	 * meaning we can listen for events on it. The events you
-	 * can listen for are as follows:
-	 * 
-	 * dice.on("roll", callback)
-	 * 
-	 * 	Fired when a the user clicks the dice to roll, does NOT
-	 * 	provide any insight into the dice roll result.
-	 * 
-	 * dice.on("landed", callback)
-	 * 
-	 * 	Fired when the dice "land" and provides the result as an
-	 * 	array of two integers (diceoneresult, dicetworesult).
-	 * 
-	 * Dice roll example:
-	 * 	
-	 * dice.requestRoll()
+	 * Creates three dice sprites, the hand roll sprite,
+	 * dice one and two sprites for rolling animation.
 	 * 
 	 * dice.result always stores the latest result but does not
 	 * update until the dice have landed!
+	 * 
+	 * @example <caption>Example usage of events</caption>
+	 * let dice = new Dice(game);
+	 * dice.on("roll", callback);
+	 * dice.on("landed", callback);
+	 * @end
+	 * 
+	 * @example <caption>Example of requesting roll</caption>
+	 * dice.requestRoll();
 	 * 
 	 * @param {GameManager} game The game manager the Dice belongs to.
 	 */
@@ -91,6 +94,7 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * frames until they "land", at which point this.land() will
 	 * be called.
 	 * @param {Phaser.Input.Pointer} pointer The pointer
+	 * @fires Dice#rolled
 	 */
 	clickRoll(pointer) {
 		this.emit("rolled");
@@ -136,6 +140,8 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * 
 	 * Stops animations and emits the "landed" event
 	 * with the result as the parameter.
+	 * 
+	 * @fires Dice#landed
 	 */
 	land() {
 		this.result = [Phaser.Math.Between(1, 6), Phaser.Math.Between(1, 6)];
@@ -163,5 +169,19 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.rollSprite.setScale(1);
 	}
 }
+
+/**
+ * Event fired when dice have landed.
+ * 
+ * @event Dice#landed
+ * @param {integer[]} result The dice result.
+ */
+
+
+/**
+ * Event fired when dice have been rolled.
+ * 
+ * @event Dice#rolled
+ */
 
 export default Dice;

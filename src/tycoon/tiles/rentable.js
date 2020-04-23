@@ -1,6 +1,15 @@
 import Purchasable from "./purchasable";
 import Property from "../property";
 
+/**
+ * Represents a Rentable tile.
+ * 
+ * @memberof Tiles
+ * @extends Purchasable
+ * 
+ * @property {Color} color The color group this property belongs to.
+ * @property {integer} rent The price of rent for each upgrade.
+ */
 class Rentable extends Purchasable {
 	constructor(game, options) {
 		super(game, options);
