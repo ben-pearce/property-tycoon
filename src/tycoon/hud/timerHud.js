@@ -36,24 +36,28 @@ class TimerHud extends Phaser.GameObjects.Container {
 		
 		this.add([background, this.timerText]);
 
-		this.timer.on("tick", this.update.bind(this));
-		this.timer.on("complete", this.complete.bind(this));
+		this.timer.on("tick", this._update.bind(this));
+		this.timer.on("complete", this._complete.bind(this));
 	}
 
 	/**
 	 * Updates the timer text.
 	 * 
-	 * @param {String} text Text to update to.
+	 * @param {string} text Text to update to.
+	 * 
+	 * @private
 	 */
-	update(text) {
+	_update(text) {
 		this.timerText.setText(text);
 	}
 
 	/**
 	 * Calling this will make the timer text flash to
 	 * indicate to the user the timer has now elapsed.
+	 * 
+	 * @private
 	 */
-	complete() {
+	_complete() {
 		setInterval(() => {
 			this.timerText.setVisible(!this.timerText.visible);
 		}, 500);
