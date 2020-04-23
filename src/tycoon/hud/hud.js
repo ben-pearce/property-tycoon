@@ -56,7 +56,7 @@ class Hud extends Phaser.GameObjects.Container {
 		this.bank = new BankHud(this, game.bank);
 		this.bank.setPosition(leftX, bankY);
 		
-		this.parking = new ParkingHud(this, game.board.tiles[20]);
+		this.parking = new ParkingHud(this, game.board.getSingletonTileByType(Parking));
 		this.parking.setPosition(leftX, parkingY);
 
 		this.timer = new TimerHud(this, game.timer);
