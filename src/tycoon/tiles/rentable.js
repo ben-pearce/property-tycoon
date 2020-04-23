@@ -11,10 +11,19 @@ import Property from "../property";
  * @property {integer} rent The price of rent for each upgrade.
  */
 class Rentable extends Purchasable {
-	constructor(game, options) {
-		super(game, options);
+	/**
+	 * Adds a property to the tile.
+	 * 
+	 * @param {Board} board The board this tile belongs to.
+	 * @param {TileConfig} config The tile configuration to observe.
+	 */
+	constructor(board, config) {
+		super(board, config);
 
-		this.property = new Property(this, options.color);
+		this.color = config.color;
+		this.rent = config.rent;
+
+		this.property = new Property(this, config.color);
 		this.add([this.property, this.property.houseGraphic]);
 	}
 
