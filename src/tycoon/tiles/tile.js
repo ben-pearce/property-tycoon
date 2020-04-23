@@ -126,7 +126,7 @@ class Tile extends Phaser.GameObjects.Container {
 	 * @param {Player} player The player that passed the tile.
 	 */
 	onPassed(player) {
-		console.log(player, "passed", this);
+		return player;
 	}
 
 	/**
@@ -138,8 +138,6 @@ class Tile extends Phaser.GameObjects.Container {
 	 * @param {Player} player The player that landed on this tile.
 	 */
 	onLanded(player) {
-		console.log(player, "landed", this);
-		
 		this.players.push(player);
 
 		if(player.tile !== null) {
