@@ -22,6 +22,7 @@ class Purchasable extends Tile {
 		super(board, config);
 
 		this.cost = config.cost;
+		this.owner = null;
 
 		let string = `£${this.cost}`;
 
@@ -37,9 +38,7 @@ class Purchasable extends Tile {
 	 * property. Children of this call will simply
 	 * have a value equal to the purchase cost.
 	 * 
-	 * i.e. this.cost.
-	 * 
-	 * @returns {Integer} The value of this property.
+	 * @returns {integer} The value of this property.
 	 */
 	getValue() {
 		return this.cost;
