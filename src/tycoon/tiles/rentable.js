@@ -92,6 +92,12 @@ class Rentable extends Purchasable {
 					this.game.nextPlayer();
 				});
 			});
+			rentCard.auctionButton.on("pointerup", () => {
+				this.game.prompt.closeWithAnim(() => {
+					this.auction();
+					this.game.nextPlayer();
+				});
+			});
 			this.game.prompt.showWithAnim(rentCard);
 		}
 	}
