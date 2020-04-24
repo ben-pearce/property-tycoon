@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Tile from "./tile";
 import {CashTextStyle} from "../../styles";
+import {getTokenNameByPlayerId} from "../utils";
 
 /**
  * All "purchasable" tiles inherit this class.
@@ -48,13 +49,53 @@ class Purchasable extends Tile {
 	 * Sells this property to the player specified.
 	 * 
 	 * @param {Player} player The purchasing player.
+	 * @param {?integer} [cost=null] Override the cost of this property for this purchase only.
 	 */
-	purchase(player) {
-		if(this.owner === null && player.cash > this.cost) {
-			player.withdraw(this.cost);
-			this.game.bank.deposit(this.cost);
+	purchase(player, cost=null) {
+		cost = cost == null ? this.cost : cost;
+		if(this.owner === null && player.cash > cost) {
+			player.withdraw(cost);
+			this.game.bank.deposit(cost);
 
 			this.owner = player;
+		}
+	}
+
+	/**
+	 * Auctions the property to the highest bidder.
+	 */
+	auction() {
+		let highestBidder = null;
+		let highestBid = 0;
+		let duplicateBids;
+
+		do {
+			duplicateBids = false;
+			for(let i = 0; i < this.game.players.length; i++) {
+				let player = this.game.players[i];
+
+				// eslint-disable-next-line no-undef
+				let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
+
+				while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
+					// eslint-disable-next-line no-undef
+					playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, please enter a valid bid: `));
+				}
+				
+				if(playerBid > 0) {
+					if(playerBid > highestBid) {
+						duplicateBids = false;
+						highestBidder = player;
+						highestBid = playerBid;
+					} else if(playerBid == highestBid) {
+						duplicateBids = true;
+					}
+				}
+			}
+		} while(duplicateBids);
+
+		if(highestBidder !== null) {
+			this.purchase(highestBidder, highestBid);
 		}
 	}
 }
