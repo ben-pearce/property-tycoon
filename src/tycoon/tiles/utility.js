@@ -28,7 +28,16 @@ class Utility extends Purchasable {
 		this.text.setY(this.y + 10);
 		this.add(graphic);
 	}
-}
+
+	/**
+	 * Offer player purchase or charge rent.
+	 * 
+	 * @param {Player} player The player to charge or offer sale.
+	 * @override
+	 */
+	onLanded(player) {
+		super.onLanded(player);
+	}
 }
 
 export default Utility;
