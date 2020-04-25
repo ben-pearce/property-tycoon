@@ -71,10 +71,10 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * Once animation is complete callback is invoked.
 	 * 
 	 * @param {Tile} tile The tile to move to.
-	 * @param {Player~animationCallback} cb The callback to invoke after animation completes.
+	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
 	 * @param {integer} direction The direction to move around the board i.e. +1 = forwards 1 step, -1 = backwards 1 step.
 	 */
-	moveToTile(tile, cb, direction=1) {
+	moveToTile(tile, cb=null, direction=1) {
 		let timeline = this.scene.tweens.createTimeline();
 		let length = this.game.board.tiles.length;
 
@@ -92,7 +92,9 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		timeline.setCallback("onComplete", () => {
 			tile.onLanded(this);
-			cb();
+			if(cb !== null) {
+				cb();
+			}
 		});
 		timeline.play();
 	}
