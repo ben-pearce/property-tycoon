@@ -53,6 +53,8 @@ class Tax extends Tile {
 		let freeParking = this.game.board.getSingletonTileByType(Parking);
 		freeParking.pay(this.cost);
 		player.withdraw(this.cost);
+
+		this.game.nextPlayer();
 	}
 }
 
