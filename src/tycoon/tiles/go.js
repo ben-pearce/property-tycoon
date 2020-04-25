@@ -35,6 +35,8 @@ class Go extends Tile {
 	 */
 	onPassed(player) {
 		super.onPassed(player);
+
+		player.hasPassedGo = true;
 		
 		this.game.bank.withdraw(200);
 		player.deposit(200);
