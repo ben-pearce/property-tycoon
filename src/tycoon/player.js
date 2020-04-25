@@ -100,6 +100,31 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	/**
+	 * Moves a player to a tile without tweening each
+	 * tile in-between. Does not move in any particular direction,
+	 * player will move to the tile from wherever they are
+	 * on the board at present.
+	 * 
+	 * @param {Tile} tile The tile to move to.
+	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
+	 */
+	jumpToTile(tile, cb) {
+		let [x, y] = tile.getPlayerXY();
+
+		this.scene.tweens.add({
+			targets: this,
+			ease: "Cubic.easeOut",
+			x: x, y: y,
+			onComplete: () => {
+				tile.onLanded(this);
+				if(cb !== null) {
+					cb();
+				}
+			}
+		});
+	}
+
+	/**
 	 * Wrapper function for moving player forward n tiles.
 	 * 
 	 * @param {integer} steps Steps to move forward.
