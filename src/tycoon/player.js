@@ -11,6 +11,7 @@ import {getTokenSpriteByPlayerId} from "./utils";
  * @property {integer} cash The cash held by this player.
  * @property {Tile} tile The tile this player is current on.
  * @property {boolean} jailed Is player in jail or not.
+ * @property {boolean} hasPassedGo Has the player passed Go tile or not.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
  */
 class Player extends Phaser.GameObjects.Sprite {
@@ -26,6 +27,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.cash = null;
 		this.tile = null;
 		this.jailed = false;
+		this.hasPassedGo = false;
 		this.doubleRollStreak = 0;
 	}
 
