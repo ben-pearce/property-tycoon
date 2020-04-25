@@ -70,7 +70,7 @@ class Rentable extends Purchasable {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
-		if(this.owner !== null) {
+		if(this.owner !== null && player !== this.owner) {
 			let rentCharged = this.getRent();
 			let monopolyOwner = this.game.board.getMonopolyOwner(this);
 			if(monopolyOwner !== null) {
@@ -83,22 +83,24 @@ class Rentable extends Purchasable {
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);
 			this.game.nextPlayer();
-		} else {
-			let rentCard = new RentableCard(this.game, this, player);
-			rentCard.buyButton.setEnabled(player.cash > this.cost);
-			rentCard.buyButton.on("pointerup", () => {
+		} else if(this.owner == null && player.hasPassedGo) {
+			let rentableCard = new RentableCard(this.game, this, player);
+			rentableCard.buyButton.setEnabled(player.cash > this.cost);
+			rentableCard.buyButton.on("pointerup", () => {
 				this.game.prompt.closeWithAnim(() => {
 					this.purchase(player);
 					this.game.nextPlayer();
 				});
 			});
-			rentCard.auctionButton.on("pointerup", () => {
+			rentableCard.auctionButton.on("pointerup", () => {
 				this.game.prompt.closeWithAnim(() => {
 					this.auction();
 					this.game.nextPlayer();
 				});
 			});
-			this.game.prompt.showWithAnim(rentCard);
+			this.game.prompt.showWithAnim(rentableCard);
+		} else {
+			this.game.nextPlayer();
 		}
 	}
 }
