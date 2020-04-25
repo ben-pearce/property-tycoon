@@ -7,9 +7,7 @@ import Bank from "./bank";
 import Timer from "./timer";
 import CashText from "./ui/cashText";
 import Prompt from "./ui/prompt";
-import Rentable from "./tiles/rentable";
 import Cards from "../cards";
-import Luck from "./tiles/luck";
 
 /**
  * This is our Game Controller, it is in charge
@@ -84,13 +82,7 @@ class GameManager {
 		this.playerContainer.bringToTop(p);
 
 		let [diceOne, diceTwo] = roll;
-		p.moveForwards(diceOne + diceTwo, this.playerMoved.bind(this, p));
-	}
-
-	playerMoved(p) {
-		if(!(p.tile instanceof Rentable) && !(p.tile instanceof Luck)) {
-			this.nextPlayer();
-		}
+		p.moveForwards(diceOne + diceTwo);
 	}
 
 	playerDeposit(p, sum) {
