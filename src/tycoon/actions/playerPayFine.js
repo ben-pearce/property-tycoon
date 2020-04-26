@@ -30,6 +30,9 @@ class PlayerPayFine extends BaseAction {
 	 */
 	do(game, player) {
 		// player places this.fine on free parking value
+		player.withdraw(this.fine);
+		game.parking.collect(this.fine);
+		
 		console.log(player);
 	}
 }
