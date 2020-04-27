@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import Tile from "./tile";
-import Parking from "./parking";
 import {CashTextStyle} from "../../styles";
 
 /**
@@ -50,9 +49,8 @@ class Tax extends Tile {
 	onLanded(player) {
 		super.onLanded(player);
 
-		let freeParking = this.game.board.getSingletonTileByType(Parking);
-		freeParking.pay(this.cost);
 		player.withdraw(this.cost);
+		this.game.bank.deposit(this.cost);
 
 		this.game.nextPlayer();
 	}
