@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import {Cards} from "../../constants";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
+import Button from "../ui/button";
 
 /**
  * @namespace Cards
@@ -29,6 +30,14 @@ class Card extends Phaser.GameObjects.Container {
 
 		this.background = new RoundRectangle(this.scene, 0, 0, Cards.WIDTH, Cards.HEIGHT, 15, Cards.COLOR);
 		this.add(this.background);
+	}
+
+	setEnabled(isEnabled) {
+		for(let i = 0; i < this.list.length; i++) {
+			if(this.list[i] instanceof Button) {
+				this.list[i].setEnabled(isEnabled);
+			}
+		}
 	}
 }
 
