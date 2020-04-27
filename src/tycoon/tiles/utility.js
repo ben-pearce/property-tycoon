@@ -32,11 +32,27 @@ class Utility extends Purchasable {
 	/**
 	 * Offer player purchase or charge rent.
 	 * 
+	 * If one utility owned, rent is 4 times dice result.
+	 * If both utilities owned, rent is 10 times dice result.
+	 * 
 	 * @param {Player} player The player to charge or offer sale.
 	 * @override
 	 */
 	onLanded(player) {
 		super.onLanded(player);
+
+		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
+			let ownedUtilities = this.board.getTilesOwnedByPlayer(this.owner, Utility);
+			if(ownedUtilities.length > 0) {
+				let [diceOne, diceTwo] = this.game.dice.result;
+				let rentCharged = [(diceOne + diceTwo) * 4, (diceOne + diceTwo) * 10][ownedUtilities.length - 1];
+				player.withdraw(rentCharged);
+				this.owner.deposit(rentCharged);
+			}
+			this.game.nextPlayer();
+		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
+			this.game.nextPlayer();
+		}
 	}
 }
 
