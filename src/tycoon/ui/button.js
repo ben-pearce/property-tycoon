@@ -82,6 +82,7 @@ class Button extends Phaser.GameObjects.Container {
 				useHandCursor: true});
 			this.setAlpha(1);
 		} else {
+			this._buttonPointerOut();
 			this.disableInteractive();
 			this.setAlpha(0.5);
 		}
