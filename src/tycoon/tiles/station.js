@@ -39,7 +39,7 @@ class Station extends Purchasable {
 		super.onLanded(player);
 		if(this.owner !== null && player !== this.owner) {
 			let ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
-			let rentCharged = [25, 50, 100, 200][ownedStations.length];
+			let rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
 
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);
