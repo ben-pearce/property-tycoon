@@ -22,6 +22,7 @@ class Rentable extends Purchasable {
 		super(board, config);
 
 		this.color = config.color;
+		this.upgradeCost = config.upgrade;
 		this.rent = config.rent;
 
 		this.property = new Property(this, config.color);

@@ -21,6 +21,7 @@ import {Colors} from "./constants";
  * @property {Colors} color The color group.
  * @property {string} graphic Sprite to use as graphic.
  * @property {integer} cost The cost of property purchase.
+ * @property {integer} upgrade The cost of a house upgrade.
  * @property {integer[]} rent The cost of rent for each upgrade.
  */
 
@@ -36,6 +37,7 @@ export default [
 		color: Colors.BROWN,
 		cost: 60,
 		rent: [2, 10, 30, 90, 160, 250],
+		upgrade: 50,
 		type: Rentable
 	},
 	{
@@ -49,6 +51,7 @@ export default [
 		color: Colors.BROWN,
 		cost: 60,
 		rent: [4, 20, 60, 180, 320, 450],
+		upgrade: 50,
 		type: Rentable
 	},
 	{
@@ -71,6 +74,7 @@ export default [
 		color: Colors.BLUE,
 		cost: 100,
 		rent: [6, 30, 90, 270, 400, 550],
+		upgrade: 50,
 		type: Rentable
 	},
 	{
@@ -85,6 +89,7 @@ export default [
 		color: Colors.BLUE,
 		cost: 100,
 		rent: [6, 30, 90, 270, 400, 550],
+		upgrade: 50,
 		type: Rentable
 	},
 	{
@@ -93,6 +98,7 @@ export default [
 		color: Colors.BLUE,
 		cost: 120,
 		rent: [8, 40, 100, 300, 450, 600],
+		upgrade: 50,
 		type: Rentable,
 	},
 	{
@@ -106,6 +112,7 @@ export default [
 		color: Colors.PURPLE,
 		cost: 140,
 		rent: [10, 50, 150, 450, 625, 750],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -121,6 +128,7 @@ export default [
 		color: Colors.PURPLE,
 		cost: 140,
 		rent: [10, 50, 150, 450, 625, 750],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -129,6 +137,7 @@ export default [
 		color: Colors.PURPLE,
 		cost: 160,
 		rent: [12, 60, 180, 500, 700, 900],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -144,6 +153,7 @@ export default [
 		color: Colors.ORANGE,
 		cost: 180,
 		rent: [14, 70, 200, 550, 750, 950],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -157,6 +167,7 @@ export default [
 		color: Colors.ORANGE,
 		cost: 180,
 		rent: [14, 70, 200, 550, 750, 950],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -165,6 +176,7 @@ export default [
 		color: Colors.ORANGE,
 		cost: 200,
 		rent: [16, 80, 220, 600, 800, 1000],
+		upgrade: 100,
 		type: Rentable
 	},
 	{
@@ -178,6 +190,7 @@ export default [
 		color: Colors.RED,
 		cost: 220,
 		rent: [18, 90, 250, 700, 875, 1050],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -192,6 +205,7 @@ export default [
 		color: Colors.RED,
 		cost: 220,
 		rent: [18, 90, 250, 700, 875, 1050],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -200,6 +214,7 @@ export default [
 		color: Colors.RED,
 		cost: 240,
 		rent: [20, 100, 300, 750, 925, 1100],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -215,6 +230,7 @@ export default [
 		color: Colors.YELLOW,
 		cost: 260,
 		rent: [22, 110, 330, 800, 975, 1150],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -223,6 +239,7 @@ export default [
 		color: Colors.YELLOW,
 		cost: 260,
 		rent: [22, 110, 330, 800, 975, 1150],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -238,6 +255,7 @@ export default [
 		color: Colors.YELLOW,
 		cost: 280,
 		rent: [22, 120, 360, 850, 1025, 1200],
+		upgrade: 150,
 		type: Rentable
 	},
 	{
@@ -251,6 +269,7 @@ export default [
 		color: Colors.GREEN,
 		cost: 300,
 		rent: [26, 130, 390, 900, 1100, 1275],
+		upgrade: 200,
 		type: Rentable
 	},
 	{
@@ -259,6 +278,7 @@ export default [
 		color: Colors.GREEN,
 		cost: 300,
 		rent: [26, 130, 390, 900, 1100, 1275],
+		upgrade: 200,
 		type: Rentable
 	},
 	{
@@ -272,6 +292,7 @@ export default [
 		color: Colors.GREEN,
 		cost: 320,
 		rent: [28, 150, 450, 1000, 1200, 1400],
+		upgrade: 200,
 		type: Rentable
 	},
 	{
@@ -293,6 +314,7 @@ export default [
 		color: Colors.DEEP_BLUE,
 		cost: 350,
 		rent: [35, 175, 500, 1100, 1300, 1500],
+		upgrade: 200,
 		type: Rentable
 	},
 	{
@@ -308,6 +330,7 @@ export default [
 		color: Colors.DEEP_BLUE,
 		cost: 400,
 		rent: [50, 200, 600, 1400, 1700, 2000],
+		upgrade: 200,
 		type: Rentable
 	}
 ];
