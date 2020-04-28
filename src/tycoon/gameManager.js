@@ -64,8 +64,8 @@ class GameManager {
 		this.scene.add.existing(this.hud);
 		this.scene.add.existing(this.prompt);
 
-		this.opportunityCards = Cards.opportunity.slice();
-		this.potluckCards = Cards.potluck.slice();
+		this.opportunityCards = this._shuffleCards(Cards.opportunity.slice());
+		this.potluckCards = this._shuffleCards(Cards.potluck.slice());
 
 		this.dice.requestRoll();
 		this.dice.on("landed", this.playerRolled.bind(this));
@@ -119,12 +119,19 @@ class GameManager {
 	}
 
 	/**
-	 * Advances the game turn.
+	 * Shuffles a deck of cards.
+	 * 
+	 * @param {CardConfig[]} cards The cards to shuffle.
+	 * @private
 	 */
-	nextPlayer() {
-		this.dice.requestRoll();
-		this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+	_shuffleCards(cards) {
+		for (let i = cards.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[cards[i], cards[j]] = [cards[j], cards[i]];
+		}
+		return cards;
 	}
+
 }
 
 export default GameManager;
