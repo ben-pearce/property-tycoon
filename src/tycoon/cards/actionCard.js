@@ -35,16 +35,9 @@ class ActionCard extends Card {
 		});
 		title.setX(title.x - (title.width /2));
 
-		let description = new Phaser.GameObjects.Text(this.scene, 0, 0, config.description, CardStyle);
-		description.setStyle({
-			fixedWidth: this.background.width,
-			wordWrap: {width: this.background.width - 50, useAdvancedWrap: true}
-		});
-		description.setPosition(description.x - (description.width /2), description.y - (description.height / 2));
-
 		this.continueButton = new Button(this.scene, -190, 240, 380, 50, "Continue", Buttons.AMBER);
 
-		this.add([title, description, this.continueButton]);
+		this.add([title, this.continueButton]);
 	}
 }
 
