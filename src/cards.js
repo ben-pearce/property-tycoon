@@ -100,7 +100,7 @@ export default {
 		}],
 	opportunity: [
 		{
-			name: "Bank pays you divided of £50",
+			name: "Bank pays you dividend of £50",
 			description: "Bank pays player £50.",
 			action: new BankPayPlayer(50)
 		},

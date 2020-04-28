@@ -35,9 +35,25 @@ class Go extends Tile {
 	 */
 	onPassed(player) {
 		super.onPassed(player);
+
+		player.hasPassedGo = true;
 		
 		this.game.bank.withdraw(200);
 		player.deposit(200);
+	}
+
+	/**
+	 * No special action for landing on a Go tile.
+	 * 
+	 * Just continue to next turn.
+	 * 
+	 * @param {Player} player The player that landed.
+	 */
+	onLanded(player) {
+		if(player.tile !== null) {
+			this.game.nextPlayer();
+		}
+		super.onLanded(player);
 	}
 }
 

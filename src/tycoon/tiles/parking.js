@@ -63,8 +63,13 @@ class Parking extends Tile {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
+		
+		if(this.cash > 0) {
+			player.deposit(this.cash);
+			this.collect();
+		}
 
-		// action: "Collect fines",
+		this.game.nextPlayer();
 	}
 }
 

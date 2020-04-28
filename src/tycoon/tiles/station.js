@@ -36,11 +36,16 @@ class Station extends Purchasable {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
+		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
+			let ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
+			let rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
 
-		// owner has 1 station, rent = £25
-		// owner has 2 station, rent = £50
-		// owner has 3 station, rent = £100
-		// owner has 4 station, rent = £200
+			player.withdraw(rentCharged);
+			this.owner.deposit(rentCharged);
+			this.game.nextPlayer();
+		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
+			this.game.nextPlayer();
+		}
 	}
 }
 

@@ -22,10 +22,12 @@ class Button extends Phaser.GameObjects.Container {
 	 * @param {integer} height Button height
 	 * @param {string} text Button text
 	 * @param {integer} color Button color
+	 * @param {boolean} isEnabled Is button enabled or not.
 	 */
 	constructor(scene, x, y, width, height, text, color) {
 		super(scene, x, y);
 
+		this.isEnabled = null;
 		this.color = color;
 
 		this.background = new RoundRectangle(this.scene, 0, 0, width, height, 15, color);
@@ -73,12 +75,14 @@ class Button extends Phaser.GameObjects.Container {
 	 * @param {boolean} enabled Button enabled?
 	 */
 	setEnabled(enabled) {
+		this.isEnabled = enabled;
 		if(enabled) {
 			this.setInteractive({hitArea: this.background, 
 				hitAreaCallback: Phaser.Geom.Rectangle.Contains, 
 				useHandCursor: true});
 			this.setAlpha(1);
 		} else {
+			this._buttonPointerOut();
 			this.disableInteractive();
 			this.setAlpha(0.5);
 		}

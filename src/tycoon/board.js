@@ -175,6 +175,30 @@ class Board extends Phaser.GameObjects.Container {
 		}
 		return monopolyOwner;
 	}
+
+	/**
+	 * Returns a list of tiles owned by a particular player
+	 * with the option to filter by the type of tile.
+	 * 
+	 * @example <caption>Getting Rentable tiles owned by player</caption>
+	 * board.getTilesOwnedByPlayer(player, Rentable)
+	 * 
+	 * @example <caption>Getting all tiles owned by player</caption>
+	 * board.getTilesOwnedByPlayer(player)
+	 * 
+	 * @param {Player} player The player to find owned tiles for.
+	 * @param {?Type} [tileType=null] The type of tile to find.
+	 */
+	getTilesOwnedByPlayer(player, tileType=null) {
+		let ownedTiles = [];
+		for(let i = 0; i < this.tiles.length; i++) {
+			let t = this.tiles[i];
+			if(t.owner === player && t instanceof tileType) {
+				ownedTiles.push(t);
+			}
+		}
+		return ownedTiles;
+	}
 }
 
 export default Board;
