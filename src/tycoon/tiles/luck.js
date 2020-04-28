@@ -41,8 +41,10 @@ class Luck extends Tile {
 		let actionCard = new ActionCard(this.scene, this.game, potluckCard, player);
 		actionCard.continueButton.on("pointerup", () => {
 			this.game.prompt.closeWithAnim(() => {
-				potluckCard.action.do(this.game, player, this.game.nextPlayer.bind(this.game));
-				this.game.potluckCards.push(potluckCard);
+				potluckCard.action.do(this.game, player, () => {
+					this.game.nextPlayer();
+					this.game.potluckCards.push(potluckCard);
+				});
 			});
 		});
 		this.game.prompt.showWithAnim(actionCard);
