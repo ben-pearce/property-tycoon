@@ -37,8 +37,7 @@ class Cop extends Tile {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
-
-		// action: "Go to jail",
+		player.jail(this.game.nextPlayer.bind(this.game));
 	}
 }
 
