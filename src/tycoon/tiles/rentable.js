@@ -79,6 +79,66 @@ class Rentable extends Purchasable {
 	}
 
 	/**
+	 * Returns whether or not this tile is upgradable but subject to
+	 * the constraint that it may only be upgraded if the owner owns
+	 * all the properies in the same colored group as this one and that
+	 * there must never be a difference of one house per group.s
+	 * 
+	 * @returns {boolean} Can the property be upgraded or not.
+	 */
+	isUpgradable() {
+		let monopolyOwner = this.board.getMonopolyOwner(this);
+		let isMonopoly = monopolyOwner !== null;
+
+		if(isMonopoly) {
+			let colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			let upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			let minUpgradeCount = Math.min(...upgradeCounts);
+			let upgradable = this.property.getUpgradeAsNumber() < minUpgradeCount + 1;
+			return upgradable && this.property.isUpgradable();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not this tile is downgradable but subject to the 
+	 * same constraints that isUpgradable() is subject to.
+	 * 
+	 * @returns {boolean} Can the property be downgraded or not.
+	 */
+	isDowngradable() {
+		let upgradeCount = this.property.getUpgradeAsNumber();
+		if(upgradeCount > 0) {
+			let colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			let upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			let maxUpgradeCount = Math.max(...upgradeCounts);
+			let downgradable = this.property.getUpgradeAsNumber() > maxUpgradeCount - 1;
+			return downgradable && this.property.isDowngradable();
+		}
+		return false;
+	}
+
+	/**
+	 * Upgrades the property on this rentable tile and charges
+	 * the player the amount required for the upgrade.
+	 */
+	upgrade() {
+		this.owner.withdraw(this.property.getUpgradeCost());
+		this.game.bank.deposit(this.property.getUpgradeCost());
+		this.property.upgrade();
+	}
+
+	/**
+	 * Downgrades the property on this rentable tile and pays
+	 * the player the amount the property is valued at.
+	 */
+	downgrade() {
+		this.game.bank.withdraw(this.property.getDowngradeValue());
+		this.owner.deposit(this.property.getDowngradeValue());
+		this.property.downgrade();
+	}
+
+	/**
 	 * If the property is owned and player is not the owner,
 	 * charge rent.
 	 * 

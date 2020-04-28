@@ -60,6 +60,15 @@ class Property extends Phaser.GameObjects.Rectangle {
 	}
 
 	/**
+	 * Returns true if property can be downgraded further.
+	 * 
+	 * @returns {boolean} Can this property be downgraded?
+	 */
+	isDowngradable() {
+		return this.houses > 0;
+	}
+
+	/**
 	 * This returns the upgrade value of the property.
 	 * 
 	 * Needed to calculate the total value of a property
@@ -69,22 +78,47 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * the original cost of the property it belongs to by the
 	 * number of upgrades made.
 	 * 
-	 * i.e.
-	 * Property original cost = £300
-	 * Upgraded to 2 houses = 2 * £300 = £600
-	 * Upgraded to hotel = 5 * £300 = £1500
-	 * 
 	 * (note this does NOT return the total value of the 
 	 * property, use Rentable.getValue() for that.)
 	 * 
 	 * @returns {integer} The value of all the upgrades.
 	 */
 	getValue() {
-		let value = this.houses * this.tile.cost;
+		let value = this.houses * this.tile.upgradeCost;
 		if(this.isHotel) {
-			return value + this.tile.cost;
+			return value + (this.tile.upgradeCost * 4);
 		}
 		return value;
+	}
+
+	/**
+	 * Gets the cost of upgrading this property to
+	 * the next level.
+	 * 
+	 * @returns {integer} The cost of upgrading.
+	 */
+	getUpgradeCost() {
+		if(this.houses < 4) {
+			return this.tile.upgradeCost;
+		} else if(!this.isHotel) {
+			return this.tile.upgradeCost * 4;
+		}
+		return 0;
+	}
+
+	/**
+	 * Gets the value for the property level currently on the
+	 * tile.
+	 * 
+	 * If property cannot be downgraded will return 0.
+	 */
+	getDowngradeValue() {
+		if(this.houses <= 4 && !this.isHotel && this.houses > 0) {
+			return this.tile.upgradeCost;
+		} else if (this.isHotel) {
+			return this.tile.upgradeCost * 4;
+		}
+		return 0;
 	}
 
 	/**
@@ -104,12 +138,56 @@ class Property extends Phaser.GameObjects.Rectangle {
 	}
 
 	/**
+	 * Downgrades this property to the previous stage.
+	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	downgrade(cb=null) {
+		if(this.houses === 4 && this.isHotel) {
+			this.isHotel = false;
+		} else if(this.houses <= 4 && this.houses > 0) {
+			this.houses--;
+			if(this.houses === 0) {
+				this.isUpgraded = false;
+			}
+		}
+		this._update(cb);
+	}
+
+	/**
 	 * Called to upgrade the property to the next stage.
 	 * 
-	 * i.e. 
-	 * * 1 house -> 2 houses
-	 * * 4 houses -> hotel
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	upgrade(cb=null) {
+		if(this.houses < 4) {
+			this.houses++;
+		} else if(this.houses === 4 && !this.isHotel) {
+			this.isHotel = true;
+		}
+
+		this.isUpgraded = true;
+		this._update(cb);
+	}
+
+	/**
+	 * Resets a property back to it original state without
+	 * any upgrades. Used when selling property.
 	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	reset(cb=null) {
+		this.houses = 0;
+		this.isHotel = false;
+
+		this.isUpgraded = false;
+		this._update(cb);
+	}
+
+	/**
 	 * Creates a easing effect on the graphic when a property is
 	 * upgraded and invokes a callback if supplied.
 	 * 
@@ -117,50 +195,52 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * but will still perform tween so it is best to check
 	 * this.isUpgradable() before calling this.
 	 * 
-	 * @param {?Property~animationCallback} cb This will be called after any 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
 	 * animation has completed.
+	 * @private
 	 */
-	upgrade(cb=null) {
+	_update(cb=null) {
+		let frame = this.houses <= 4 && !this.isHotel ? `house${this.houses}` : "hotel";
 		let timeline = this.scene.tweens.createTimeline();
 
-		let hideTween = {
-			targets: this.houseGraphic,
-			ease: "Back.easeIn",
-			scale: 0
-		};
-
-		if(this.houses < 4) {
-			this.houses++;
-			this.isUpgraded = true;
-		}
-		let frame = `house${this.houses}`;
-		
-		if(this.houses == 4 && !this.isHotel) {
-			this.isHotel = true;
-			frame = "hotel";
-		}
-
-		if(this.houses > 1) {
-			Object.assign(hideTween, {
-				onComplete: () => this.houseGraphic.setFrame(frame)
-			});
-			
+		if(this.houseGraphic.visible) {
+			let hideTween = {
+				targets: this.houseGraphic,
+				ease: "Back.easeIn",
+				scale: 0,
+				onComplete: () => {
+					if(this.houses > 0) {
+						this.houseGraphic.setFrame(frame);
+					} else {
+						this.houseGraphic.setVisible(false);
+						if(cb !== null) {
+							cb();
+						}
+					}
+				}
+			};
 			timeline.add(hideTween);
-		} else {
-			this.houseGraphic.setFrame(frame);
+		}
+
+		if(!this.houseGraphic.visible && this.houses > 0) {
 			this.houseGraphic.setScale(0);
 			this.houseGraphic.setVisible(true);
+			this.houseGraphic.setFrame(frame);
 		}
 
-		timeline.add({
-			targets: this.houseGraphic,
-			ease: "Back.easeOut",
-			scale: 1
-		});
-
-		if(cb !== null) {
-			timeline.setCallback("onComplete", cb);
+		if(this.houses > 0) {
+			let showTween = {
+				targets: this.houseGraphic,
+				ease: "Back.easeOut",
+				scale: 1
+			};
+			timeline.add(showTween);
+	
+			if(cb !== null) {
+				timeline.setCallback("onComplete", cb);
+			}
 		}
+
 		timeline.play();
 	}
 }
