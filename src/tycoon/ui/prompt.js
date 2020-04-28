@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Card from "../cards/card";
 
 /**
  * Game prompt layer.
@@ -45,15 +46,22 @@ class Prompt extends Phaser.GameObjects.Container {
 	 * @param {Phaser.GameObject} promptGameObject The game object to show in the prompt window.
 	 * @param {?Prompt~animationCallback} [cb=null] Callback invoked when animation completes.
 	 */
-	showWithAnim(promptGameObject, db=null) {
+	showWithAnim(promptGameObject, cb=null) {
 		this.show(promptGameObject);
 		this.promptGameObject.setPosition(this.game.game.config.width / 2, this.game.game.config.height * 2);
 
 		const onComplete = () => {
-			if(typeof db === "function") {
-				db();
+			if(this.promptGameObject instanceof Card) {
+				this.promptGameObject.setEnabled(true);
+			}
+			if(typeof cb === "function") {
+				cb();
 			}
 		};
+
+		if(this.promptGameObject instanceof Card) {
+			this.promptGameObject.setEnabled(false);
+		}
 
 		this.scene.tweens.add({
 			targets: this.promptGameObject,
@@ -76,6 +84,11 @@ class Prompt extends Phaser.GameObjects.Container {
 				cb();
 			}
 		};
+
+		if(this.promptGameObject instanceof Card) {
+			this.promptGameObject.setEnabled(false);
+		}
+
 		this.scene.tweens.add({
 			targets: this.promptGameObject,
 			ease: "Back.easeIn",
