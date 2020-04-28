@@ -33,12 +33,14 @@ class PlayerPayRepair extends PlayerPayBank {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to withdraw cash from.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// conditionally update cost
 		super.do(game, player);
 
 		this.cash = null;
+		cb();
 	}
 }
 

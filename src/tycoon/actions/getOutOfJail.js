@@ -19,10 +19,11 @@ class GetOutOfJail extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player who has picked up the card.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// player is given Get Out Of Jail card
-		console.log(player);
+		cb();
 	}
 }
 

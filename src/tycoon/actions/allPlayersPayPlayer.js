@@ -25,10 +25,11 @@ class AllPlayersPayPlayer extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The paying player.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// iterate player.board.players and pay player
-		console.log(player);
+		cb();
 	}
 }
 

@@ -31,10 +31,11 @@ class PlayerMove extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to move.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// player is moved this.direction this.steps steps
-		console.log(player);
+		cb();
 	}
 }
 

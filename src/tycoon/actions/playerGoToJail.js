@@ -18,10 +18,11 @@ class PlayerGoToJail extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player instance.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// player is sent to jail and is given usual restrictions for jailed players
-		console.log(player);
+		cb();
 	}
 }
 
