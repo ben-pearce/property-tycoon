@@ -32,10 +32,11 @@ class PlayerMoveToTile extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to move.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// player is moved to tile with tile id this.tileId in this.direction
-		console.log(player);
+		cb();
 	}
 }
 

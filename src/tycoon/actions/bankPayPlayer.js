@@ -26,10 +26,12 @@ class BankPayPlayer extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to deposit cash into.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		game.bank.withdraw(this.cash);
 		player.deposit(this.cash);
+		cb();
 	}
 }
 

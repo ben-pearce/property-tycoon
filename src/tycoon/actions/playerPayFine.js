@@ -1,4 +1,5 @@
 import BaseAction from "./action";
+import Parking from "../tiles/parking";
 
 /**
  * Action class for player that pays fine to the
@@ -27,13 +28,13 @@ class PlayerPayFine extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to withdraw cash from.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
-		// player places this.fine on free parking value
+	do(game, player, cb) {
+		let parking = game.board.getSingletonTileByType(Parking);
 		player.withdraw(this.fine);
-		game.parking.collect(this.fine);
-		
-		console.log(player);
+		parking.pay(this.fine);
+		cb();
 	}
 }
 

@@ -43,8 +43,7 @@ class Opportunity extends Tile {
 		let actionCard = new ActionCard(this.scene, this.game, opportunityCard, player);
 		actionCard.continueButton.on("pointerup", () => {
 			this.game.prompt.closeWithAnim(() => {
-				opportunityCard.action.do(this.game, player);
-				this.game.nextPlayer();
+				opportunityCard.action.do(this.game, player, this.game.nextPlayer.bind(this.game));
 				this.game.opportunityCards.push(opportunityCard);
 			});
 		});

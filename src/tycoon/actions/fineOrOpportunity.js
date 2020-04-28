@@ -27,10 +27,11 @@ class FineOrOpportunity extends BaseAction {
 	 * @override
 	 * @param {GameManager} game The game manager instance.
 	 * @param {Player} player The player to ask.
+	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
-	do(game, player) {
+	do(game, player, cb) {
 		// ask player to pay this.fine or pick up opportunity card
-		console.log(player);
+		cb();
 	}
 }
 
