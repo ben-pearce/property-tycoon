@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import Purchasable from "./purchasable";
-import StationCard from "../cards/stationCard";
 
 /**
  * Represents a station tile.
@@ -44,23 +43,7 @@ class Station extends Purchasable {
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);
 			this.game.nextPlayer();
-		} else if(this.owner === null && player.hasPassedGo) {
-			let stationCard = new StationCard(this.game, this, player);
-			stationCard.buyButton.setEnabled(player.cash > this.cost);
-			stationCard.buyButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(() => {
-					this.purchase(player);
-					this.game.nextPlayer();
-				});
-			});
-			stationCard.auctionButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(() => {
-					this.auction();
-					this.game.nextPlayer();
-				});
-			});
-			this.game.prompt.showWithAnim(stationCard);
-		} else {
+		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
 			this.game.nextPlayer();
 		}
 	}
