@@ -43,8 +43,8 @@ class GameManager {
 			p.deposit(1500);
 			p.teleportToTile(this.board.tiles[0]);
 
-			p.on("deposit", this.playerDeposit.bind(this, p));
-			p.on("withdraw", this.playerWithdraw.bind(this, p));
+			p.on("deposit", this._playerDeposit.bind(this, p));
+			p.on("withdraw", this._playerWithdraw.bind(this, p));
 
 			this.players.push(p);
 		}
@@ -86,12 +86,33 @@ class GameManager {
 	}
 
 	playerDeposit(p, sum) {
+	/**
+	 * Called when a player deposits money into their account.
+	 * 
+	 * Displays cash text animation above the player token.
+	 * 
+	 * @param {Player} p The player who deposited cash.
+	 * @param {integer} sum The sum of the deposit.
+	 * 
+	 * @private
+	 */
+	_playerDeposit(p, sum) {
 		let c = new CashText(p, sum);
 		this.playerContainer.add(c);
 		c.play();
 	}
 
-	playerWithdraw(p, sum) {
+	/**
+	 * Called when a player withdraws money from their account.
+	 * 
+	 * Displays cash text animation above the player token.
+	 * 
+	 * @param {Player} p The player who withdrew cash.
+	 * @param {integer} sum The sum of the withdrawal.
+	 * 
+	 * @private
+	 */
+	_playerWithdraw(p, sum) {
 		let c = new CashText(p, -sum);
 		this.playerContainer.add(c);
 		c.play();
