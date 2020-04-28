@@ -16,11 +16,23 @@ import Cards from "../cards";
  *  
  * This class will initiate dice rolls, then ask for user
  * input and display prompts as appropriate.
+ * 
+ * @property {Board} board The board instance for this game.
+ * @property {Phaser.GameObjects.Container} playerContainer The layer that player tokens sit inside of.
+ * @property {Player[]} players The players in this game.
+ * @property {integer} currentPlayer The players index of player whose turn it current is.
+ * @property {Dice} dice The dice instance for this game.
+ * @property {Bank} bank The bank instance for this game.
+ * @property {Timer} timer The timer instance for this game.
+ * @property {Hud} hud The HUD instance for this game.
+ * @property {Prompt} prompt The prompt instance for this game.
+ * @property {CardConfig[]} opportunityCards The opporunity cards configuration objects.
+ * @property {CardConfig[]} potluckCards The pot luck cards configuration objects.
  */
 class GameManager {
 	/**
 	 * @param {Phaser.Game} game The Phaser.Game instance.
-	 * @param {Object} config The options for this game instance.
+	 * @param {GameConfig} config The options for this game instance.
 	 */
 	constructor(game, config) {
 		this.game = game;
@@ -37,6 +49,7 @@ class GameManager {
 			(game.config.height / 2) - boardDimensions.height / 2
 		);
 
+		// Create all the players and deposit 1500 cash
 		this.playerContainer = new Phaser.GameObjects.Container(this.scene);
 		for(let i = 0; i < config.playerCount; i++) {
 			let p = new Player(this, i);

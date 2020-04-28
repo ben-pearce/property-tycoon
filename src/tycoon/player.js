@@ -14,6 +14,7 @@ import Jail from "./tiles/jail";
  * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
  * @property {?(CardConfig|Array)} getOutOfJailCard The get out of jail card this player holds and the deck.
+ * @property {integer} jailTurnsMissed Number of turns missed due to jail.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
  */
 class Player extends Phaser.GameObjects.Sprite {
@@ -38,7 +39,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Deposits some cash into player bank account.
 	 * 
-	 * @param {Integer} sum Amount of cash deposit.
+	 * @param {integer} sum Amount of cash deposit.
 	 * @fires Player#deposit
 	 */
 	deposit(sum) {
@@ -50,7 +51,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Withdraws some cash from player bank account.
 	 * 
-	 * @param {Integer} sum Amount of cash withdrawal.
+	 * @param {integer} sum Amount of cash withdrawal.
 	 * @fires Player#withdraw
 	 */
 	withdraw(sum) {
