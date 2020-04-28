@@ -21,6 +21,8 @@ class PlayerGoToJail extends BaseAction {
 	 */
 	do(game, player) {
 		// player is sent to jail and is given usual restrictions for jailed players
+		game.jail.getPlayerJailXY();
+		player.jail();
 		console.log(player);
 	}
 }
