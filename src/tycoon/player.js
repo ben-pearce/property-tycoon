@@ -106,9 +106,9 @@ class Player extends Phaser.GameObjects.Sprite {
 	 */
 	moveToTile(tile, cb=null, direction=1) {
 		let timeline = this.scene.tweens.createTimeline();
-		let length = this.game.board.tiles.length;
+		let l = this.game.board.tiles.length;
 
-		for(let i = (this.tile.id + direction) % length; i != (tile.id + direction) % length; i = (i + direction) % length) {
+		for(let i = (this.tile.id + direction + l) % l; i != (tile.id + direction + l) % l; i = (i + direction + l) % l) {
 			let tempTile = this.game.board.tiles[i];
 			let [x, y] = tempTile.getPlayerXY();
 
@@ -181,7 +181,8 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Player~animationCallback} cb The callback to invoke after animation completes.
 	 */
 	moveBackwards(steps, cb) {
-		let newTileIndex = (this.tile.id - steps) % this.game.board.tiles.length;
+		let l = this.game.board.tiles.length;
+		let newTileIndex = (this.tile.id - steps + l) % l;
 		let newTile = this.game.board.tiles[newTileIndex];
 		this.moveToTile(newTile, cb, -1);
 	}
