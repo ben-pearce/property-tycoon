@@ -94,7 +94,7 @@ class Jail extends Tile {
 	 */
 	onLanded(player, cb=null) {
 		if(player.isJailed) {
-			let jailCard = new JailCard(this.game, player);
+			let jailCard = new JailCard(this.scene, this.game, player);
 			jailCard.stayButton.on("pointerup", () => {
 				this.game.prompt.closeWithAnim(cb);
 			});
