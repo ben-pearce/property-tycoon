@@ -106,7 +106,6 @@ export default {
 		{
 			name: "Pay university fees of £150.",
 			action: new PlayerPayBank(150)
-	
 		},
 		{
 			name: "Take a trip to Hove station. If you pass GO collect £200.",
@@ -117,7 +116,7 @@ export default {
 			action: new BankPayPlayer(150)
 		},
 		{
-			name: "You are assessed for repairs, £40/house, £115/hotel.",
+			name: "You are assessed for repairs, £40 per house, £115 per hotel.",
 			action: new PlayerPayRepair(40, 115)
 		},
 		{
@@ -125,7 +124,7 @@ export default {
 			action: new PlayerMoveToTile(0)
 		},
 		{
-			name: "You are assessed for repairs, £25/house, £100/hotel.",
+			name: "You are assessed for repairs, £25 per house, £100 per hotel.",
 			action: new PlayerPayRepair(25, 100)
 		},
 		{
