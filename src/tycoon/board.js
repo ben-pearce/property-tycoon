@@ -194,7 +194,7 @@ class Board extends Phaser.GameObjects.Container {
 		for(let i = 0; i < this.tiles.length; i++) {
 			let t = this.tiles[i];
 			if(t.owner === player && t instanceof tileType) {
-				ownedTiles.append(t);
+				ownedTiles.push(t);
 			}
 		}
 		return ownedTiles;
