@@ -125,6 +125,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @fires Menu#start
 	 */
 	playButtonPressed() {
+		this.button.setEnabled(false);
 		this.emit("start", {
 			playerCount: this.playerCount,
 			computerCount: this.computerCount,
