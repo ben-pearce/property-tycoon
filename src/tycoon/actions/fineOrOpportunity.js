@@ -1,4 +1,7 @@
 import BaseAction from "./action";
+import FineCard from "../cards/fineCard";
+import ActionCard from "../cards/actionCard";
+import Parking from "../tiles/parking";
 
 /**
  * Action class that asks player to pay a fine or
@@ -30,8 +33,36 @@ class FineOrOpportunity extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// ask player to pay this.fine or pick up opportunity card
-		cb();
+		let fineCard = new FineCard(game.scene, game, this.fine);
+
+		let takeCard = () => {
+			let opportunityCard = game.opportunityCards.shift();
+			let actionCard = new ActionCard(game.scene, game, opportunityCard, player);
+			actionCard.continueButton.on("pointerup", () => {
+				game.prompt.closeWithAnim(() => {
+					opportunityCard.action.do(game, player, () => {
+						game.opportunityCards.push(opportunityCard);
+						cb();
+					});
+				});
+			});
+			game.prompt.showWithAnim(actionCard);
+		};
+
+		fineCard.fineButton.on("pointerup", () => {
+			game.prompt.closeWithAnim(() => {
+				let parking = game.board.getSingletonTileByType(Parking);
+				player.withdraw(this.fine);
+				parking.pay(this.fine);
+				cb();
+			});
+		});
+
+		fineCard.opportunityButton.on("pointerup", () => {
+			game.prompt.closeWithAnim(takeCard);
+		});
+
+		game.prompt.showWithAnim(fineCard);
 	}
 }
 
