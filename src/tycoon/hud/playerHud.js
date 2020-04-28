@@ -29,18 +29,45 @@ class PlayerHud extends Phaser.GameObjects.Container {
 		this.player = player;
 		this.cash = player.cash;
 
-		let background = new RoundRectangle(hud.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
-		background.setOrigin(0);
+		this.background = new RoundRectangle(hud.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
+		this.background.setOrigin(0);
 
 		let tokenGraphic = new Phaser.GameObjects.Sprite(this.scene, 40, 40, "tokens", getTokenSpriteByPlayerId(player.id));
 		let nameText = new Phaser.GameObjects.Text(this.scene, 80, 10, getTokenNameByPlayerId(player.id), PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
-		this.add([background, tokenGraphic, nameText, this.cashText]);
+		this.add([this.background, tokenGraphic, nameText, this.cashText]);
 
 		this.player.on("deposit", this._updateCash.bind(this));
 		this.player.on("withdraw", this._updateCash.bind(this));
+	}
+
+	/**
+	 * Sets the player HUD state as the current
+	 * player.
+	 * 
+	 * If set to true, a while border will flash a few
+	 * times before becoming solid.
+	 * 
+	 * If set to false, the white border will be removed.
+	 * 
+	 * @param {boolean} isCurrentPlayer Is this HUD the current player or not.
+	 */
+	setCurrentPlayer(isCurrentPlayer) {
+		if(isCurrentPlayer) {
+			let count = 0;
+			let interval = setInterval(() => {
+				this.background.setStrokeStyle((count % 2 == 0) ? 5 : 0, 0xFFFFFF);
+				count++;
+	
+				if(count == 5) {
+					clearInterval(interval);
+				}
+			}, 250);
+		} else {
+			this.background.setStrokeStyle(null);
+		}
 	}
 
 	/**
