@@ -81,6 +81,17 @@ class Rentable extends Purchasable {
 	}
 
 	/**
+	 * Calls property sell and resets the upgradable property
+	 * state.
+	 */
+	sell() {
+		if(this.owner !== null) {
+			super.sell();
+			this.property.reset();
+		}
+	}
+
+	/**
 	 * Returns whether or not this tile is upgradable but subject to
 	 * the constraint that it may only be upgraded if the owner owns
 	 * all the properies in the same colored group as this one and that
