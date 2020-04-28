@@ -1,4 +1,5 @@
-import PlayerPayBank from "./playerPayBank";
+import BaseAction from "./action";
+import Rentable from "../tiles/rentable";
 
 /**
  * Action class for player that pays repair fees that
@@ -6,12 +7,10 @@ import PlayerPayBank from "./playerPayBank";
  * 
  * @extends PlayerPayBank
  * @memberof Actions
- * @property {number} houseCost The amount the player will 
- * pay if they have houses on the property.
- * @property {number} hotelCost The amount the player will 
- * pay if they have a hotel on the property.
+ * @property {number} houseCost The amount the player will pay per house.
+ * @property {number} hotelCost The amount the player will pay per hotel.
  */
-class PlayerPayRepair extends PlayerPayBank {
+class PlayerPayRepair extends BaseAction {
 	/**
 	 * Takes the repair cost fees to pay for both 
 	 * houses and hotels that will be charged to the player.
@@ -27,8 +26,8 @@ class PlayerPayRepair extends PlayerPayBank {
 	}
 
 	/**
-	 * Withdraws {@link houseCost} if player owns only houses,
-	 * withdraws {@link hotelCost} if player owns hotels.
+	 * Withdraws {@link houseCost} from player for each house.
+	 * withdraws {@link hotelCost} from player for each hotel.
 	 * 
 	 * @override
 	 * @param {GameManager} game The game manager instance.
@@ -36,10 +35,14 @@ class PlayerPayRepair extends PlayerPayBank {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// conditionally update cost
-		super.do(game, player);
-
-		this.cash = null;
+		let rentableOwnedTiles = game.board.getTilesOwnedByPlayer(player, Rentable);
+		let repairBill = rentableOwnedTiles.reduce(
+			(bill, tile) => bill + (tile.property.isHotel ? this.hotelCost : (this.houseCost * tile.property.houses)), 0
+		);
+		if(repairBill > 0) {
+			player.withdraw(repairBill);
+			game.bank.deposit(repairBill);
+		}
 		cb();
 	}
 }
