@@ -29,7 +29,7 @@ class GameManager {
 		this.board = new Board(this);
 
 		this.players = [];
-		this.currentPlayer = 0;
+		this.currentPlayer = null;
 
 		let boardDimensions = this.board.getBounds();
 		this.board.setPosition(
@@ -67,8 +67,9 @@ class GameManager {
 		this.opportunityCards = this._shuffleCards(Cards.opportunity.slice());
 		this.potluckCards = this._shuffleCards(Cards.potluck.slice());
 
-		this.dice.requestRoll();
 		this.dice.on("landed", this.playerRolled.bind(this));
+
+		this.nextPlayer();
 	}
 
 	/**
@@ -97,7 +98,47 @@ class GameManager {
 		}
 	}
 
-	playerDeposit(p, sum) {
+	/**
+	 * Advances the game turn.
+	 */
+	nextPlayer() {
+		if(this.currentPlayer === null) {
+			this.currentPlayer = 0;
+			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
+		} else {
+			let p = this.players[this.currentPlayer];
+			this.hud.players[this.currentPlayer].setCurrentPlayer(false);
+
+			let [diceOne, diceTwo] = this.dice.result;
+			let isDouble = diceOne == diceTwo;
+
+			// So long as they have not rolled a double, advance to next player
+			if(!isDouble || p.doubleRollStreak >= 3) {
+				// Reset their double roll streak, as they haven't rolled a double!
+				p.doubleRollStreak = 0;
+
+				this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+				p = this.players[this.currentPlayer];
+
+				// If the next player is in jail, increment their turns missed and move to the player after
+				while(p.isJailed) {
+					p.jailTurnsMissed++;
+
+					// If the player has missed 2 turns already, unjail them.
+					if(p.jailTurnsMissed >= 2) {
+						p.unjail();
+					}
+
+					this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+					p = this.players[this.currentPlayer];
+				}
+			}
+
+			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
+		}
+		this.dice.requestRoll();
+	}
+
 	/**
 	 * Called when a player deposits money into their account.
 	 * 
