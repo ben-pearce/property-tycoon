@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import Tile from "./tile";
+import JailCard from "../cards/jailCard";
+import Parking from "./parking";
 
 /**
  * This class represents the Jail tile.
@@ -83,6 +85,45 @@ class Jail extends Tile {
 	 */
 	getPlayerXY() {
 		return this.getPlayerVisitingXY();
+	}
+
+	/**
+	 * Landing on the Jail tile does nothing unless
+	 * the player is set to be jailed, in which case, ask them
+	 * to pay fee or go to jail and miss rounds.
+	 * 
+	 * @param {Player} player The player to charge or Jail.
+	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
+	 * @override
+	 */
+	onLanded(player, cb=null) {
+		if(player.isJailed) {
+			let jailCard = new JailCard(this.game, player);
+			jailCard.stayButton.on("pointerup", () => {
+				this.game.prompt.closeWithAnim(cb);
+			});
+	
+			jailCard.leaveButton.on("pointerup", () => {
+				this.game.prompt.closeWithAnim(() => {
+					let parkingTile = this.game.board.getSingletonTileByType(Parking);
+					player.withdraw(50);
+					parkingTile.pay(50);
+					player.unjail(cb);
+				});
+			});
+	
+			if(player.getOutOfJailCard !== null) {
+				let [getOutOfJailCard, cardDeck] = player.getOutOfJailCard;
+				cardDeck.push(getOutOfJailCard);
+				player.getOutOfJailCard = null;
+				player.unjail(cb);
+			} else {
+				this.game.prompt.showWithAnim(jailCard);
+			}
+		} else if(this.players.indexOf(player) == -1) {
+			this.game.nextPlayer();
+		}
+		super.onLanded(player);
 	}
 }
 

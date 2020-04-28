@@ -132,22 +132,24 @@ class Purchasable extends Tile {
 			for(let i = 0; i < this.game.players.length; i++) {
 				let player = this.game.players[i];
 
-				// eslint-disable-next-line no-undef
-				let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
-
-				while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
+				if(!player.isJailed) {
 					// eslint-disable-next-line no-undef
-					playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, please enter a valid bid: `));
-				}
-				
-				if(playerBid > 0) {
-					if(playerBid > highestBid) {
-						duplicateBids = false;
-						highestBidder = player;
-						highestBid = playerBid;
-					} else if(playerBid == highestBid) {
-						duplicateBids = true;
+					let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
+
+					while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
+						// eslint-disable-next-line no-undef
+						playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, please enter a valid bid: `));
 					}
+					
+					if(playerBid > 0) {
+						if(playerBid > highestBid) {
+							duplicateBids = false;
+							highestBidder = player;
+							highestBid = playerBid;
+						} else if(playerBid == highestBid) {
+							duplicateBids = true;
+						}
+					}	
 				}
 			}
 		} while(duplicateBids);

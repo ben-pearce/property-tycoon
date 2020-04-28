@@ -150,7 +150,7 @@ class Rentable extends Purchasable {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
-		if(this.owner !== null && player !== this.owner) {
+		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
 			let rentCharged = this.getRent();
 			let monopolyOwner = this.game.board.getMonopolyOwner(this);
 			if(monopolyOwner !== null) {

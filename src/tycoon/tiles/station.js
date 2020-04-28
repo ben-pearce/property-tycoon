@@ -37,7 +37,7 @@ class Station extends Purchasable {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
-		if(this.owner !== null && player !== this.owner) {
+		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
 			let ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
 			let rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
 

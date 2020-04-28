@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import {getTokenSpriteByPlayerId} from "./utils";
+import Jail from "./tiles/jail";
 
 /**
  * This class represents a player.
@@ -10,8 +11,9 @@ import {getTokenSpriteByPlayerId} from "./utils";
  * @property {GameManager} game The game instance this player belongs to.
  * @property {integer} cash The cash held by this player.
  * @property {Tile} tile The tile this player is current on.
- * @property {boolean} jailed Is player in jail or not.
+ * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
+ * @property {?(CardConfig|Array)} getOutOfJailCard The get out of jail card this player holds and the deck.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
  */
 class Player extends Phaser.GameObjects.Sprite {
@@ -26,8 +28,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.cash = null;
 		this.tile = null;
-		this.jailed = false;
+		this.isJailed = false;
 		this.hasPassedGo = false;
+		this.getOutOfJailCard = null;
+		this.jailTurnsMissed = 0;
 		this.doubleRollStreak = 0;
 	}
 
@@ -63,6 +67,29 @@ class Player extends Phaser.GameObjects.Sprite {
 	teleportToTile(tile) {
 		this.setPosition(...tile.getPlayerXY());
 		tile.onLanded(this);
+	}
+
+
+	/**
+	 * Jails this player.
+	 * 
+	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
+	 */
+	jail(cb=null) {
+		let jailTile = this.game.board.getSingletonTileByType(Jail);
+		this.isJailed = true;
+		this.jumpToTile(jailTile, cb);
+	}
+
+	/**
+	 * Unjails this player.
+	 * 
+	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
+	 */
+	unjail(cb=null) {
+		let jailTile = this.game.board.getSingletonTileByType(Jail);
+		this.isJailed = false;
+		this.jumpToTile(jailTile, cb);
 	}
 
 	/**
@@ -111,14 +138,22 @@ class Player extends Phaser.GameObjects.Sprite {
 	jumpToTile(tile, cb) {
 		let [x, y] = tile.getPlayerXY();
 
+		if(this.isJailed && tile instanceof Jail) {
+			[x, y] = tile.getPlayerJailXY();
+		}
+
 		this.scene.tweens.add({
 			targets: this,
 			ease: "Cubic.easeOut",
 			x: x, y: y,
 			onComplete: () => {
-				tile.onLanded(this);
-				if(cb !== null) {
-					cb();
+				if(this.isJailed && tile instanceof Jail) {
+					tile.onLanded(this, cb);
+				} else {
+					tile.onLanded(this);
+					if(cb !== null) {
+						cb();
+					}
 				}
 			}
 		});
