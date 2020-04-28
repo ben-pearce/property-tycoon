@@ -19,10 +19,12 @@ import Jail from "./tiles/jail";
  */
 class Player extends Phaser.GameObjects.Sprite {
 	/**
+	 * @param {Phaser.Scene} scene The scene this player belongs to.
 	 * @param {GameManager} game The game this player belongs to.
+	 * @param {integer} id The unique player ID.
 	 */
-	constructor(game, id) {
-		super(game.scene, 0, 0, "tokens", getTokenSpriteByPlayerId(id));
+	constructor(scene, game, id) {
+		super(scene, 0, 0, "tokens", getTokenSpriteByPlayerId(id));
 
 		this.id = id;
 		this.game = game;
@@ -120,7 +122,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		timeline.setCallback("onComplete", () => {
 			tile.onLanded(this);
-			if(cb !== null) {
+			if(typeof cb === "function") {
 				cb();
 			}
 		});
@@ -152,7 +154,7 @@ class Player extends Phaser.GameObjects.Sprite {
 					tile.onLanded(this, cb);
 				} else {
 					tile.onLanded(this);
-					if(cb !== null) {
+					if(typeof cb === "function") {
 						cb();
 					}
 				}

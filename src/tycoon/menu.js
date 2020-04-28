@@ -3,6 +3,7 @@ import {MenuStyle} from "../styles";
 import {getTokenSpriteByPlayerId, getTimerSecondsByOption} from "./utils";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 import Button from "./ui/button";
+import {Buttons} from "../enums";
 
 /**
  * This class represents the game menu.
@@ -25,7 +26,7 @@ class Menu extends Phaser.GameObjects.Container {
 		let playerBackground = new RoundRectangle(this.scene, 0, playerText.y + 90, 550, 90, 10, 0xD7D7D7);
 		let computerBackground = new RoundRectangle(this.scene, 0, computerText.y + 90, 550, 90, 10, 0xD7D7D7);
 
-		this.button = new Button(this.scene, leftOfMenu + 25, computerBackground.y + 180, 550, 70, "Play", 0xF2BB26);
+		this.button = new Button(this.scene, leftOfMenu + 25, computerBackground.y + 180, 550, 70, "Play", Buttons.AMBER);
 
 		this.timerOption = 0;
 		this.playerCount = 0;
@@ -51,8 +52,8 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @private
 	 */
 	_setupTimerOptions(x, y) {
-		this.slider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, 0xF2BB26, 0.5);
-		this.slider.setStrokeStyle(3, 0xF2BB26).setOrigin(0).setInteractive();
+		this.slider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, Buttons.AMBER, 0.5);
+		this.slider.setStrokeStyle(3, Buttons.AMBER).setOrigin(0).setInteractive();
 
 		let timerOptionText = ["Off", "30min", "1hr", "1hr 30min", "2hr"];
 		this.timerOptions = [];
@@ -80,11 +81,11 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @private
 	 */
 	_setupPlayerOptions(x, y, y2) {
-		this.playerSlider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, 0xF2BB26, 0.5);
-		this.playerSlider.setStrokeStyle(3, 0xF2BB26).setOrigin(0).setInteractive();
+		this.playerSlider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, Buttons.AMBER, 0.5);
+		this.playerSlider.setStrokeStyle(3, Buttons.AMBER).setOrigin(0).setInteractive();
 
-		this.computerSlider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, 0xF2BB26, 0.5);
-		this.computerSlider.setStrokeStyle(3, 0xF2BB26).setOrigin(0).setInteractive();
+		this.computerSlider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, Buttons.AMBER, 0.5);
+		this.computerSlider.setStrokeStyle(3, Buttons.AMBER).setOrigin(0).setInteractive();
 
 		this.playerTokens = [];
 		this.computerTokens = [];

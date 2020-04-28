@@ -12,7 +12,7 @@ import Rentable from "./tycoon/tiles/rentable";
 import Station from "./tycoon/tiles/station";
 import Utility from "./tycoon/tiles/utility";
 
-import {Colors} from "./constants";
+import {Colors} from "./enums";
 
 /**
  * @typedef {Object} TileConfig

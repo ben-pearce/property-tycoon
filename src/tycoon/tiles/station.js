@@ -11,19 +11,18 @@ class Station extends Purchasable {
 	/**
 	 * Adds the station graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.text.setY(this.y + 10);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2) + 10, 
-			"tiles", "station");
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2) + 10;
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "station");
 		
 		this.add(graphic);
 	}

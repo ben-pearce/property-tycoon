@@ -41,7 +41,7 @@ function preload() {
  */
 function create() {
 	let menuScene = this.scene.add("menu", {}, true);
-	this.scene.add("board", {});
+	let gameScene = this.scene.add("game", {});
 	
 	let menu = new Menu(menuScene);
 	
@@ -58,17 +58,18 @@ function create() {
 		ease: "Back.easeOut",
 		scale: 1
 	});
-
+	
 	menu.on("start", (config) => {
 		menuScene.tweens.add({
 			targets: menu,
 			ease: "Back.easeIn",
 			y: game.config.height * 2,
 			onComplete: () => {
-				new GameManager(game, config);
+				let gameManager = new GameManager(gameScene, config);
+				gameScene.add.existing(gameManager);
 
-				this.scene.switch("menu", "board");
-				this.scene.run("board");
+				this.scene.switch("menu", "game");
+				this.scene.run("game");
 
 				menu.setY(game.config.height / 2);
 			}

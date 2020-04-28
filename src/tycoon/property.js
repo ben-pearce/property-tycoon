@@ -15,24 +15,15 @@ import Phaser from "phaser";
  */
 class Property extends Phaser.GameObjects.Rectangle {
 	/**
-	 * This class represents a property. 
+	 * Creates a colored rectangle and house graphic to
+	 * indicate the upgrade level.
 	 * 
-	 * Properties have several ranks:
-	 * 	- unimproved
-	 * 	- 1 house
-	 * 	- 2 houses
-	 * 	- 3 houses
-	 * 	- 4 houses
-	 * 	- hotel
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Tile} tile The tile this property belongs to
 	 * @param {string} color The background color hex code
 	 */
-	constructor(tile, color) {
-		super(tile.scene, 
-			tile.background.x, 
-			tile.background.y, 
-			tile.background.width, 
-			20, color);
+	constructor(scene, tile, color) {
+		super(scene, tile.background.x, tile.background.y, tile.background.width, 20, color);
 		this.tile = tile;
 
 		this.setStrokeStyle(3, 0x00000);
@@ -213,7 +204,7 @@ class Property extends Phaser.GameObjects.Rectangle {
 						this.houseGraphic.setFrame(frame);
 					} else {
 						this.houseGraphic.setVisible(false);
-						if(cb !== null) {
+						if(typeof cb === "function") {
 							cb();
 						}
 					}
@@ -236,7 +227,7 @@ class Property extends Phaser.GameObjects.Rectangle {
 			};
 			timeline.add(showTween);
 	
-			if(cb !== null) {
+			if(typeof cb === "function") {
 				timeline.setCallback("onComplete", cb);
 			}
 		}

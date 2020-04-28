@@ -21,7 +21,6 @@ class Bank extends Phaser.Events.EventEmitter {
 		super();
 
 		this.game = game;
-		this.scene = game.scene;
 		this.spent = 0;
 		this.cash = 0;
 	}

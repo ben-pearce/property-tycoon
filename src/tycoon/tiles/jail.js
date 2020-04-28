@@ -13,29 +13,25 @@ class Jail extends Tile {
 	/**
 	 * Adds the Jail graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.text.setVisible(false);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 3), 
-			this.background.y + (this.background.height / 3), 
-			"tiles", "jail");
+		let x = this.background.x + (this.background.width / 3);
+		let y = this.background.y + (this.background.height / 3);
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "jail");
 
-		this.jailPlatform = new Phaser.GameObjects.Rectangle(
-			this.board.scene, 
-			this.x, this.y, 
-			this.background.height * 0.70, this.background.width * 0.70,
-			0xf7941d
-		);
-		this.jailPlatform.setOrigin(0);
-		this.jailPlatform.setStrokeStyle(3, 0x000000);
-		this.add([this.jailPlatform, graphic]);
+		let jailHeight = this.background.height * 0.70;
+		let jailWidth = this.background.width * 0.70;
+		let jailPlatform = new Phaser.GameObjects.Rectangle(this.scene, this.x, this.y, jailHeight, jailWidth, 0xF7941D);
+		jailPlatform.setOrigin(0).setStrokeStyle(3, 0x000000);
+
+		this.add([jailPlatform, graphic]);
 	}
 
 	/**

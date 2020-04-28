@@ -1,4 +1,4 @@
-import {TokenSprites, TokenNames} from "../constants";
+import {TokenSprites, TokenNames} from "../enums";
 
 /**
  * Returns a sprite name for a token based

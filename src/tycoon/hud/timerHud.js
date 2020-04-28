@@ -16,15 +16,17 @@ class TimerHud extends Phaser.GameObjects.Container {
 	 * Creates a background and a text object to
 	 * show the remaining time.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this HUD belongs to.
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Player} timer The timer object to represent.
 	 */
-	constructor(hud, timer) {
-		super(hud.scene);
+	constructor(scene, hud, timer) {
+		super(scene);
+
 		this.hud = hud;
 		this.timer = timer;
 
-		let background = new RoundRectangle(hud.scene, 0, 0, 300, 60, 10, 0x000000, 0.75);
+		let background = new RoundRectangle(this.scene, 0, 0, 300, 60, 10, 0x000000, 0.75);
 		background.setOrigin(0);
 
 		this.timerText = new Phaser.GameObjects.Text(this.scene, 0, 0, timer.toString(), TimerStyle);

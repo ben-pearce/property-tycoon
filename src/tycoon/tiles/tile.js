@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {Tiles} from "../../constants";
+import {Tiles} from "../../enums";
 import {TileTextStyle} from "../../styles";
 
 /**
@@ -27,11 +27,12 @@ class Tile extends Phaser.GameObjects.Container {
 	 * Creates the tile background and text and initiates 
 	 * class variables.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board object this belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board.scene, 0, 0);
+	constructor(scene, board, config) {
+		super(scene, 0, 0);
 
 		this.board = board;
 		this.game = board.game;
@@ -45,7 +46,7 @@ class Tile extends Phaser.GameObjects.Container {
 			Tiles.HEIGHT, 
 			Tiles.COLOR);
 		
-		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, TileTextStyle);
+		this.text = new Phaser.GameObjects.Text(this.scene, this.x, this.y + 25, config.name, TileTextStyle);
 		this.text.setStyle({
 			fixedWidth: this.background.width,
 			wordWrap: {width: this.background.width - 8, useAdvancedWrap: true}

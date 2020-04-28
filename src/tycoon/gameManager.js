@@ -29,30 +29,28 @@ import Cards from "../cards";
  * @property {CardConfig[]} opportunityCards The opporunity cards configuration objects.
  * @property {CardConfig[]} potluckCards The pot luck cards configuration objects.
  */
-class GameManager {
+class GameManager extends Phaser.GameObjects.Group {
 	/**
-	 * @param {Phaser.Game} game The Phaser.Game instance.
+	 * @param {Phaser.Scene} scene The Phaser.Scene instance.
 	 * @param {GameConfig} config The options for this game instance.
 	 */
-	constructor(game, config) {
-		this.game = game;
-		this.scene = game.scene.getScene("board");
+	constructor(scene, config) {
+		super(scene);
 	
-		this.board = new Board(this);
+		this.board = new Board(scene, this);
 
 		this.players = [];
 		this.currentPlayer = null;
 
 		let boardDimensions = this.board.getBounds();
-		this.board.setPosition(
-			(game.config.width / 2) - boardDimensions.width / 2, 
-			(game.config.height / 2) - boardDimensions.height / 2
-		);
+		let boardX = (scene.game.config.width / 2) - boardDimensions.width / 2;
+		let boardY = (scene.game.config.height / 2) - boardDimensions.height / 2;
+		this.board.setPosition(boardX, boardY);
 
 		// Create all the players and deposit 1500 cash
-		this.playerContainer = new Phaser.GameObjects.Container(this.scene);
+		this.playerContainer = new Phaser.GameObjects.Container(scene);
 		for(let i = 0; i < config.playerCount; i++) {
-			let p = new Player(this, i);
+			let p = new Player(scene, this, i);
 			p.deposit(1500);
 			p.teleportToTile(this.board.tiles[0]);
 
@@ -66,16 +64,11 @@ class GameManager {
 		this.dice = new Dice(this);
 		this.bank = new Bank(this);
 		this.timer = new Timer(this, config.timer);
-		this.hud = new Hud(this);
-		this.prompt = new Prompt(this);
+		this.hud = new Hud(scene, this);
+		this.prompt = new Prompt(scene, this);
 
-		this.scene.add.existing(this.board);
-		this.scene.add.existing(this.playerContainer);
-		this.scene.add.existing(this.dice.rollSprite);
-		this.scene.add.existing(this.dice.diceOneSprite);
-		this.scene.add.existing(this.dice.diceTwoSprite);
-		this.scene.add.existing(this.hud);
-		this.scene.add.existing(this.prompt);
+		this.addMultiple([this.board, this.playerContainer, this.dice.rollSprite, 
+			this.dice.diceOneSprite, this.dice.diceTwoSprite, this.hud, this.prompt], true);
 
 		this.opportunityCards = this._shuffleCards(Cards.opportunity.slice());
 		this.potluckCards = this._shuffleCards(Cards.potluck.slice());

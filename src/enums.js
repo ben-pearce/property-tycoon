@@ -8,30 +8,32 @@
 const Tiles = Object.freeze({
 	HEIGHT: 100,
 	WIDTH: 60,
-	COLOR: 0xcde6d0
+	COLOR: 0xCDE6D0
 });
 
 /**
  * Enum for property colors.
  * 
  * @readonly
+ * @memberof Enums
  * @enum {number}
  */
 const Colors = Object.freeze({
-	DEEP_BLUE: 0x00008b,
-	YELLOW: 0xffff00,
-	BROWN: 0x964b00,
-	GREEN: 0x00ff00,
-	ORANGE: 0xffa500,
-	PURPLE: 0x6a0dad,
-	BLUE: 0x0d98ba,
-	RED: 0xff0000
+	DEEP_BLUE: 0x00008B,
+	YELLOW: 0xFFFF00,
+	BROWN: 0x964B00,
+	GREEN: 0x00FF00,
+	ORANGE: 0xFFA500,
+	PURPLE: 0x6A0DAD,
+	BLUE: 0x0D98BA,
+	RED: 0xFF0000
 });
 
 /**
  * Enum for token sprite tags.
  * 
  * @readonly
+ * @memberof Enums
  * @enum {string}
  */
 const TokenSprites = Object.freeze({
@@ -45,6 +47,13 @@ const TokenSprites = Object.freeze({
 	PARKING: "parking"
 });
 
+/**
+ * Enum for token names.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {string}
+ */
 const TokenNames = Object.freeze({
 	BOOT: "Boot",
 	CAT: "Cat",
@@ -56,6 +65,13 @@ const TokenNames = Object.freeze({
 	PARKING: "Free Parking"
 });
 
+/**
+ * Enum for HUD styles.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {string}
+ */
 const Hud = Object.freeze({
 	BANK_DEFAULT_TEXT: "Cash £∞",
 	TEXT_COLOR: "#FFFFFF",
@@ -64,10 +80,30 @@ const Hud = Object.freeze({
 	CASH_UPDATE_TIMEOUT: 2500
 });
 
+/**
+ * Enum for card styles.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {integer}
+ */
 const Cards = Object.freeze({
 	WIDTH: 400,
 	HEIGHT: 600,
 	COLOR: 0xFFFFFF
+});
+
+/**
+ * Enum for button colors.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {integer}
+ */
+const Buttons = Object.freeze({
+	GREEN: 0x17B70F,
+	AMBER: 0xEBA417,
+	RED: 0xD63434,
 });
 
 export {
@@ -76,5 +112,6 @@ export {
 	TokenSprites,
 	TokenNames,
 	Hud,
-	Cards
+	Cards,
+	Buttons
 };
