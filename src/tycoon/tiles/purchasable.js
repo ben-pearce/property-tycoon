@@ -11,6 +11,7 @@ import {getTokenNameByPlayerId} from "../utils";
  * 
  * @property {integer} cost The cost of the purchasable.
  * @property {?Player} owner The owner of the purchasable or null.
+ * @property {boolean} isMortgaged Is the property mortgaged or not.
  */
 class Purchasable extends Tile {
 	/**
@@ -24,6 +25,7 @@ class Purchasable extends Tile {
 
 		this.cost = config.cost;
 		this.owner = null;
+		this.isMortgaged = false;
 
 		let string = `£${this.cost}`;
 
@@ -42,7 +44,23 @@ class Purchasable extends Tile {
 	 * @returns {integer} The value of this property.
 	 */
 	getValue() {
+		if(this.isMortgaged) {
+			return this.cost / 2;
+		}
 		return this.cost;
+	}
+
+	/**
+	 * Returns the mortgage value of this property. Value with be
+	 * half of what the total sale value of this property is, assuming it
+	 * is not already mortgaged.
+	 * 
+	 * If this function is called on a mortgaged property, it will return 0.
+	 * 
+	 * @returns {integer} The mortgage value of this property.
+	 */
+	getMortgageValue() {
+		return this.isMortgaged ? 0 : this.getValue() / 2;
 	}
 
 	/**
@@ -58,6 +76,46 @@ class Purchasable extends Tile {
 			this.game.bank.deposit(cost);
 
 			this.owner = player;
+		}
+	}
+
+	/**
+	 * Mortgages this property with the bank. Player
+	 * will receive one half the value of the property.
+	 */
+	mortgage() {
+		if(this.owner !== null && !this.isMortgaged) {
+			this.game.bank.withdraw(this.getValue() / 2);
+			this.owner.deposit(this.getValue() / 2);
+			
+			this.isMortgaged = true;
+		}
+	}
+
+	/**
+	 * Umortgages this property with the bank. Player
+	 * will pay the current value of the property.
+	 */
+	unmortgage() {
+		if(this.owner !== null && this.isMortgaged && this.owner.cash > this.getValue()) {
+			this.owner.withdraw(this.getValue());
+			this.game.bank.deposit(this.getValue());
+
+			this.isMortgaged = false;
+		}
+	}
+
+	/**
+	 * Sells this property back to the bank for its current
+	 * valuation.
+	 */
+	sell() {
+		if(this.owner !== null) {
+			this.game.bank.withdraw(this.getValue());
+			this.owner.deposit(this.getValue());
+
+			this.isMortgaged = false;
+			this.owner = null;
 		}
 	}
 

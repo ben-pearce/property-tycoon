@@ -40,7 +40,26 @@ class Rentable extends Purchasable {
 	 * @override
 	 */
 	getValue() {
-		return this.cost + this.property.getValue();
+		let value = this.cost + this.property.getValue();
+		if(this.isMortgaged) {
+			return value / 2;
+		}
+		return value;
+	}
+
+	/**
+	 * Returns the mortgage value of this property. 
+	 * 
+	 * If this property has been upgraded, this will return 0.
+	 * 
+	 * @returns {integer} The mortgage value of this property.
+	 * @override
+	 */
+	getMortgageValue() {
+		if(this.property.isUpgraded) {
+			return 0;
+		}
+		return super.getMortgageValue();
 	}
 
 	/**
