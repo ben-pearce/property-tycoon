@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Tile from "./tile";
 import {CashTextStyle} from "../../styles";
 import {getTokenNameByPlayerId} from "../utils";
+import PurchasableCard from "../cards/purchasableCard";
 
 /**
  * All "purchasable" tiles inherit this class.
@@ -12,6 +13,8 @@ import {getTokenNameByPlayerId} from "../utils";
  * @property {integer} cost The cost of the purchasable.
  * @property {?Player} owner The owner of the purchasable or null.
  * @property {boolean} isMortgaged Is the property mortgaged or not.
+ * @property {Type} cardType The type of card to show when landed on.
+ * @property {?Card} cardInstance The card instance shown to player.
  */
 class Purchasable extends Tile {
 	/**
@@ -26,6 +29,9 @@ class Purchasable extends Tile {
 		this.cost = config.cost;
 		this.owner = null;
 		this.isMortgaged = false;
+
+		this.cardType = PurchasableCard;
+		this.cardInstance = null;
 
 		let string = `£${this.cost}`;
 
@@ -156,6 +162,77 @@ class Purchasable extends Tile {
 
 		if(highestBidder !== null) {
 			this.purchase(highestBidder, highestBid);
+		}
+	}
+
+	/**
+	 * Registers all the card buttons when a card is
+	 * shown for this tile in the context of the player
+	 * that is passed in.
+	 * 
+	 * @param {Player} player The player the buttons should act upon.
+	 */
+	registerCardButtons(player) {
+		this.cardInstance.buyButton.setEnabled(player.cash > this.cost);
+		this.cardInstance.buyButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.purchase(player);
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.auctionButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.auction();
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.unmortgageButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.unmortgage();
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.mortgageButton.setEnabled(this.getMortgageValue() > 0);
+		this.cardInstance.mortgageButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.mortgage();
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.sellButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.sell();
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.continueButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.game.nextPlayer();
+			});
+		});
+	}
+
+	/**
+	 * Sets up a card in the event this tile is not owned or
+	 * is owned but the owner has landed on it.
+	 * 
+	 * @param {Player} player The player to setup card for.
+	 * @override
+	 */
+	onLanded(player) {
+		super.onLanded(player);
+
+		if((this.owner == null && player.hasPassedGo) || this.owner == player) {
+			this.cardInstance = new this.cardType(this.game, this, player);
+
+			this.game.prompt.showWithAnim(this.cardInstance, this.registerCardButtons.bind(this, player));
+		} else if(this.owner == null && !player.hasPassedGo) {
+			this.game.nextPlayer();
 		}
 	}
 }

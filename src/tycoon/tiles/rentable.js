@@ -25,6 +25,8 @@ class Rentable extends Purchasable {
 		this.upgradeCost = config.upgrade;
 		this.rent = config.rent;
 
+		this.cardType = RentableCard;
+
 		this.property = new Property(this, config.color);
 		this.add([this.property, this.property.houseGraphic]);
 	}
@@ -139,6 +141,32 @@ class Rentable extends Purchasable {
 	}
 
 	/**
+	 * Registers the additional upgrade buttons in the 
+	 * context of the player that is passed in.
+	 * 
+	 * @param {Player} player The player the buttons should act upon.
+	 */
+	registerCardButtons(player) {
+		super.registerCardButtons(player);
+		this.cardInstance.sellButton.setEnabled(!this.property.isUpgraded);
+		this.cardInstance.upgradeButton.setEnabled(!this.isMortgaged && player.cash > this.property.getUpgradeCost() && this.isUpgradable());
+		this.cardInstance.upgradeButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.upgrade();
+				this.game.nextPlayer();
+			});
+		});
+
+		this.cardInstance.sellUpgradeButton.setEnabled(!this.isMortgaged && this.isDowngradable());
+		this.cardInstance.sellUpgradeButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.downgrade();
+				this.game.nextPlayer();
+			});
+		});
+	}
+
+	/**
 	 * If the property is owned and player is not the owner,
 	 * charge rent.
 	 * 
@@ -162,24 +190,6 @@ class Rentable extends Purchasable {
 			}
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);
-			this.game.nextPlayer();
-		} else if(this.owner == null && player.hasPassedGo) {
-			let rentableCard = new RentableCard(this.game, this, player);
-			rentableCard.buyButton.setEnabled(player.cash > this.cost);
-			rentableCard.buyButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(() => {
-					this.purchase(player);
-					this.game.nextPlayer();
-				});
-			});
-			rentableCard.auctionButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(() => {
-					this.auction();
-					this.game.nextPlayer();
-				});
-			});
-			this.game.prompt.showWithAnim(rentableCard);
-		} else {
 			this.game.nextPlayer();
 		}
 	}

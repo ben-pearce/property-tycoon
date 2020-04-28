@@ -1,5 +1,7 @@
+import Phaser from "phaser";
 import Card from "./card";
 import Button from "../ui/button";
+import {CardStyle} from "../../styles";
 
 /**
  * Represents a graphical purchasable tile card.
@@ -9,8 +11,13 @@ import Button from "../ui/button";
  * 
  * @property {Button} buyButton The button instance that represents "Buy".
  * @property {Button} auctionButton The button instance that represents "Auction".
+ * 
+ * @property {Button} upgradeButton The button instance that represents "Upgrade".
  * @property {Button} mortgageButton The button instance that represents "Mortgage".
+ * @property {Button} unmortgageButton The button instance that represents "Unmortgage".
  * @property {Button} sellButton The button instance that represents "Sell".
+ * @property {Button} sellUpgradeButton The button instance that represents "Sell House".
+ * @property {Button} continueButton The button instance that represents "Continue".
  */
 class PurchasableCard extends Card {
 	/**
@@ -23,15 +30,40 @@ class PurchasableCard extends Card {
 	 * @param {Player} player The player instance to act upon.
 	 */
 	constructor(game, tile, player) {
-		super(game, tile);
+		super(game);
 
 		this.player = player;
 		this.tile = tile;
-        
+		let price = new Phaser.GameObjects.Text(this.scene, -187, -190, `Price   .......................  £${tile.cost}`, CardStyle);
+
+		this.title = new Phaser.GameObjects.Text(this.scene, 0, -250, tile.name, CardStyle);
+		this.title.setPosition(this.title.x - (this.title.width /2), this.title.y - (this.title.height / 2));
+		
 		this.buyButton = new Button(this.scene, -190, 180, 380, 50, "Purchase", 0x17B70F);
 		this.auctionButton = new Button(this.scene, -190, 240, 380, 50, "Auction", 0xEBA417);
-        
-		this.add([this.buyButton, this.auctionButton]);
+
+		this.mortgageButton = new Button(this.scene, -190, 120, 380, 50, `Mortgage (+£${tile.getMortgageValue()})`, 0xD63434);
+		this.unmortgageButton = new Button(this.scene, -190, 120, 380, 50, `Unmortgage (-£${tile.getValue()})`, 0x17B70F);
+		this.mortgageButton.setVisible(!tile.isMortgaged);
+		this.unmortgageButton.setVisible(tile.isMortgaged);
+
+		this.sellButton = new Button(this.scene, -190, 180, 380, 50, `Sell (+£${tile.getValue()})`, 0xD63434);
+		this.continueButton = new Button(this.scene, -190, 240, 380, 50, "Continue", 0xEBA417);
+
+		this.buyButton.setEnabled(false);
+		this.auctionButton.setEnabled(false);
+
+		this.mortgageButton.setEnabled(false);
+		this.unmortgageButton.setEnabled(false);
+		this.sellButton.setEnabled(false);
+		this.continueButton.setEnabled(false);
+
+		this.add([this.title, price]);
+		if(tile.owner === null) {
+			this.add([this.buyButton, this.auctionButton]);	
+		} else {
+			this.add([this.mortgageButton, this.unmortgageButton, this.sellButton, this.continueButton]);
+		}
 	}
 }
 
