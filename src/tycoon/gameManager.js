@@ -82,7 +82,19 @@ class GameManager {
 		this.playerContainer.bringToTop(p);
 
 		let [diceOne, diceTwo] = roll;
-		p.moveForwards(diceOne + diceTwo);
+		let isDouble = diceOne == diceTwo;
+
+		if (isDouble) {
+			p.doubleRollStreak++;
+		} else {
+			p.doubleRollStreak = 0;
+		}
+
+		if (p.doubleRollStreak >= 3) {
+			p.jail(this.nextPlayer.bind(this));
+		} else {
+			p.moveForwards(diceOne + diceTwo);
+		}
 	}
 
 	playerDeposit(p, sum) {
