@@ -11,19 +11,18 @@ class Utility extends Purchasable {
 	/**
 	 * Adds a utility graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.cost = config.cost;
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2) + 10, 
-			"tiles", config.graphic);
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2) + 10;
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
 
 		this.text.setY(this.y + 10);
 		this.add(graphic);

@@ -11,17 +11,16 @@ class Go extends Tile {
 	/**
 	 * Adds the Go graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, options) {
-		super(board, options);
+	constructor(scene, board, options) {
+		super(scene, board, options);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2), 
-			"tiles", "go");
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2);
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "go");
 
 		this.text.setVisible(false);
 		this.add(graphic);

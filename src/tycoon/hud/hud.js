@@ -27,11 +27,12 @@ class Hud extends Phaser.GameObjects.Container {
 	 * Creates all components of the HUD
 	 * including player, bank, free parking and timer HUDs.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this Hud belongs to.
 	 * @param {GameManager} game The game manager instance associated
 	 * with this hud.
 	 */
-	constructor(game) {
-		super(game.scene);
+	constructor(scene, game) {
+		super(scene);
 		this.game = game;
 
 		this.players = [];
@@ -45,7 +46,7 @@ class Hud extends Phaser.GameObjects.Container {
 
 		for(let i = 0; i < game.players.length; i++) {
 			let player = game.players[i];
-			let playerHud = new PlayerHud(this, player);
+			let playerHud = new PlayerHud(scene, this, player);
 			
 			let playerY = (playerHud.getBounds().height * i) + (15 * i) + 35;
 			playerHud.setPosition(rightX, playerY);
@@ -53,13 +54,13 @@ class Hud extends Phaser.GameObjects.Container {
 			this.players.push(playerHud);
 		}
 		
-		this.bank = new BankHud(this, game.bank);
+		this.bank = new BankHud(scene, this, game.bank);
 		this.bank.setPosition(leftX, bankY);
 		
-		this.parking = new ParkingHud(this, game.board.getSingletonTileByType(Parking));
+		this.parking = new ParkingHud(scene, this, game.board.getSingletonTileByType(Parking));
 		this.parking.setPosition(leftX, parkingY);
 
-		this.timer = new TimerHud(this, game.timer);
+		this.timer = new TimerHud(scene, this, game.timer);
 		this.timer.setPosition(leftX, timerY);
 
 		if(game.timer.seconds === null) {

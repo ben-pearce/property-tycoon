@@ -28,8 +28,8 @@ class BankPayPlayer extends BaseAction {
 	 * @param {Player} player The player to deposit cash into.
 	 */
 	do(game, player) {
-		// bank pays play this.cash amount
-		console.log(player);
+		game.bank.withdraw(this.cash);
+		player.deposit(this.cash);
 	}
 }
 

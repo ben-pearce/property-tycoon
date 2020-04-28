@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import BoardConfig from "../tiles";
-import {Tiles} from "../constants";
+import {Tiles} from "../enums";
 import Rentable from "./tiles/rentable";
 
 /**
@@ -16,10 +16,11 @@ class Board extends Phaser.GameObjects.Container {
 	/**
 	 * Creates board background, tiles and adds logo.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this board belongs to.
 	 * @param {GameManager} game Game manager this board belongs to.
 	 */
-	constructor(game) {
-		super(game.scene, 0, 0);
+	constructor(scene, game) {
+		super(scene, 0, 0);
 
 		this.game = game;
 		this.dimension = BoardConfig.length / 4;
@@ -60,7 +61,7 @@ class Board extends Phaser.GameObjects.Container {
 		for(let tile in BoardConfig) {
 			let tileConfig = BoardConfig[tile];
 			let tileClass = tileConfig.type;
-			let t = new tileClass(this, tileConfig);
+			let t = new tileClass(this.scene, this, tileConfig);
 			tiles.push(t);
 		}
 		return tiles;

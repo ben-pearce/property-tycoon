@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {PlayerNameStyle, BankCashStyle} from "../../styles";
-import {TokenSprites, TokenNames, Hud} from "../../constants";
+import {TokenSprites, TokenNames, Hud} from "../../enums";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
 /**
@@ -21,16 +21,17 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * Creates a hud background, graphic, name text and 
 	 * cash text for the hud layer to represent the bank.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this HUD belongs to.
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Bank} bank The game bank instance.
 	 */
-	constructor(hud, bank) {
-		super(hud.scene);
+	constructor(scene, hud, bank) {
+		super(scene);
 
 		this.hud = hud;
 		this.bank = bank;
 
-		let background = new RoundRectangle(hud.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
+		let background = new RoundRectangle(this.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
 		background.setOrigin(0);
 		let graphic = new Phaser.GameObjects.Sprite(this.scene, 150, 60, "tokens", TokenSprites.BANK);
 		let nameText = new Phaser.GameObjects.Text(this.scene, 10, 120, TokenNames.BANK, PlayerNameStyle);

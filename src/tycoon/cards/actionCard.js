@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Card from "./card";
 import {CardStyle} from "../../styles";
 import Button from "../ui/button";
+import {Buttons} from "../../enums";
 
 /**
  * Represents a graphical action card which has 
@@ -17,12 +18,13 @@ class ActionCard extends Card {
 	 * Creates a title, description, and a continue button
 	 * and adds them to the card.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {GameManager} game The game instance this belongs to.
 	 * @param {CardConfig} config The card configuration to observe.
 	 * @param {Player} player The player instance this card acts upon.
 	 */
-	constructor(game, config, player) {
-		super(game);
+	constructor(scene, game, config, player) {
+		super(scene, game);
 
 		this.player = player;
 
@@ -40,7 +42,7 @@ class ActionCard extends Card {
 		});
 		description.setPosition(description.x - (description.width /2), description.y - (description.height / 2));
 
-		this.continueButton = new Button(this.scene, -190, 240, 380, 50, "Continue", 0xEBA417);
+		this.continueButton = new Button(this.scene, -190, 240, 380, 50, "Continue", Buttons.AMBER);
 
 		this.add([title, description, this.continueButton]);
 	}

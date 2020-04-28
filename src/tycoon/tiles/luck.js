@@ -12,19 +12,18 @@ class Luck extends Tile {
 	/**
 	 * Adds the chest graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.text.setY(this.y + 10);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2) + 10, 
-			"tiles", "chest");
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2) + 10;
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "chest");
 		this.add(graphic);
 	}
 
@@ -39,7 +38,7 @@ class Luck extends Tile {
 		super.onLanded(player);
 
 		let potluckCard = this.game.potluckCards.shift();
-		let actionCard = new ActionCard(this.game, potluckCard, player);
+		let actionCard = new ActionCard(this.scene, this.game, potluckCard, player);
 		actionCard.continueButton.on("pointerup", () => {
 			this.game.prompt.closeWithAnim(() => {
 				potluckCard.action.do(this.game, player);

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {Cards} from "../../constants";
+import {Cards} from "../../enums";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 import Button from "../ui/button";
 
@@ -21,10 +21,11 @@ class Card extends Phaser.GameObjects.Container {
 	/**
 	 * Creates a new card with white background.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {GameManager} game The game manager instance.
 	 */
-	constructor(game) {
-		super(game.scene);
+	constructor(scene, game) {
+		super(scene);
 
 		this.game = game;
 

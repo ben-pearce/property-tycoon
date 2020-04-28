@@ -15,11 +15,12 @@ class Rentable extends Purchasable {
 	/**
 	 * Adds a property to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.color = config.color;
 		this.upgradeCost = config.upgrade;
@@ -27,7 +28,7 @@ class Rentable extends Purchasable {
 
 		this.cardType = RentableCard;
 
-		this.property = new Property(this, config.color);
+		this.property = new Property(this.scene, this, config.color);
 		this.add([this.property, this.property.houseGraphic]);
 	}
 

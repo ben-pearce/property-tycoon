@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {PlayerNameStyle, BankCashStyle} from "../../styles";
-import {TokenSprites, TokenNames, Hud} from "../../constants";
+import {TokenSprites, TokenNames, Hud} from "../../enums";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
 /**
@@ -21,17 +21,18 @@ class ParkingHud extends Phaser.GameObjects.Container {
 	 * cash text for the hud layer to represent the free 
 	 * parking space.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this HUD belongs to.
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Parking} parking The parking tile instance.
 	 */
-	constructor(hud, parking) {
-		super(hud.scene);
+	constructor(scene, hud, parking) {
+		super(scene);
 
 		this.hud = hud;
 		this.parking = parking;
 		this.cash = 0;
 
-		let background = new RoundRectangle(hud.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
+		let background = new RoundRectangle(this.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
 		background.setOrigin(0);
 
 		let graphic = new Phaser.GameObjects.Sprite(this.scene, 150, 60, "tokens", TokenSprites.PARKING);

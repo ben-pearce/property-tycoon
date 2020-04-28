@@ -12,17 +12,16 @@ class Cop extends Tile {
 	/**
 	 * Adds the cop graphic to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile is part of.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2), 
-			"tiles", "cop");
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2);
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "cop");
 		
 		this.text.setVisible(false);
 		this.add(graphic);

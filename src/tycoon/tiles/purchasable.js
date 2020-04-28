@@ -20,11 +20,12 @@ class Purchasable extends Tile {
 	/**
 	 * Adds a price text to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
 		this.cost = config.cost;
 		this.owner = null;
@@ -228,7 +229,7 @@ class Purchasable extends Tile {
 		super.onLanded(player);
 
 		if((this.owner == null && player.hasPassedGo) || this.owner == player) {
-			this.cardInstance = new this.cardType(this.game, this, player);
+			this.cardInstance = new this.cardType(this.scene, this.game, this, player);
 
 			this.game.prompt.showWithAnim(this.cardInstance, this.registerCardButtons.bind(this, player));
 		} else if(this.owner == null && !player.hasPassedGo) {

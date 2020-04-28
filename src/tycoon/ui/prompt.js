@@ -21,15 +21,16 @@ class Prompt extends Phaser.GameObjects.Container {
 	/**
 	 * Creates prompt background.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this prompt belongs to.
 	 * @param {GameManager} game The game manager instance this belongs to.
 	 */
-	constructor(game) {
-		super(game.scene);
+	constructor(scene, game) {
+		super(scene);
 		this.game = game;
 
 		this.promptGameObject = null;
 
-		this.background = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.game.game.config.width, this.game.game.config.height, 0x000000, 0.5);
+		this.background = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, this.scene.game.config.width, this.scene.game.config.height, 0x000000, 0.5);
 		this.background.setOrigin(0);
 		this.background.setVisible(false);
 
@@ -48,7 +49,7 @@ class Prompt extends Phaser.GameObjects.Container {
 	 */
 	showWithAnim(promptGameObject, cb=null) {
 		this.show(promptGameObject);
-		this.promptGameObject.setPosition(this.game.game.config.width / 2, this.game.game.config.height * 2);
+		this.promptGameObject.setPosition(this.scene.game.config.width / 2, this.scene.game.config.height * 2);
 
 		const onComplete = () => {
 			if(this.promptGameObject instanceof Card) {
@@ -66,7 +67,7 @@ class Prompt extends Phaser.GameObjects.Container {
 		this.scene.tweens.add({
 			targets: this.promptGameObject,
 			ease: "Back.easeOut",
-			y: this.game.game.config.height / 2,
+			y: this.scene.game.config.height / 2,
 			onComplete: onComplete
 		});
 	}
@@ -92,7 +93,7 @@ class Prompt extends Phaser.GameObjects.Container {
 		this.scene.tweens.add({
 			targets: this.promptGameObject,
 			ease: "Back.easeIn",
-			y: this.game.game.config.height * 2,
+			y: this.scene.game.config.height * 2,
 			onComplete: onComplete
 		});
 	}

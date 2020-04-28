@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import {PlayerNameStyle, PlayerCashStyle} from "../../styles";
 import {getTokenNameByPlayerId, getTokenSpriteByPlayerId} from "../utils";
-import {Hud} from "../../constants";
+import {Hud} from "../../enums";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
 /**
@@ -20,16 +20,18 @@ class PlayerHud extends Phaser.GameObjects.Container {
 	 * Creates the player token, their cash and 
 	 * allows the user to see owned properties.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this HUD belongs to.
 	 * @param {Hud} hud The parent hud object.
 	 * @param {Player} player The player this hud represents.
 	 */
-	constructor(hud, player) {
-		super(hud.scene);
+	constructor(scene, hud, player) {
+		super(scene);
+
 		this.hud = hud;
 		this.player = player;
 		this.cash = player.cash;
 
-		this.background = new RoundRectangle(hud.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
+		this.background = new RoundRectangle(this.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
 		this.background.setOrigin(0);
 
 		let tokenGraphic = new Phaser.GameObjects.Sprite(this.scene, 40, 40, "tokens", getTokenSpriteByPlayerId(player.id));

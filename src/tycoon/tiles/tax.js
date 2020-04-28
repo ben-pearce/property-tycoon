@@ -14,17 +14,16 @@ class Tax extends Tile {
 	/**
 	 * Adds tax graphic and price text to the tile.
 	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board this tile belongs to.
 	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board, config);
+	constructor(scene, board, config) {
+		super(scene, board, config);
 
-		let graphic = new Phaser.GameObjects.Sprite(
-			this.scene, 
-			this.background.x + (this.background.width / 2), 
-			this.background.y + (this.background.height / 2), 
-			"tiles", config.graphic);
+		let x = this.background.x + (this.background.width / 2);
+		let y = this.background.y + (this.background.height / 2);
+		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
 
 		this.cost = config.cost;
 		this.text.setY(this.y + 10);
