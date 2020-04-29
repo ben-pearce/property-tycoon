@@ -13,6 +13,7 @@ import Jail from "./tiles/jail";
  * @property {Tile} tile The tile this player is current on.
  * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
+ * @property {boolean} isComputer Is this player a computer or not.
  * @property {?(CardConfig|Array)} getOutOfJailCard The get out of jail card this player holds and the deck.
  * @property {integer} jailTurnsMissed Number of turns missed due to jail.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
@@ -33,6 +34,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.tile = null;
 		this.isJailed = false;
 		this.hasPassedGo = false;
+		this.isComputer = false;
 		this.getOutOfJailCard = null;
 		this.jailTurnsMissed = 0;
 		this.doubleRollStreak = 0;
