@@ -161,6 +161,7 @@ class Rentable extends Purchasable {
 	registerCardButtons(player) {
 		super.registerCardButtons(player);
 		this.cardInstance.sellButton.setEnabled(!this.property.isUpgraded);
+
 		this.cardInstance.upgradeButton.setEnabled(!this.isMortgaged && player.cash > this.property.getUpgradeCost() && this.isUpgradable());
 		this.cardInstance.upgradeButton.on("pointerup", () => {
 			this.game.prompt.closeWithAnim(() => {
@@ -176,6 +177,14 @@ class Rentable extends Purchasable {
 				this.game.nextPlayer();
 			});
 		});
+
+		this.cardInstance.auctionPlayerButton.on("pointerup", () => {
+			this.game.prompt.closeWithAnim(() => {
+				this.auction();
+				this.game.nextPlayer();
+			});
+		});
+
 	}
 
 	/**
@@ -203,6 +212,9 @@ class Rentable extends Purchasable {
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);
 			this.game.nextPlayer();
+		} else if(this.owner == player) {
+			this.cardInstance.auctionPlayerButton.setVisible(!this.property.isUpgraded);
+			this.cardInstance.sellUpgradeButton.setVisible(this.property.isUpgraded);
 		}
 	}
 }

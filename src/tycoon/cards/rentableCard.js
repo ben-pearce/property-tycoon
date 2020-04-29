@@ -34,15 +34,16 @@ class RentableCard extends PurchasableCard {
 		let upgradeCount = tile.property.getUpgradeAsNumber();
 		let upgradeName = upgradeCount > 0 ? (upgradeCount > 4 ? "Hotel" : "House") : "Upgrade";
 
-		this.sellUpgradeButton = new Button(this.scene, -190, 60, 380, 50, `Sell ${upgradeName} (+£${tile.property.getDowngradeValue()})`, Buttons.AMBER);
-
+		this.sellUpgradeButton = new Button(this.scene, -190, 60, 380, 50, `Sell ${upgradeName} (+£${tile.property.getDowngradeValue()})`, Buttons.RED);
 		this.title.setStyle({color: "#FFFFFF"});
+
+		this.auctionPlayerButton = new Button(this.scene, -190, 60, 380, 50, "Auction to Player", Buttons.RED);
 
 		this.add([color, housePrice, hotelPrice]);
 		this.swap(color, this.title);
 
 		if(tile.owner === player) {
-			this.add([this.upgradeButton, this.sellUpgradeButton]);
+			this.add([this.auctionPlayerButton, this.upgradeButton, this.sellUpgradeButton]);
 		}
 	}
 }
