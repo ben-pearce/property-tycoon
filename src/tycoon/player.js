@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import {getTokenSpriteByPlayerId} from "./utils";
 import Jail from "./tiles/jail";
+import Purchasable from "./tiles/purchasable";
 
 /**
  * This class represents a player.
@@ -97,6 +98,20 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.jumpToTile(jailTile, cb);
 	}
 
+	/**
+	 * Gets the net worth of this player. 
+	 * 
+	 * The net worth is the players cash plus the value
+	 * of all of their assets.
+	 * 
+	 * @returns {integer} The players net worth.
+	 */
+	getNetWorth() {
+		let ownedTiles = this.game.board.getTilesOwnedByPlayer(this, Purchasable);
+		let propertyValue = ownedTiles.reduce((value, tile) => value + tile.getValue(), 0);
+		return this.cash + propertyValue;
+	}
+ 
 	/**
 	 * Moves and animates a player to a new tile on the board.
 	 * 
