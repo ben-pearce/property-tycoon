@@ -108,6 +108,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		let timeline = this.scene.tweens.createTimeline();
 		let l = this.game.board.tiles.length;
 
+		let duration = 5000;
+		let distance = (((tile.id - this.tile.id) % l) + l) % l;
+
 		for(let i = (this.tile.id + direction + l) % l; i != (tile.id + direction + l) % l; i = (i + direction + l) % l) {
 			let tempTile = this.game.board.tiles[i];
 			let [x, y] = tempTile.getPlayerXY();
@@ -116,6 +119,7 @@ class Player extends Phaser.GameObjects.Sprite {
 				targets: this,
 				ease: "Cubic.easeOut", 
 				x: x, y: y,
+				duration: Math.min(750, duration / distance),
 				onComplete: () => tempTile.onPassed(this)
 			});
 		}
