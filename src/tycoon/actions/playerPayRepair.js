@@ -39,6 +39,13 @@ class PlayerPayRepair extends PlayerPayBank {
 		super.do(game, player);
 
 		this.cash = null;
+		if(isHotel){
+			player.withdraw(this.hotelCost);
+			game.bank.deposit(this.hotelCost);
+		}else{
+			player.withdraw(this.houseCost);
+			game.bank.deposit(this.hotelCost);
+		}
 	}
 }
 
