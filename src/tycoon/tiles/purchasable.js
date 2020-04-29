@@ -83,6 +83,11 @@ class Purchasable extends Tile {
 			this.game.bank.deposit(cost);
 
 			this.owner = player;
+		} else if(this.owner !== null && player.cash > cost) {
+			player.withdraw(cost);
+			this.owner.deposit(cost);
+
+			this.owner = player;
 		}
 	}
 
@@ -139,7 +144,7 @@ class Purchasable extends Tile {
 			for(let i = 0; i < this.game.players.length; i++) {
 				let player = this.game.players[i];
 
-				if(!player.isJailed) {
+				if(!player.isJailed && this.owner !== player) {
 					// eslint-disable-next-line no-undef
 					let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
 
