@@ -1,6 +1,6 @@
 import BaseAction from "./action";
 import FineCard from "../cards/fineCard";
-import ActionCard from "../cards/actionCard";
+//import ActionCard from "../cards/actionCard";
 import Parking from "../tiles/parking";
 
 /**
@@ -36,17 +36,7 @@ class FineOrOpportunity extends BaseAction {
 		let fineCard = new FineCard(game.scene, game, this.fine);
 
 		let takeCard = () => {
-			let opportunityCard = game.opportunityCards.shift();
-			let actionCard = new ActionCard(game.scene, game, opportunityCard, player);
-			actionCard.continueButton.on("pointerup", () => {
-				game.prompt.closeWithAnim(() => {
-					opportunityCard.action.do(game, player, () => {
-						game.opportunityCards.push(opportunityCard);
-						cb();
-					});
-				});
-			});
-			game.prompt.showWithAnim(actionCard);
+			game.pickUpCard(player, game.opportunityCards, cb);
 		};
 
 		fineCard.fineButton.on("pointerup", () => {
@@ -54,6 +44,7 @@ class FineOrOpportunity extends BaseAction {
 				let parking = game.board.getSingletonTileByType(Parking);
 				player.withdraw(this.fine);
 				parking.pay(this.fine);
+				game.nextPlayer();
 				cb();
 			});
 		});

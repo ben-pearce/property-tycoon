@@ -8,6 +8,8 @@ import Timer from "./timer";
 import CashText from "./ui/cashText";
 import Prompt from "./ui/prompt";
 import Cards from "../cards";
+import ActionCard from "./cards/actionCard";
+import GetOutOfJail from "./actions/getOutOfJail";
 
 /**
  * This is our Game Controller, it is in charge
@@ -143,6 +145,36 @@ class GameManager extends Phaser.GameObjects.Group {
 			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
 		}
 		this.dice.requestRoll();
+	}
+
+	/**
+	 * Shows an action card and performs action upon player
+	 * once continue button has been pressed.
+	 * 
+	 * @param {Player} player The player to perform action on.
+	 * @param {CardConfig[]} deck The deck the card was picked up from.
+	 * @param {} cb The callback to invoke once action is complete.
+	 */
+	pickUpCard(player, deck, cb=null){
+		let card = deck.shift();
+		let actionCard = new ActionCard(this.scene, this, card, player);
+		actionCard.continueButton.on("pointerup", () => {
+			this.prompt.closeWithAnim(() => {
+				card.action.do(this, player, () => {
+					// Don't place the card back in the deck if it's GetOutOfJail.
+					if(card.action instanceof GetOutOfJail) {
+						player.getOutOfJailCard = [card, deck];
+					} else {
+						deck.push(card);
+					}
+					
+					if(typeof cb === "function") {
+						cb();
+					}
+				});
+			});
+		});
+		this.prompt.showWithAnim(actionCard);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Tile from "./tile";
-import ActionCard from "../cards/actionCard";
+//import ActionCard from "../cards/actionCard";
 
 /**
  * This class represents an Opportunity Knocks tile.
@@ -39,17 +39,7 @@ class Opportunity extends Tile {
 	onLanded(player) {
 		super.onLanded(player);
 
-		let opportunityCard = this.game.opportunityCards.shift();
-		let actionCard = new ActionCard(this.scene, this.game, opportunityCard, player);
-		actionCard.continueButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				opportunityCard.action.do(this.game, player, () => {
-					this.game.nextPlayer();
-					this.game.opportunityCards.push(opportunityCard);
-				});
-			});
-		});
-		this.game.prompt.showWithAnim(actionCard);
+		this.game.pickUpCard(player, this.game.opportunityCards);
 	}
 }
 

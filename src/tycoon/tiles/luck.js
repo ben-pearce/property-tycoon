@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Tile from "./tile";
-import ActionCard from "../cards/actionCard";
+//import ActionCard from "../cards/actionCard";
 
 /**
  * This class represents a Pot Luck tile.
@@ -37,17 +37,7 @@ class Luck extends Tile {
 	onLanded(player) {
 		super.onLanded(player);
 
-		let potluckCard = this.game.potluckCards.shift();
-		let actionCard = new ActionCard(this.scene, this.game, potluckCard, player);
-		actionCard.continueButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				potluckCard.action.do(this.game, player, () => {
-					this.game.nextPlayer();
-					this.game.potluckCards.push(potluckCard);
-				});
-			});
-		});
-		this.game.prompt.showWithAnim(actionCard);
+		this.game.pickUpCard(player, this.game.potluckCards);
 	}
 }
 
