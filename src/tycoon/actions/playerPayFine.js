@@ -34,6 +34,7 @@ class PlayerPayFine extends BaseAction {
 		let parking = game.board.getSingletonTileByType(Parking);
 		player.withdraw(this.fine);
 		parking.pay(this.fine);
+		game.nextPlayer();
 		cb();
 	}
 }

@@ -31,6 +31,7 @@ class PlayerPayBank extends BaseAction {
 	do(game, player, cb) {
 		player.withdraw(this.cash);
 		game.bank.deposit(this.cash);
+		game.nextPlayer();
 		cb();
 	}
 }

@@ -22,7 +22,8 @@ class GetOutOfJail extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// player is given Get Out Of Jail card
+		// Not much to do here, registering the players GOOJF card is done by the game manager.
+		game.nextPlayer();
 		cb();
 	}
 }
