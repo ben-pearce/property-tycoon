@@ -43,6 +43,7 @@ class PlayerPayRepair extends BaseAction {
 			player.withdraw(repairBill);
 			game.bank.deposit(repairBill);
 		}
+		game.nextPlayer();
 		cb();
 	}
 }
