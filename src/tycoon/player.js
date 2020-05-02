@@ -16,6 +16,7 @@ import Purchasable from "./tiles/purchasable";
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
  * @property {boolean} isComputer Is this player a computer or not.
  * @property {boolean} isRetired Has this player retired from the game.
+ * @property {CardConfig[]} getOutOfJailCard The get out of jail card this player holds and the deck.
  * @property {integer} jailTurnsMissed Number of turns missed due to jail.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
  */
@@ -24,20 +25,23 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Phaser.Scene} scene The scene this player belongs to.
 	 * @param {GameManager} game The game this player belongs to.
 	 * @param {integer} id The unique player ID.
+	 * @param {integer} cash The cash the player will start with.
+	 * @param {boolean} isComputer Is this player a computer or not.
 	 */
-	constructor(scene, game, id) {
+	constructor(scene, game, id, cash, isComputer) {
 		super(scene, 0, 0, "tokens", getTokenSpriteByPlayerId(id));
 
 		this.id = id;
 		this.game = game;
 
-		this.cash = 0;
+		this.cash = cash;
 		this.tile = null;
 		this.isJailed = false;
 		this.hasPassedGo = false;
-		this.isComputer = false;
-		this.getOutOfJailCard = null;
+		this.direction = Direction.FORWARDS;
+		this.isComputer = isComputer;
 		this.isRetired = false;
+		this.getOutOfJailCard = [];
 		this.jailTurnsMissed = 0;
 		this.doubleRollStreak = 0;
 	}

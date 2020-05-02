@@ -51,9 +51,10 @@ class GameManager extends Phaser.GameObjects.Group {
 
 		// Create all the players and deposit 1500 cash
 		this.playerContainer = new Phaser.GameObjects.Container(scene);
-		for(let i = 0; i < config.playerCount; i++) {
-			let p = new Player(scene, this, i);
-			p.deposit(1500);
+		for(let i = 0; i < config.playerCount + config.computerCount; i++) {
+			const cash = 1500;
+			const isComputer = i >= config.playerCount; 
+			const p = new Player(scene, this, i, cash, isComputer);
 			p.teleportToTile(this.board.tiles[0]);
 
 			p.on("deposit", this._playerDeposit.bind(this, p));
