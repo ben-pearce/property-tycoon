@@ -119,7 +119,7 @@ class Jail extends Tile {
 				this.game.prompt.showWithAnim(jailCard);
 			}
 		} else if(this.players.indexOf(player) == -1) {
-			this.game.nextPlayer();
+			this.game.showSaleInterface(player);
 		}
 		super.onLanded(player);
 	}

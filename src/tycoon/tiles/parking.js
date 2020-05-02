@@ -68,7 +68,7 @@ class Parking extends Tile {
 			this.collect();
 		}
 
-		this.game.nextPlayer();
+		this.game.showSaleInterface(player);
 	}
 }
 

@@ -206,47 +206,28 @@ class Purchasable extends Tile {
 	 */
 	registerCardButtons(player) {
 		this.cardInstance.buyButton.setEnabled(player.cash > this.cost);
-		this.cardInstance.buyButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.purchase(player);
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.buyButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.purchase(player)));
+		this.cardInstance.auctionButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.auction()));
 
-		this.cardInstance.auctionButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.auction();
-				this.game.nextPlayer();
-			});
-		});
-
-		this.cardInstance.unmortgageButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.unmortgage();
-				this.game.nextPlayer();
-			});
-		});
-
+		this.cardInstance.unmortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.unmortgage()));
 		this.cardInstance.mortgageButton.setEnabled(this.getMortgageValue() > 0);
-		this.cardInstance.mortgageButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.mortgage();
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.mortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.mortgage()));
 
-		this.cardInstance.sellButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.sell();
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.sellButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.sell()));
+		this.cardInstance.continueButton.on("pointerup", () => this.game.prompt.closeWithAnim());
+	}
 
-		this.cardInstance.continueButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.game.nextPlayer();
-			});
-		});
+	/**
+	 * Shows the purchase card for this property
+	 * in the context for the player passed in.
+	 * 
+	 * @param {Player} player The player to show the card to.
+	 */
+	showCard(player) {
+		this.cardInstance = new this.cardType(this.scene, this.game, this, player);
+		this.game.prompt.showWithAnim(this.cardInstance, this.registerCardButtons.bind(this, player));
+
+		this.game.prompt.once("close", () => this.game.showSaleInterface(player));
 	}
 
 	/**
@@ -260,11 +241,9 @@ class Purchasable extends Tile {
 		super.onLanded(player);
 
 		if((this.owner == null && player.hasPassedGo) || this.owner == player) {
-			this.cardInstance = new this.cardType(this.scene, this.game, this, player);
-
-			this.game.prompt.showWithAnim(this.cardInstance, this.registerCardButtons.bind(this, player));
-		} else if(this.owner == null && !player.hasPassedGo) {
-			this.game.nextPlayer();
+			this.showCard(player);
+		} else if((this.owner == null && !player.hasPassedGo) || this.isMortgaged || this.owner.isJailed) {
+			this.game.showSaleInterface(player);
 		}
 	}
 }
