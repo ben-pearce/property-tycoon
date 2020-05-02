@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Tile from "./tile";
+import {Direction} from "../../enums";
 
 /**
  * This class represents the Go tile.
@@ -35,10 +36,12 @@ class Go extends Tile {
 	onPassed(player) {
 		super.onPassed(player);
 
-		player.hasPassedGo = true;
+		if(player.direction == Direction.FORWARDS) {
+			player.hasPassedGo = true;
 		
-		this.game.bank.withdraw(200);
-		player.deposit(200);
+			this.game.bank.withdraw(200);
+			player.deposit(200);
+		}
 	}
 
 	/**
