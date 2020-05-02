@@ -118,14 +118,22 @@ class Purchasable extends Tile {
 	/**
 	 * Sells this property back to the bank for its current
 	 * valuation.
+	 * 
+	 * @param {integer} value Overrides the value of this property for this sale only.
 	 */
-	sell() {
+	sell(value=null) {
+		value = value === null ? this.getValue() : value;
 		if(this.owner !== null) {
-			this.game.bank.withdraw(this.getValue());
-			this.owner.deposit(this.getValue());
-
 			this.isMortgaged = false;
+			this.mortgagedBox.setVisible(false);
+
+			const oldOwner = this.owner;
 			this.owner = null;
+
+			if(value > 0) {
+				this.game.bank.withdraw(value);
+				oldOwner.deposit(value);
+			}
 		}
 	}
 
