@@ -102,6 +102,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	unjail(cb=null) {
 		const jailTile = this.game.board.getSingletonTileByType(Jail);
 		this.isJailed = false;
+		this.jailTurnsMissed = 0;
 		this.jumpToTile(jailTile, cb);
 	}
 
