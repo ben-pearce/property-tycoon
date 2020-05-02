@@ -68,6 +68,22 @@ class Hud extends Phaser.GameObjects.Container {
 		}
 
 		this.add([this.bank, this.parking, this.timer, ...this.players]);
+	/**
+	 * Sets whether the "Properties" and "Forfeit" buttons 
+	 * on the player huds are clickable or not.
+	 * 
+	 * @param {boolean} isEnabled Buttons are enabled or disabled.
+	 */
+	setPlayerHudEnabled(isEnabled) {
+		for(let i = 0; i < this.players.length; i++) {
+			if(isEnabled && !this.game.players[i].isRetired) {
+				this.players[i].propertiesButton.setInteractive({useHandCursor: true}).setAlpha(1);
+				this.players[i].forfeitButton.setInteractive({useHandCursor: true}).setAlpha(1);
+			} else {
+				this.players[i].propertiesButton.removeInteractive().setAlpha(0.5);
+				this.players[i].forfeitButton.removeInteractive().setAlpha(0.5);
+			}
+		}
 	}
 }
 

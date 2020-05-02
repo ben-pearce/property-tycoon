@@ -79,6 +79,7 @@ class GameManager extends Phaser.GameObjects.Group {
 		this.potluckCards = this._shuffleCards(Cards.potluck.slice());
 
 		this.dice.on("landed", this.playerRolled.bind(this));
+		this.dice.on("rolled", this.hud.setPlayerHudEnabled.bind(this.hud, false));
 
 		this.nextPlayer();
 	}
@@ -147,6 +148,7 @@ class GameManager extends Phaser.GameObjects.Group {
 
 			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
 		}
+		this.hud.setPlayerHudEnabled(true);
 		this.dice.requestRoll();
 	}
 
