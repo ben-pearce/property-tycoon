@@ -35,7 +35,7 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.game = game;
 		this.scene = game.scene;
 
-		this.result = (null, null);
+		this.result = [null, null];
 
 		this.rollSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "roll");
 		this.diceOneSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "1");
