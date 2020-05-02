@@ -10,6 +10,7 @@ import Prompt from "./ui/prompt";
 import Cards from "../cards";
 import ActionCard from "./cards/actionCard";
 import GetOutOfJail from "./actions/getOutOfJail";
+import {WinStyle} from "../styles";
 
 /**
  * This is our Game Controller, it is in charge
@@ -59,6 +60,7 @@ class GameManager extends Phaser.GameObjects.Group {
 
 			p.on("deposit", this._playerDeposit.bind(this, p));
 			p.on("withdraw", this._playerWithdraw.bind(this, p));
+			p.on("retire", this._playerRetire.bind(this, p));
 
 			this.players.push(p);
 		}
@@ -208,6 +210,23 @@ class GameManager extends Phaser.GameObjects.Group {
 		const c = new CashText(p, -sum);
 		this.playerContainer.add(c);
 		c.play();
+	}
+
+	/**
+	 * Called when a player retires from the game.
+	 */
+	_playerRetire() {
+		const playersRemaining = this.players.reduce((remaining, player) => remaining + !player.isRetired, 0);
+		if(playersRemaining === 1) {
+			const winnerId = this.players.map(e => e.isRetired).indexOf(false);
+
+			this.hud.setPlayerHudEnabled(false);
+			this.dice.reset();
+
+			const winText = new Phaser.GameObjects.Text(this.scene, 0, 0, `${getTokenNameByPlayerId(winnerId)} wins!`, WinStyle);
+			winText.setStroke(0x000000, 10);
+			this.prompt.show(winText);
+		}
 	}
 
 	/**

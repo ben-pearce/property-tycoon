@@ -57,6 +57,12 @@ const CardStyle = {
 	align: "center"
 };
 
+const WinStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "100px",
+	align: "center"
+};
 export {
 	TileTextStyle,
 	CashTextStyle,
@@ -66,5 +72,6 @@ export {
 	BankCashStyle,
 	TimerStyle,
 	MenuStyle,
-	CardStyle
+	CardStyle,
+	WinStyle,
 };
