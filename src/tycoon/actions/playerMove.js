@@ -1,4 +1,5 @@
 import BaseAction from "./action";
+import {Direction} from "../../enums";
 
 /**
  * Action class for moving a player a specified
@@ -8,7 +9,7 @@ import BaseAction from "./action";
  * @memberof Actions
  * 
  * @property {integer} steps The number of steps player will move.
- * @property {integer} direction The direction player should move in.
+ * @property {Enums.Direction} direction The direction player should move in.
  */
 class PlayerMove extends BaseAction {
 	/**
@@ -16,9 +17,9 @@ class PlayerMove extends BaseAction {
 	 * to move in.
 	 * 
 	 * @param {integer} steps The number of steps to move.
-	 * @param {integer} [direction=1] The direction to move the player.
+	 * @param {Enums.Direction} [direction=Direction.FORWARDS] The direction to move the player.
 	 */
-	constructor(steps, direction=1) {
+	constructor(steps, direction=Direction.FORWARDS) {
 		super();
         
 		this.steps = steps;
@@ -34,8 +35,11 @@ class PlayerMove extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// player is moved this.direction this.steps steps
-		cb();
+		if(this.direction === Direction.FORWARDS) {
+			player.moveForwards(this.steps, cb);
+		} else if (this.direction === Direction.BACKWARDS) {
+			player.moveBackwards(this.steps, cb);
+		}
 	}
 }
 
