@@ -45,3 +45,12 @@ $ npm install
 To test the game, run `npm start` (Auto-opens in browser).
 
 To build the game, run `npm build`.
+
+## Documentation
+
+To build the docs for this project, you just need [JSDoc](https://jsdoc.app/).
+
+```
+$ npm i -g jsdoc
+$ jsdoc -r -d docs
+```

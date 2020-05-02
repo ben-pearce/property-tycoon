@@ -1,28 +1,30 @@
 import Phaser from "phaser";
 
-
+/**
+ * This class represents our dice.
+ * 
+ * @extends Phaser.Events.EventEmitter
+ * 
+ * @property {integer[]} result Stores the result for most recent dice roll.
+ * @property {Phaser.GameObjects.Sprite} rollSprite The hand roll sprite.
+ * @property {Phaser.GameObjects.Sprite} diceOneSprite 
+ * @property {Phaser.GameObjects.Sprite} diceTwoSprite
+ */
 class Dice extends Phaser.Events.EventEmitter {
 	/**
-	 * This class represents our dice, it is an EventEmitter,
-	 * meaning we can listen for events on it. The events you
-	 * can listen for are as follows:
-	 * 
-	 * dice.on("roll", callback)
-	 * 
-	 * 	Fired when a the user clicks the dice to roll, does NOT
-	 * 	provide any insight into the dice roll result.
-	 * 
-	 * dice.on("landed", callback)
-	 * 
-	 * 	Fired when the dice "land" and provides the result as an
-	 * 	array of two integers (diceoneresult, dicetworesult).
-	 * 
-	 * Dice roll example:
-	 * 	
-	 * dice.requestRoll()
+	 * Creates three dice sprites, the hand roll sprite,
+	 * dice one and two sprites for rolling animation.
 	 * 
 	 * dice.result always stores the latest result but does not
 	 * update until the dice have landed!
+	 * 
+	 * @example <caption>Example usage of events</caption>
+	 * let dice = new Dice(game);
+	 * dice.on("rolled", callback);
+	 * dice.on("landed", callback);
+	 * 
+	 * @example <caption>Example of requesting roll</caption>
+	 * dice.requestRoll();
 	 * 
 	 * @param {GameManager} game The game manager the Dice belongs to.
 	 */
@@ -32,11 +34,11 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.game = game;
 		this.scene = game.scene;
 
-		this.result = (null, null);
+		this.result = [null, null];
 
-		this.rollSprite = this.scene.add.sprite(0, 0, "dice", "roll");
-		this.diceOneSprite = this.scene.add.sprite(0, 0, "dice", "1");
-		this.diceTwoSprite = this.scene.add.sprite(0, 0, "dice", "1");
+		this.rollSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "roll");
+		this.diceOneSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "1");
+		this.diceTwoSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "dice", "1");
 
 		this.rollSprite.setInteractive({useHandCursor: true});
 		this.rollSprite.on("pointerdown", () => {
@@ -61,7 +63,7 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * moved.
 	 */
 	requestRoll() {
-		let pointer = this.scene.input.activePointer;
+		const pointer = this.scene.input.activePointer;
 		this.reset();
 
 		this.rollSprite.setVisible(true);
@@ -91,6 +93,7 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * frames until they "land", at which point this.land() will
 	 * be called.
 	 * @param {Phaser.Input.Pointer} pointer The pointer
+	 * @fires Dice#rolled
 	 */
 	clickRoll(pointer) {
 		this.emit("rolled");
@@ -105,10 +108,10 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceOneSprite.setPosition(pointer.x, pointer.y);
 		this.diceTwoSprite.setPosition(pointer.x, pointer.y);
 
-		let minx = this.game.board.x + this.game.board.background.x;
-		let miny = this.game.board.y + this.game.board.background.y;
-		let maxx = this.game.board.x + this.game.board.background.x + this.game.board.background.width;
-		let maxy = this.game.board.y + this.game.board.background.y + this.game.board.background.height;
+		const minx = this.game.board.x + this.game.board.background.x;
+		const miny = this.game.board.y + this.game.board.background.y;
+		const maxx = this.game.board.x + this.game.board.background.x + this.game.board.background.width;
+		const maxy = this.game.board.y + this.game.board.background.y + this.game.board.background.height;
 
 		this.scene.tweens.add({
 			targets: this.diceOneSprite,
@@ -136,6 +139,8 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * 
 	 * Stops animations and emits the "landed" event
 	 * with the result as the parameter.
+	 * 
+	 * @fires Dice#landed
 	 */
 	land() {
 		this.result = [Phaser.Math.Between(1, 6), Phaser.Math.Between(1, 6)];
@@ -152,6 +157,9 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * Reset sprites to their initial state.
 	 */
 	reset() {
+		this.rollSprite.off("pointerup");
+		this.scene.input.off("pointermove");
+		
 		this.rollSprite.setVisible(false);
 		this.diceOneSprite.setVisible(false);
 		this.diceTwoSprite.setVisible(false);
@@ -161,8 +169,21 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceTwoSprite.setPosition(0, 0);
 
 		this.rollSprite.setScale(1);
-		this.scene.children.bringToTop(this.rollSprite);
 	}
 }
+
+/**
+ * Event fired when dice have landed.
+ * 
+ * @event Dice#landed
+ * @param {integer[]} result The dice result.
+ */
+
+
+/**
+ * Event fired when dice have been rolled.
+ * 
+ * @event Dice#rolled
+ */
 
 export default Dice;

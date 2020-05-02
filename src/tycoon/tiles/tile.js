@@ -1,54 +1,71 @@
 import Phaser from "phaser";
-import Property from "../property";
-import GeneralConfig from "../../general";
+import {Tiles} from "../../enums";
+import {TileTextStyle} from "../../styles";
 
+/**
+ * @namespace Tiles
+ */
 
+/**
+ * This class represents a tile on the board. 
+ * 
+ * Intended to be inherited by specialised tile classes.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * @memberof Tiles
+ * 
+ * @property {Board} board The board this tile is part of.
+ * @property {GameManager} game The game manager instance.
+ * @property {integer} id The unique tile ID.
+ * @property {string} name The name of the tile.
+ * @property {Player[]} players Players currently on the tile.
+ * @property {Phaser.GameObjects.Rectangle} background The background of the tile.
+ * @property {Phaser.GameObjects.Text} text The text on the tile.
+ */
 class Tile extends Phaser.GameObjects.Container {
 	/**
-	 * This class represents a tile on the board. 
+	 * Creates the tile background and text and initiates 
+	 * class variables.
 	 * 
-	 * This class will not be used alone, there will be classes
-	 * that inherit this class to give further functionality (i.e. Jail, Station etc).
-	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
 	 * @param {Board} board The board object this belongs to.
-	 * @param {Object} config Configuration options for this tile.
+	 * @param {TileConfig} config The tile configuration to observe.
 	 */
-	constructor(board, config) {
-		super(board.scene, 0, 0);
+	constructor(scene, board, config) {
+		super(scene, 0, 0);
 
 		this.board = board;
 		this.game = board.game;
 		this.id = config.id;
+		this.name = config.name;
 
 		this.background = new Phaser.GameObjects.Rectangle(
 			board.scene, 
 			this.x, this.y, 
-			(config.id % 10 == 0) ? GeneralConfig.tiles.height : GeneralConfig.tiles.width, 
-			GeneralConfig.tiles.height, 
-			GeneralConfig.board.color);
-
-		const textStyle = {
-			fontFamily: "Sans",
-			color: "#000000", 
-			fontSize: "10px", 
-			align: "center", 
+			(config.id % 10 == 0) ? Tiles.HEIGHT : Tiles.WIDTH, 
+			Tiles.HEIGHT, 
+			Tiles.COLOR);
+		
+		this.text = new Phaser.GameObjects.Text(this.scene, this.x, this.y + 25, config.name, TileTextStyle);
+		this.text.setStyle({
 			fixedWidth: this.background.width,
-			wordWrap: {width: this.background.width, useAdvancedWrap: true}
-		};
-
-		this.text = new Phaser.GameObjects.Text(board.scene, this.x, this.y + 25, config.name, textStyle);
+			wordWrap: {width: this.background.width - 8, useAdvancedWrap: true}
+		});
 		this.background.setStrokeStyle(3, 0x000000);
 		this.background.setOrigin(0);
 		this.text.setOrigin(0);
 		this.add([this.background, this.text]);
 
-		if(config.buy && config.group != "Utilities" && config.group != "Station") {
-			const color = GeneralConfig.groups[config.group];
-			this.property = new Property(this, color);
-			this.add(this.property);
-		}
-
 		this.players = [];
+
+		this.posRange = [
+			[0, 0],
+			[0, -0.25],
+			[0, +0.25],
+			[-0.25, -0.15],
+			[-0.25, +0.15],
+			[+0.25, 0]
+		];
 	}
 
 	/**
@@ -67,21 +84,14 @@ class Tile extends Phaser.GameObjects.Container {
 	 * If there is already a player on the tile, this function also
 	 * introduces some random variance in the coordiantes to make
 	 * the movement seem more natural.
+	 * 
+	 * @returns {integer[]} The XY coordinates.
 	 */
 	getPlayerXY() {
 		let x = this.board.x + this.x;
 		let y = this.board.y + this.y;
 
-		let posRange = [
-			[0, 0],
-			[0, -0.25],
-			[0, +0.25],
-			[-0.25, -0.15],
-			[-0.25, +0.15],
-			[+0.25, 0]
-		];
-
-		let [varX, varY] = posRange[this.players.length];
+		let [varX, varY] = this.posRange[this.players.length];
 
 		if(this.players.length > 0) {
 			varX += Math.random() * (0.1) - 0.05;
@@ -105,13 +115,30 @@ class Tile extends Phaser.GameObjects.Container {
 		return [x, y];
 	}
 
+	/**
+	 * This method is called when a player has "passed"
+	 * this tile, i.e. they have rolled the dice and need
+	 * to move past this tile to get to their target tile.
+	 * 
+	 * It is ALSO called when  the player lands on the target
+	 * tile. So when a player lands both `onPassed()` and 
+	 * `onLanded()` will be invoked.
+	 * 
+	 * @param {Player} player The player that passed the tile.
+	 */
 	onPassed(player) {
-		console.log(player, "passed", this);
+		return player;
 	}
 
+	/**
+	 * This method is called when a player has "landed"
+	 * on this tile, i.e. they have rolled the dice and this
+	 * tile is their target tile and player has finished
+	 * progressing to this tile.
+	 * 
+	 * @param {Player} player The player that landed on this tile.
+	 */
 	onLanded(player) {
-		console.log(player, "landed", this);
-		
 		this.players.push(player);
 
 		if(player.tile !== null) {

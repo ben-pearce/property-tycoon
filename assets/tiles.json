@@ -1,0 +1,292 @@
+{
+	"textures": [
+		{
+			"image": "tiles.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 240,
+				"h": 210
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "go",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 75,
+						"h": 75
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 75,
+						"h": 75
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 75,
+						"h": 75
+					}
+				},
+				{
+					"filename": "cop",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 75,
+						"h": 75
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 75,
+						"h": 75
+					},
+					"frame": {
+						"x": 75,
+						"y": 0,
+						"w": 75,
+						"h": 75
+					}
+				},
+				{
+					"filename": "parking",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 75,
+						"h": 75
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 75,
+						"h": 75
+					},
+					"frame": {
+						"x": 0,
+						"y": 75,
+						"w": 75,
+						"h": 75
+					}
+				},
+				{
+					"filename": "jail",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 70,
+						"h": 70
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 70,
+						"h": 70
+					},
+					"frame": {
+						"x": 75,
+						"y": 75,
+						"w": 70,
+						"h": 70
+					}
+				},
+				{
+					"filename": "opportunity",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 60
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 60
+					},
+					"frame": {
+						"x": 150,
+						"y": 0,
+						"w": 40,
+						"h": 60
+					}
+				},
+				{
+					"filename": "electric",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 60
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 60
+					},
+					"frame": {
+						"x": 150,
+						"y": 60,
+						"w": 40,
+						"h": 60
+					}
+				},
+				{
+					"filename": "opportunity2",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 60
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 60
+					},
+					"frame": {
+						"x": 0,
+						"y": 150,
+						"w": 40,
+						"h": 60
+					}
+				},
+				{
+					"filename": "opportunity3",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 60
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 60
+					},
+					"frame": {
+						"x": 40,
+						"y": 150,
+						"w": 40,
+						"h": 60
+					}
+				},
+				{
+					"filename": "chest",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 50,
+						"h": 50
+					},
+					"frame": {
+						"x": 80,
+						"y": 145,
+						"w": 50,
+						"h": 50
+					}
+				},
+				{
+					"filename": "luxury",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 50,
+						"h": 50
+					},
+					"frame": {
+						"x": 130,
+						"y": 145,
+						"w": 50,
+						"h": 50
+					}
+				},
+				{
+					"filename": "station",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 50,
+						"h": 50
+					},
+					"frame": {
+						"x": 190,
+						"y": 0,
+						"w": 50,
+						"h": 50
+					}
+				},
+				{
+					"filename": "tax",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 40
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 40
+					},
+					"frame": {
+						"x": 190,
+						"y": 50,
+						"w": 40,
+						"h": 40
+					}
+				},
+				{
+					"filename": "water",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 40,
+						"h": 40
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 40
+					},
+					"frame": {
+						"x": 190,
+						"y": 90,
+						"w": 40,
+						"h": 40
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.5"
+	}
+}
