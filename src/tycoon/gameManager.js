@@ -159,6 +159,8 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * @param {Player} player The player to perform action on.
 	 * @param {CardConfig[]} deck The deck the card was picked up from.
 	 * @param {} cb The callback to invoke once action is complete.
+	 * 
+	 * @fires Player#jailpickup
 	 */
 	pickUpCard(player, deck, cb=null){
 		const card = deck.shift();
@@ -168,7 +170,8 @@ class GameManager extends Phaser.GameObjects.Group {
 				card.action.do(this, player, () => {
 					// Don't place the card back in the deck if it's GetOutOfJail.
 					if(card.action instanceof GetOutOfJail) {
-						player.getOutOfJailCard = [card, deck];
+						player.getOutOfJailCard.push([card, deck]);
+						player.emit("jailpickup");
 					} else {
 						deck.push(card);
 					}
