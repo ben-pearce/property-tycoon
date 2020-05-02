@@ -20,9 +20,9 @@ class Parking extends Tile {
 
 		this.cash = 0;
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "parking");
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "parking");
 		
 		this.text.setVisible(false);
 		this.add(graphic);

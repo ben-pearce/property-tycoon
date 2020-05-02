@@ -34,7 +34,7 @@ class Board extends Phaser.GameObjects.Container {
 			Tiles.COLOR);
 		this.background.setOrigin(0);
 		
-		let wallpaper = new Phaser.GameObjects.Sprite(
+		const wallpaper = new Phaser.GameObjects.Sprite(
 			this.scene, 
 			this.background.x + (this.background.width / 2), 
 			this.background.y + (this.background.height / 2), 
@@ -58,10 +58,10 @@ class Board extends Phaser.GameObjects.Container {
 	 */
 	_drawTiles() {
 		const tiles = [];
-		for(let tile in BoardConfig) {
-			let tileConfig = BoardConfig[tile];
-			let tileClass = tileConfig.type;
-			let t = new tileClass(this.scene, this, tileConfig);
+		for(const tile in BoardConfig) {
+			const tileConfig = BoardConfig[tile];
+			const tileClass = tileConfig.type;
+			const t = new tileClass(this.scene, this, tileConfig);
 			tiles.push(t);
 		}
 		return tiles;
@@ -100,7 +100,7 @@ class Board extends Phaser.GameObjects.Container {
 	getRentableTilesByColor(color) {
 		const rentableTiles = [];
 		for(let i = 0; i < this.tiles.length; i++) {
-			let t = this.tiles[i];
+			const t = this.tiles[i];
 			if(t instanceof Rentable && t.color == color) {
 				rentableTiles.push(t);
 			}
@@ -121,7 +121,7 @@ class Board extends Phaser.GameObjects.Container {
 	getTilesByType(type) {
 		const tiles = [];
 		for(let i = 0; i < this.tiles.length; i++) {
-			let t = this.tiles[i];
+			const t = this.tiles[i];
 			if(t instanceof type) {
 				tiles.push(t);
 			}
@@ -141,7 +141,7 @@ class Board extends Phaser.GameObjects.Container {
 	 */
 	getSingletonTileByType(type) {
 		for(let i = 0; i < this.tiles.length; i++) {
-			let t = this.tiles[i];
+			const t = this.tiles[i];
 			if(t instanceof type) {
 				return t;
 			}
@@ -165,7 +165,7 @@ class Board extends Phaser.GameObjects.Container {
 	getMonopolyOwner(tile) {
 		let monopolyOwner = null;
 		for(let i = 0; i < this.tiles.length; i++) {
-			let t = this.tiles[i];
+			const t = this.tiles[i];
 			if(t.color === tile.color) {
 				if(t.owner === null || (monopolyOwner !== null && monopolyOwner !== t.owner)) {
 					return null;
@@ -191,9 +191,9 @@ class Board extends Phaser.GameObjects.Container {
 	 * @param {?Type} [tileType=null] The type of tile to find.
 	 */
 	getTilesOwnedByPlayer(player, tileType=null) {
-		let ownedTiles = [];
+		const ownedTiles = [];
 		for(let i = 0; i < this.tiles.length; i++) {
-			let t = this.tiles[i];
+			const t = this.tiles[i];
 			if(t.owner === player && t instanceof tileType) {
 				ownedTiles.push(t);
 			}

@@ -18,9 +18,9 @@ class Go extends Tile {
 	constructor(scene, board, options) {
 		super(scene, board, options);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "go");
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "go");
 
 		this.text.setVisible(false);
 		this.add(graphic);

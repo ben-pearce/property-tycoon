@@ -34,9 +34,9 @@ class Purchasable extends Tile {
 		this.cardType = PurchasableCard;
 		this.cardInstance = null;
 
-		let string = `£${this.cost}`;
+		const string = `£${this.cost}`;
 
-		let costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
+		const costText = new Phaser.GameObjects.Text(this.scene, this.x, this.y + 80, string, CashTextStyle);
 		costText.setStyle({
 			fixedWidth: this.background.width,
 		});
@@ -142,7 +142,7 @@ class Purchasable extends Tile {
 		do {
 			duplicateBids = false;
 			for(let i = 0; i < this.game.players.length; i++) {
-				let player = this.game.players[i];
+				const player = this.game.players[i];
 
 				if(!player.isJailed && this.owner !== player) {
 					// eslint-disable-next-line no-undef

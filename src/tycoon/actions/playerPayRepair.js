@@ -35,8 +35,8 @@ class PlayerPayRepair extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		let rentableOwnedTiles = game.board.getTilesOwnedByPlayer(player, Rentable);
-		let repairBill = rentableOwnedTiles.reduce(
+		const rentableOwnedTiles = game.board.getTilesOwnedByPlayer(player, Rentable);
+		const repairBill = rentableOwnedTiles.reduce(
 			(bill, tile) => bill + (tile.property.isHotel ? this.hotelCost : (this.houseCost * tile.property.houses)), 0
 		);
 		if(repairBill > 0) {

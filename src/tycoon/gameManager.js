@@ -44,9 +44,9 @@ class GameManager extends Phaser.GameObjects.Group {
 		this.players = [];
 		this.currentPlayer = null;
 
-		let boardDimensions = this.board.getBounds();
-		let boardX = (scene.game.config.width / 2) - boardDimensions.width / 2;
-		let boardY = (scene.game.config.height / 2) - boardDimensions.height / 2;
+		const boardDimensions = this.board.getBounds();
+		const boardX = (scene.game.config.width / 2) - boardDimensions.width / 2;
+		const boardY = (scene.game.config.height / 2) - boardDimensions.height / 2;
 		this.board.setPosition(boardX, boardY);
 
 		// Create all the players and deposit 1500 cash
@@ -87,11 +87,11 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * @param {integer[]} roll The first and second dice result as a tuple.
 	 */
 	playerRolled(roll) {
-		let p = this.players[this.currentPlayer];
+		const p = this.players[this.currentPlayer];
 		this.playerContainer.bringToTop(p);
 
-		let [diceOne, diceTwo] = roll;
-		let isDouble = diceOne == diceTwo;
+		const [diceOne, diceTwo] = roll;
+		const isDouble = diceOne == diceTwo;
 
 		if (isDouble) {
 			p.doubleRollStreak++;
@@ -117,8 +117,8 @@ class GameManager extends Phaser.GameObjects.Group {
 			let p = this.players[this.currentPlayer];
 			this.hud.players[this.currentPlayer].setCurrentPlayer(false);
 
-			let [diceOne, diceTwo] = this.dice.result;
-			let isDouble = diceOne == diceTwo;
+			const [diceOne, diceTwo] = this.dice.result;
+			const isDouble = diceOne == diceTwo;
 
 			// So long as they have not rolled a double, advance to next player
 			if(!isDouble || p.doubleRollStreak >= 3) {
@@ -156,8 +156,8 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * @param {} cb The callback to invoke once action is complete.
 	 */
 	pickUpCard(player, deck, cb=null){
-		let card = deck.shift();
-		let actionCard = new ActionCard(this.scene, this, card, player);
+		const card = deck.shift();
+		const actionCard = new ActionCard(this.scene, this, card, player);
 		actionCard.continueButton.on("pointerup", () => {
 			this.prompt.closeWithAnim(() => {
 				card.action.do(this, player, () => {
@@ -188,7 +188,7 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * @private
 	 */
 	_playerDeposit(p, sum) {
-		let c = new CashText(p, sum);
+		const c = new CashText(p, sum);
 		this.playerContainer.add(c);
 		c.play();
 	}
@@ -204,7 +204,7 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * @private
 	 */
 	_playerWithdraw(p, sum) {
-		let c = new CashText(p, -sum);
+		const c = new CashText(p, -sum);
 		this.playerContainer.add(c);
 		c.play();
 	}

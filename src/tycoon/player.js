@@ -82,7 +82,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
 	 */
 	jail(cb=null) {
-		let jailTile = this.game.board.getSingletonTileByType(Jail);
+		const jailTile = this.game.board.getSingletonTileByType(Jail);
 		this.isJailed = true;
 		this.jumpToTile(jailTile, cb);
 	}
@@ -93,7 +93,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
 	 */
 	unjail(cb=null) {
-		let jailTile = this.game.board.getSingletonTileByType(Jail);
+		const jailTile = this.game.board.getSingletonTileByType(Jail);
 		this.isJailed = false;
 		this.jumpToTile(jailTile, cb);
 	}
@@ -107,8 +107,8 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @returns {integer} The players net worth.
 	 */
 	getNetWorth() {
-		let ownedTiles = this.game.board.getTilesOwnedByPlayer(this, Purchasable);
-		let propertyValue = ownedTiles.reduce((value, tile) => value + tile.getValue(), 0);
+		const ownedTiles = this.game.board.getTilesOwnedByPlayer(this, Purchasable);
+		const propertyValue = ownedTiles.reduce((value, tile) => value + tile.getValue(), 0);
 		return this.cash + propertyValue;
 	}
  
@@ -190,8 +190,8 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Player~animationCallback} cb The callback to invoke after animation completes.
 	 */
 	moveForwards(steps, cb) {
-		let newTileIndex = (this.tile.id + steps) % this.game.board.tiles.length;
-		let newTile = this.game.board.tiles[newTileIndex];
+		const newTileIndex = (this.tile.id + steps) % this.game.board.tiles.length;
+		const newTile = this.game.board.tiles[newTileIndex];
 		this.moveToTile(newTile, cb);
 	}
 
@@ -202,9 +202,9 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Player~animationCallback} cb The callback to invoke after animation completes.
 	 */
 	moveBackwards(steps, cb) {
-		let l = this.game.board.tiles.length;
-		let newTileIndex = (this.tile.id - steps + l) % l;
-		let newTile = this.game.board.tiles[newTileIndex];
+		const l = this.game.board.tiles.length;
+		const newTileIndex = (this.tile.id - steps + l) % l;
+		const newTile = this.game.board.tiles[newTileIndex];
 		this.moveToTile(newTile, cb, -1);
 	}
 }

@@ -34,8 +34,8 @@ class PlayerHud extends Phaser.GameObjects.Container {
 		this.background = new RoundRectangle(this.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
 		this.background.setOrigin(0);
 
-		let tokenGraphic = new Phaser.GameObjects.Sprite(this.scene, 40, 40, "tokens", getTokenSpriteByPlayerId(player.id));
-		let nameText = new Phaser.GameObjects.Text(this.scene, 80, 10, getTokenNameByPlayerId(player.id), PlayerNameStyle);
+		const tokenGraphic = new Phaser.GameObjects.Sprite(this.scene, 40, 40, "tokens", getTokenSpriteByPlayerId(player.id));
+		const nameText = new Phaser.GameObjects.Text(this.scene, 80, 10, getTokenNameByPlayerId(player.id), PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);

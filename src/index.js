@@ -40,10 +40,10 @@ function preload() {
  * Sets up GameManager instance.
  */
 function create() {
-	let menuScene = this.scene.add("menu", {}, true);
-	let gameScene = this.scene.add("game", {});
+	const menuScene = this.scene.add("menu", {}, true);
+	const gameScene = this.scene.add("game", {});
 	
-	let menu = new Menu(menuScene);
+	const menu = new Menu(menuScene);
 	
 	menu.setPosition(
 		(game.config.width / 2),
@@ -58,14 +58,14 @@ function create() {
 		ease: "Back.easeOut",
 		scale: 1
 	});
-	
+
 	menu.on("start", (config) => {
 		menuScene.tweens.add({
 			targets: menu,
 			ease: "Back.easeIn",
 			y: game.config.height * 2,
 			onComplete: () => {
-				let gameManager = new GameManager(gameScene, config);
+				const gameManager = new GameManager(gameScene, config);
 				gameScene.add.existing(gameManager);
 
 				this.scene.switch("menu", "game");

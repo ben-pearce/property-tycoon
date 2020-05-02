@@ -21,16 +21,16 @@ class Tax extends Tile {
 	constructor(scene, board, config) {
 		super(scene, board, config);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
 
 		this.cost = config.cost;
 		this.text.setY(this.y + 10);
 
-		let string = `Pay £${this.cost}`;
+		const string = `Pay £${this.cost}`;
 
-		let costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
+		const costText = new Phaser.GameObjects.Text(this.board.scene, this.x, this.y + 80, string, CashTextStyle);
 		costText.setStyle({
 			fixedWidth: this.background.width,
 		});

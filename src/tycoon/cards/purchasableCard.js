@@ -36,7 +36,7 @@ class PurchasableCard extends Card {
 
 		this.player = player;
 		this.tile = tile;
-		let price = new Phaser.GameObjects.Text(this.scene, -187, -190, `Price   .......................  £${tile.cost}`, CardStyle);
+		const price = new Phaser.GameObjects.Text(this.scene, -187, -190, `Price   .......................  £${tile.cost}`, CardStyle);
 
 		this.title = new Phaser.GameObjects.Text(this.scene, 0, -250, tile.name, CardStyle);
 		this.title.setPosition(this.title.x - (this.title.width /2), this.title.y - (this.title.height / 2));

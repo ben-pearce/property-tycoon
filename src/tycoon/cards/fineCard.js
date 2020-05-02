@@ -28,8 +28,8 @@ class FineCard extends Card {
 	constructor(scene, game, fine) {
 		super(scene, game);
 
-		let text = `Pay a £${fine} or take Opportunity Knocks.`;
-		let title = new Phaser.GameObjects.Text(this.scene, 0, -250, text, CardStyle);
+		const text = `Pay a £${fine} or take Opportunity Knocks.`;
+		const title = new Phaser.GameObjects.Text(this.scene, 0, -250, text, CardStyle);
 		title.setStyle({
 			fixedWidth: this.background.width,
 			wordWrap: {width: this.background.width - 50, useAdvancedWrap: true}

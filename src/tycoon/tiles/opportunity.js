@@ -22,9 +22,9 @@ class Opportunity extends Tile {
 		this.text.setStyle({fontSize: "8px"});
 		this.text.setY(this.y + 10);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2) + 15;
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2) + 15;
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
 		this.add(graphic);
 		
 	}

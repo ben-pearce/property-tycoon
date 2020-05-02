@@ -19,9 +19,9 @@ class Cop extends Tile {
 	constructor(scene, board, config) {
 		super(scene, board, config);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "cop");
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "cop");
 		
 		this.text.setVisible(false);
 		this.add(graphic);

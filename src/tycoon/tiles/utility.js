@@ -20,9 +20,9 @@ class Utility extends Purchasable {
 
 		this.cost = config.cost;
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2) + 10;
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2) + 10;
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", config.graphic);
 
 		this.text.setY(this.y + 10);
 		this.add(graphic);
@@ -41,10 +41,10 @@ class Utility extends Purchasable {
 		super.onLanded(player);
 
 		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
-			let ownedUtilities = this.board.getTilesOwnedByPlayer(this.owner, Utility);
+			const ownedUtilities = this.board.getTilesOwnedByPlayer(this.owner, Utility);
 			if(ownedUtilities.length > 0) {
-				let [diceOne, diceTwo] = this.game.dice.result;
-				let rentCharged = [(diceOne + diceTwo) * 4, (diceOne + diceTwo) * 10][ownedUtilities.length - 1];
+				const [diceOne, diceTwo] = this.game.dice.result;
+				const rentCharged = [(diceOne + diceTwo) * 4, (diceOne + diceTwo) * 10][ownedUtilities.length - 1];
 				player.withdraw(rentCharged);
 				this.owner.deposit(rentCharged);
 			}
