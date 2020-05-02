@@ -110,6 +110,18 @@ const Buttons = Object.freeze({
 	RED: 0xD63434,
 });
 
+/**
+ * Enum for player movement direction.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {integer}
+ */
+const Direction = Object.freeze({
+	FORWARDS: 1,
+	BACKWARDS: -1
+});
+
 export {
 	Tiles,
 	Colors,
@@ -117,5 +129,6 @@ export {
 	TokenNames,
 	Hud,
 	Cards,
-	Buttons
+	Buttons,
+	Direction
 };

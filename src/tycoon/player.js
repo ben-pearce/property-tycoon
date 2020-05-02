@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import {getTokenSpriteByPlayerId} from "./utils";
 import Jail from "./tiles/jail";
 import Purchasable from "./tiles/purchasable";
+import {Direction} from "../enums";
 
 /**
  * This class represents a player.
@@ -14,6 +15,7 @@ import Purchasable from "./tiles/purchasable";
  * @property {Tile} tile The tile this player is current on.
  * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
+ * @property {Enums.Direction} direction The direction that the player is moving in.
  * @property {boolean} isComputer Is this player a computer or not.
  * @property {boolean} isRetired Has this player retired from the game.
  * @property {CardConfig[]} getOutOfJailCard The get out of jail card this player holds and the deck.
@@ -160,13 +162,13 @@ class Player extends Phaser.GameObjects.Sprite {
 	 * 
 	 * @param {Tile} tile The tile to move to.
 	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
-	 * @param {integer} direction The direction to move around the board i.e. +1 = forwards 1 step, -1 = backwards 1 step.
+	 * @param {Enums.Direction} direction The direction to move around the board.
 	 */
-	moveToTile(tile, cb=null, direction=1) {
-		let timeline = this.scene.tweens.createTimeline();
-		let l = this.game.board.tiles.length;
+	moveToTile(tile, cb=null, direction=Direction.FORWARDS) {
+		this.direction = direction;
 
-		let duration = 5000;
+		const timeline = this.scene.tweens.createTimeline();
+		const l = this.game.board.tiles.length;
 		let distance = (((tile.id - this.tile.id) % l) + l) % l;
 
 		for(let i = (this.tile.id + direction + l) % l; i != (tile.id + direction + l) % l; i = (i + direction + l) % l) {
