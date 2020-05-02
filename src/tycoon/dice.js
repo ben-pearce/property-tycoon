@@ -20,9 +20,8 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * 
 	 * @example <caption>Example usage of events</caption>
 	 * let dice = new Dice(game);
-	 * dice.on("roll", callback);
+	 * dice.on("rolled", callback);
 	 * dice.on("landed", callback);
-	 * @end
 	 * 
 	 * @example <caption>Example of requesting roll</caption>
 	 * dice.requestRoll();
