@@ -1,4 +1,8 @@
 /**
+ * @namespace Enums
+ */
+
+/**
  * Enum for tile graphics.
  * 
  * @readonly
