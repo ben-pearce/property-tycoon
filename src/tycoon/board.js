@@ -201,6 +201,55 @@ class Board extends Phaser.GameObjects.Container {
 		}
 		return ownedTiles;
 	}
+
+	/**
+	 * Makes all tiles except the ones passed in half
+	 * alpha, highlighting the tiles specified.
+	 * 
+	 * If null is passed in then all tiles will be reset
+	 * to full alpha.
+	 * 
+	 * @param {?Tile[]} tiles The tiles to highlight.
+	 */
+	highlightTiles(tiles=null) {
+		for(let i = 0; i < this.tiles.length; i++) {
+			const tile = this.tiles[i];
+			tile.setAlpha(tiles === null ? 1 : 0.5);
+		}
+		if(tiles !== null) {
+			for(let i = 0; i < tiles.length; i++) {
+				const tile = tiles[i];
+				tile.setAlpha(1);
+			}
+		}
+	}
+
+	/**
+	 * Highlights tiles passed in and makes them interactive
+	 * so that current player can interact with their properties.
+	 * 
+	 * If null is passed in then all tiles will be reset.
+	 * 
+	 * @param {?Tiles} tiles The tiles to make interactive.
+	 */
+	setTilesActive(tiles=null) {
+		this.highlightTiles(tiles);
+
+		for(let i = 0; i < this.tiles.length; i++) {
+			const tile = this.tiles[i];
+			tile.removeInteractive();
+		}
+		if(tiles !== null ){
+			for(let i = 0; i < tiles.length; i++) {
+				const tile = tiles[i];
+				tile.setInteractive({
+					hitArea: tile.background, 
+					hitAreaCallback: Phaser.Geom.Rectangle.Contains, 
+					useHandCursor: true
+				});
+			}
+		}
+	}
 }
 
 export default Board;
