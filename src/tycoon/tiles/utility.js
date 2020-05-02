@@ -45,8 +45,8 @@ class Utility extends Purchasable {
 			if(ownedUtilities.length > 0) {
 				const [diceOne, diceTwo] = this.game.dice.result;
 				const rentCharged = [(diceOne + diceTwo) * 4, (diceOne + diceTwo) * 10][ownedUtilities.length - 1];
-				player.withdraw(rentCharged);
-				this.owner.deposit(rentCharged);
+
+				player.charge(rentCharged, this.owner, () => this.game.showSaleInterface(player));
 			} else {
 				this.game.showSaleInterface(player);
 			}

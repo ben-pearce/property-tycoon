@@ -40,11 +40,14 @@ class PlayerPayRepair extends BaseAction {
 			(bill, tile) => bill + (tile.property.isHotel ? this.hotelCost : (this.houseCost * tile.property.houses)), 0
 		);
 		if(repairBill > 0) {
-			player.withdraw(repairBill);
-			game.bank.deposit(repairBill);
+			player.charge(repairBill, game.bank, () => {
+				game.showSaleInterface(player);
+				cb();
+			});
+		} else {
+			game.showSaleInterface(player);
+			cb();
 		}
-		game.nextPlayer();
-		cb();
 	}
 }
 

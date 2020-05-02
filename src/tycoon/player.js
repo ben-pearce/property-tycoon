@@ -12,6 +12,7 @@ import {Direction} from "../enums";
  * @property {integer} id The player unique ID.
  * @property {GameManager} game The game instance this player belongs to.
  * @property {integer} cash The cash held by this player.
+ * @property {integer} debt The amount that the player is in debt.
  * @property {Tile} tile The tile this player is current on.
  * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
@@ -37,6 +38,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.game = game;
 
 		this.cash = cash;
+		this.debt = 0;
 		this.tile = null;
 		this.isJailed = false;
 		this.hasPassedGo = false;
@@ -70,6 +72,61 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.cash -= sum;
 
 		this.emit("withdraw", sum);
+	}
+
+	/**
+	 * Charges a player a specified amount of money and deposits
+	 * into a specified location.
+	 * 
+	 * If player can afford to pay the amount will be withdrawn
+	 * from their account and callback will be invoked.
+	 * 
+	 * If a player cannot afford to pay an amount this function
+	 * will ask them to sell off assets until they can.
+	 * 
+	 * If a player still cannot afford to pay an amount after
+	 * selling assets they will be forced to retire.
+	 * 
+	 * @param {integer} amount The amount the player must pay.
+	 * @param {Player|Bank|Parking} depositInto Where the amount must be deposited into.
+	 * @param {?Player~debtPaidCallback} cb The callback to invoke after any payment and sale of assets.
+	 */
+	charge(amount, depositInto, cb=null) {
+		if(this.cash >= amount) {
+			this.withdraw(amount);
+			depositInto.deposit(amount);
+			if(typeof cb === "function") {
+				cb();
+			}
+		} else if(this.getNetWorth() >= amount) {
+			this.debt = amount - this.cash;
+			this.game.showSaleInterface(this);
+
+			const playerCanMakeDeposit = () => {
+				if(this.cash >= amount) {
+					this.debt = 0;
+					
+					this.game.hideSaleInterface();
+					this.game.prompt.off("close");
+
+					this.withdraw(amount);
+					depositInto.deposit(amount);
+					this.off("deposit", playerCanMakeDeposit);
+
+					if(typeof cb === "function") {
+						cb();
+					}
+				}
+			};
+
+			this.on("deposit", playerCanMakeDeposit);
+		} else {
+			this.retire(depositInto);
+
+			if(typeof cb === "function") {
+				cb();
+			}
+		}
 	}
 
 	/**
@@ -295,6 +352,11 @@ class Player extends Phaser.GameObjects.Sprite {
 /**
  * This callback is invoked once animations complete.
  * @callback Player~animationCallback
+ */
+
+/**
+ * This callback is invoked once player can pay a debt.
+ * @callback Player~debtPaidCallback
  */
 
 export default Player;

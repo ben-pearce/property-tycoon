@@ -47,11 +47,8 @@ class Tax extends Tile {
 	 */
 	onLanded(player) {
 		super.onLanded(player);
-
-		player.withdraw(this.cost);
-		this.game.bank.deposit(this.cost);
-
-		this.game.nextPlayer();
+		
+		player.charge(this.cost, this.game.bank, () => this.game.showSaleInterface(player));
 	}
 }
 
