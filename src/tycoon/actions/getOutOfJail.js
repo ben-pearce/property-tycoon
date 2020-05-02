@@ -23,7 +23,7 @@ class GetOutOfJail extends BaseAction {
 	 */
 	do(game, player, cb) {
 		// Not much to do here, registering the players GOOJF card is done by the game manager.
-		game.nextPlayer();
+		game.showSaleInterface(player);
 		cb();
 	}
 }
