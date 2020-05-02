@@ -28,8 +28,18 @@ class AllPlayersPayPlayer extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// iterate player.board.players and pay player
-		cb();
+		let chargeAllPlayers = () => {
+			game.showSaleInterface(player);
+			cb();
+		};
+		for(let i = 0; i < game.players.length; i++) {
+			const otherPlayer = game.players[i];
+			if(otherPlayer !== player) {
+				const oldChargeAllPlayers = chargeAllPlayers;
+				chargeAllPlayers = () => otherPlayer.charge(this.cash, player, oldChargeAllPlayers);
+			}
+		}
+		chargeAllPlayers();
 	}
 }
 
