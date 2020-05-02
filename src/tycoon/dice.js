@@ -158,6 +158,9 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * Reset sprites to their initial state.
 	 */
 	reset() {
+		this.rollSprite.off("pointerup");
+		this.scene.input.off("pointermove");
+		
 		this.rollSprite.setVisible(false);
 		this.diceOneSprite.setVisible(false);
 		this.diceTwoSprite.setVisible(false);
