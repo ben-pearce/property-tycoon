@@ -84,14 +84,15 @@ class PlayerHud extends Phaser.GameObjects.Container {
 	 * @param {boolean} isCurrentPlayer Is this HUD the current player or not.
 	 */
 	setCurrentPlayer(isCurrentPlayer) {
+		clearInterval(this.flashInterval);
 		if(isCurrentPlayer) {
 			let count = 0;
-			let interval = setInterval(() => {
+			this.flashInterval = setInterval(() => {
 				this.background.setStrokeStyle((count % 2 == 0) ? 5 : 0, 0xFFFFFF);
 				count++;
 	
 				if(count == 5) {
-					clearInterval(interval);
+					clearInterval(this.flashInterval);
 				}
 			}, 250);
 		} else {
