@@ -141,7 +141,7 @@ class GameManager extends Phaser.GameObjects.Group {
 			const isDouble = diceOne == diceTwo;
 
 			// So long as they have not rolled a double, advance to next player
-			if(!isDouble || p.doubleRollStreak >= 3) {
+			if((!isDouble || p.doubleRollStreak >= 3) || p.isJailed || p.isRetired) {
 				// Reset their double roll streak, as they haven't rolled a double!
 				p.doubleRollStreak = 0;
 
@@ -149,12 +149,14 @@ class GameManager extends Phaser.GameObjects.Group {
 				p = this.players[this.currentPlayer];
 
 				// If the next player is in jail, increment their turns missed and move to the player after
-				while(p.isJailed) {
-					p.jailTurnsMissed++;
+				while(p.isJailed || p.isRetired) {
+					if(p.isJailed) {
+						p.jailTurnsMissed++;
 
-					// If the player has missed 2 turns already, unjail them.
-					if(p.jailTurnsMissed >= 2) {
-						p.unjail();
+						// If the player has missed 2 turns already, unjail them.
+						if(p.jailTurnsMissed >= 2) {
+							p.unjail();
+						}
 					}
 
 					this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
