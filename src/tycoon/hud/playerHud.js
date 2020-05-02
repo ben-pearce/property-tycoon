@@ -72,6 +72,8 @@ class PlayerHud extends Phaser.GameObjects.Container {
 			}
 		});
 
+		const cashString =  `Cash £${player.cash.toLocaleString()}`;
+		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, cashString, PlayerCashStyle);
 		this.player.on("deposit", this._updateCash.bind(this));
 		this.player.on("withdraw", this._updateCash.bind(this));
 
@@ -122,9 +124,9 @@ class PlayerHud extends Phaser.GameObjects.Container {
 	 * @private
 	 */
 	_updateCash() {
-		let string = `Cash £${this.player.cash}`;
+		const cashString = `Cash £${this.player.cash.toLocaleString()}`;
 		
-		this.cashText.setStyle({color: (this.player.cash > this.cash) ? Hud.POSITIVE_COLOR : Hud.NEGATIVE_COLOR});
+		this.cashText.setStyle({color: (this.player.cash > this.cash) ? Hud.POSITIVE_COLOR : Hud.NEGATIVE_COLOR}).setText(cashString);
 		this.cashText.setText(string);
 
 		this.cash = this.player.cash;

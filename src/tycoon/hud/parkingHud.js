@@ -39,7 +39,7 @@ class ParkingHud extends Phaser.GameObjects.Container {
 		const nameText = new Phaser.GameObjects.Text(this.scene, 10, 120, TokenNames.PARKING, PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
-		this.cashText = new Phaser.GameObjects.Text(this.scene, 13, 155, `Cash £${this.parking.cash}`, BankCashStyle);
+		this.cashText = new Phaser.GameObjects.Text(this.scene, 13, 155, `Cash £${this.parking.cash.toLocaleString()}`, BankCashStyle);
 		this.add([background, graphic, this.cashText, nameText]);
 
 		this.parking.on("fee", this._updateCash.bind(this));
