@@ -21,8 +21,10 @@ class PlayerGoToJail extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// player is sent to jail and is given usual restrictions for jailed players
-		cb();
+		player.jail(() => {
+			game.nextPlayer();
+			cb();
+		});
 	}
 }
 
