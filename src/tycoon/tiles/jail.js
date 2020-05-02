@@ -108,10 +108,12 @@ class Jail extends Tile {
 				});
 			});
 	
-			if(player.getOutOfJailCard !== null) {
-				let [getOutOfJailCard, cardDeck] = player.getOutOfJailCard;
+			if(player.getOutOfJailCard.length > 0) {
+				const [getOutOfJailCard, cardDeck] = player.getOutOfJailCard.shift();
 				cardDeck.push(getOutOfJailCard);
-				player.getOutOfJailCard = null;
+				if(player.getOutOfJailCard.length == 0) {
+					player.emit("jaildrop");
+				}
 				player.unjail(cb);
 			} else {
 				this.game.prompt.showWithAnim(jailCard);

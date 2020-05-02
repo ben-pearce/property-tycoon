@@ -273,6 +273,19 @@ class Player extends Phaser.GameObjects.Sprite {
  */
 
 /**
+ * Event fired when player picks up a Get Out
+ * of Jail Free card.
+ * 
+ * @event Player#jailpickup
+ */
+
+/**
+ * Event fired when player replaces a Get Out
+ * of Jail Free card.
+ * 
+ * @event Player#jaildrop
+ */
+
 /**
  * Event fired when player retires from the game.
  * 
