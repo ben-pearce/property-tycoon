@@ -84,11 +84,13 @@ class Rentable extends Purchasable {
 	/**
 	 * Calls property sell and resets the upgradable property
 	 * state.
+	 * 
+	 * @param {integer} value Overrides the value of this property for this sale only.
 	 */
-	sell() {
+	sell(value) {
 		if(this.owner !== null) {
-			super.sell();
 			this.property.reset();
+			super.sell(value);
 		}
 	}
 
