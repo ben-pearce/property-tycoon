@@ -40,7 +40,22 @@ class PlayerHud extends Phaser.GameObjects.Container {
 
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
 		this.add([this.background, tokenGraphic, nameText, this.cashText]);
+		this.propertiesButton = new Phaser.GameObjects.Text(this.scene, 20, 85, "Properties", PlayerCashStyle);
 		this.forfeitButton = new Phaser.GameObjects.Text(this.scene, 240, 85, "Forfeit", PlayerCashStyle);
+
+		this.propertiesButton.on("pointerover", () => {
+			this.hud.game.dice.rollSprite.setVisible(false);
+
+			const ownedTiles = this.hud.game.board.getTilesOwnedByPlayer(this.player, Purchasable);
+			this.hud.game.board.highlightTiles(ownedTiles);
+		});
+
+		this.propertiesButton.on("pointerout", () => {
+			this.hud.game.dice.rollSprite.setVisible(true);
+
+			this.hud.game.board.highlightTiles(null);
+		});
+
 		this.forfeitButton.on("pointerover", () => this.hud.game.dice.rollSprite.setVisible(false));
 		this.forfeitButton.on("pointerout", () => this.hud.game.dice.rollSprite.setVisible(true));
 
