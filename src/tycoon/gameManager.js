@@ -11,6 +11,8 @@ import Cards from "../cards";
 import ActionCard from "./cards/actionCard";
 import GetOutOfJail from "./actions/getOutOfJail";
 import {WinStyle} from "../styles";
+import {getTokenNameByPlayerId} from "./utils";
+import Purchasable from "./tiles/purchasable";
 
 /**
  * This is our Game Controller, it is in charge
@@ -111,9 +113,42 @@ class GameManager extends Phaser.GameObjects.Group {
 	}
 
 	/**
+	 * Asks player if they wish to upgrade/downgrade/sell/mortgage
+	 * properties before moving to next player.
+	 * 
+	 * If player has no owned properties, will move to next
+	 * player instantly.
+	 */
+	showSaleInterface(player) {
+		const ownedTiles = this.board.getTilesOwnedByPlayer(player, Purchasable);
+		if(player.debt > 0) {
+			this.board.setTilesActive(ownedTiles);
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you must raise funds of £${player.debt}.`).setVisible(true);
+		} else if(ownedTiles.length > 0) {
+			this.board.setTilesActive(ownedTiles);
+
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you may modify properties now.`).setVisible(true);
+
+			this.hud.doneButton.removeListener("pointerup");
+			this.hud.doneButton.on("pointerup", this.nextPlayer.bind(this));
+			this.hud.doneButton.setVisible(true);
+		} else {
+			this.nextPlayer();
+		}
+	}
+
+	hideSaleInterface() {
+		this.hud.doneButton.setVisible(false);
+		this.hud.actionText.setVisible(false);
+		this.board.setTilesActive(null);
+	}
+
+	/**
 	 * Advances the game turn.
 	 */
 	nextPlayer() {
+		this.hideSaleInterface();
+
 		const lastPlayerId = this.players.map(e => e.isRetired).lastIndexOf(false);
 		if(this.timer.complete && this.currentPlayer == lastPlayerId) {
 			const maxNetWorth = Math.max(...this.players.map(e => e.getNetWorth()));
