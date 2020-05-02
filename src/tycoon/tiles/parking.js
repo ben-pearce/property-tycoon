@@ -35,7 +35,7 @@ class Parking extends Tile {
 	 * @param {integer} fee The fee total being deposited.
 	 * @fires Tiles.Parking#fee
 	 */
-	pay(fee) {
+	deposit(fee) {
 		this.cash += fee;
 
 		this.emit("fee", fee);
