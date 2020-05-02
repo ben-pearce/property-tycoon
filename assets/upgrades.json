@@ -1,0 +1,124 @@
+{
+	"textures": [
+		{
+			"image": "upgrades.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 175,
+				"h": 33
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "hotel",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 35,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 35,
+						"h": 33
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 35,
+						"h": 33
+					}
+				},
+				{
+					"filename": "house1",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 35,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 35,
+						"h": 33
+					},
+					"frame": {
+						"x": 35,
+						"y": 0,
+						"w": 35,
+						"h": 33
+					}
+				},
+				{
+					"filename": "house2",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 35,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 35,
+						"h": 33
+					},
+					"frame": {
+						"x": 70,
+						"y": 0,
+						"w": 35,
+						"h": 33
+					}
+				},
+				{
+					"filename": "house3",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 35,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 35,
+						"h": 33
+					},
+					"frame": {
+						"x": 105,
+						"y": 0,
+						"w": 35,
+						"h": 33
+					}
+				},
+				{
+					"filename": "house4",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 35,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 35,
+						"h": 33
+					},
+					"frame": {
+						"x": 140,
+						"y": 0,
+						"w": 35,
+						"h": 33
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.5"
+	}
+}

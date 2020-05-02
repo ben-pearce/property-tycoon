@@ -1,0 +1,61 @@
+{
+	"textures": [
+		{
+			"image": "hud.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 50,
+				"h": 27
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "cop",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 27,
+						"h": 27
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 25,
+						"h": 27
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 25,
+						"h": 27
+					}
+				},
+				{
+					"filename": "computer",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 27,
+						"h": 27
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 6,
+						"w": 25,
+						"h": 20
+					},
+					"frame": {
+						"x": 25,
+						"y": 0,
+						"w": 25,
+						"h": 20
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.5"
+	}
+}
