@@ -40,9 +40,21 @@ class PlayerHud extends Phaser.GameObjects.Container {
 
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
 		this.add([this.background, tokenGraphic, nameText, this.cashText]);
+		this.forfeitButton = new Phaser.GameObjects.Text(this.scene, 240, 85, "Forfeit", PlayerCashStyle);
+		this.forfeitButton.on("pointerover", () => this.hud.game.dice.rollSprite.setVisible(false));
+		this.forfeitButton.on("pointerout", () => this.hud.game.dice.rollSprite.setVisible(true));
+
+		this.forfeitButton.on("pointerup", () => {
+			// eslint-disable-next-line no-undef
+			const wantsRetirement = confirm(`${getTokenNameByPlayerId(player.id)}, do you want to retire from this game?`);
+			if(wantsRetirement) {
+				this.player.retire(this.hud.game.bank);
+			}
+		});
 
 		this.player.on("deposit", this._updateCash.bind(this));
 		this.player.on("withdraw", this._updateCash.bind(this));
+		this.player.on("retire", this.setAlpha.bind(this, 0.5));
 	}
 
 	/**
