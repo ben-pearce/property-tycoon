@@ -1,4 +1,5 @@
 import BaseAction from "./action";
+import {Direction} from "../../enums";
 
 /**
  * Action class for moving a player to a specified
@@ -8,7 +9,7 @@ import BaseAction from "./action";
  * @memberof Actions
  * 
  * @property {integer} tileId The ID of the tile the player will move to.
- * @property {direction} direction The direction to move the player in.
+ * @property {Enums.Direction} direction The direction to move the player in.
  */
 class PlayerMoveToTile extends BaseAction {
 	/**
@@ -16,9 +17,9 @@ class PlayerMoveToTile extends BaseAction {
 	 * to move.
 	 * 
 	 * @param {integer} tileId The ID of the tile the player will move to.
-	 * @param {integer} [direction=1] The direction to move the player.
+	 * @param {Enums.Direction} [direction=Direction.FORWARDS] The direction to move the player.
 	 */
-	constructor(tileId, direction=1) {
+	constructor(tileId, direction=Direction.FORWARDS) {
 		super();
         
 		this.tileId = tileId;
@@ -35,8 +36,7 @@ class PlayerMoveToTile extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		// player is moved to tile with tile id this.tileId in this.direction
-		cb();
+		player.moveToTile(game.board.tiles[this.tileId], cb, this.direction);
 	}
 }
 
