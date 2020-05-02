@@ -40,7 +40,23 @@ class Purchasable extends Tile {
 		costText.setStyle({
 			fixedWidth: this.background.width,
 		});
-		this.add(costText);
+
+		this.mortgagedBox = new Phaser.GameObjects.Rectangle(
+			this.scene, 
+			this.background.x, 
+			this.background.x, 
+			this.background.width, 
+			this.background.height, 
+			0xFF0000, 0.5
+		);
+		this.mortgagedBox.setOrigin(0).setVisible(false);
+
+		this.add([costText, this.mortgagedBox]);
+
+		this.on("pointerup", () => {
+			this.game.board.setTilesActive([]);
+			this.showCard(this.owner);
+		});
 	}
 
 	/**
@@ -98,6 +114,8 @@ class Purchasable extends Tile {
 	mortgage() {
 		if(this.owner !== null && !this.isMortgaged) {
 			this.isMortgaged = true;
+			this.mortgagedBox.setVisible(true);
+
 			this.game.bank.withdraw(this.getValue());
 			this.owner.deposit(this.getValue());
 		}
@@ -110,6 +128,8 @@ class Purchasable extends Tile {
 	unmortgage() {
 		if(this.owner !== null && this.isMortgaged && this.owner.cash > this.getValue()) {
 			this.isMortgaged = false;
+			this.mortgagedBox.setVisible(false);
+
 			this.owner.withdraw(this.getMortgageValue());
 			this.game.bank.deposit(this.getMortgageValue());
 		}
