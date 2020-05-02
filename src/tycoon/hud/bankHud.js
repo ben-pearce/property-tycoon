@@ -31,10 +31,10 @@ class BankHud extends Phaser.GameObjects.Container {
 		this.hud = hud;
 		this.bank = bank;
 
-		let background = new RoundRectangle(this.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
+		const background = new RoundRectangle(this.scene, 0, 0, 300, 200, 10, 0x000000, 0.75);
 		background.setOrigin(0);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, 150, 60, "tokens", TokenSprites.BANK);
-		let nameText = new Phaser.GameObjects.Text(this.scene, 10, 120, TokenNames.BANK, PlayerNameStyle);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, 150, 60, "tokens", TokenSprites.BANK);
+		const nameText = new Phaser.GameObjects.Text(this.scene, 10, 120, TokenNames.BANK, PlayerNameStyle);
 		this.cashText = new Phaser.GameObjects.Text(this.scene, 13, 155, Hud.BANK_DEFAULT_TEXT, BankCashStyle);
 		nameText.setStroke(0x000000, 3);
 		
@@ -54,7 +54,7 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * @param {integer} cash Cash value gained.
 	 */
 	_cashGained(cash) {
-		let string = `Cash +£${cash}`;
+		const string = `Cash +£${cash.toLocaleString()}`;
 		
 		this.cashText.setStyle({color: Hud.POSITIVE_COLOR });
 		this.cashText.setText(string);
@@ -72,7 +72,7 @@ class BankHud extends Phaser.GameObjects.Container {
 	 * @param {integer} cash Cash value lost.
 	 */
 	_cashLost(cash) {
-		let string = `Cash -£${cash}`;
+		const string = `Cash -£${cash.toLocaleString()}`;
 		
 		this.cashText.setStyle({color: Hud.NEGATIVE_COLOR});
 		this.cashText.setText(string);

@@ -75,7 +75,7 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * @returns {integer} The value of all the upgrades.
 	 */
 	getValue() {
-		let value = this.houses * this.tile.upgradeCost;
+		const value = this.houses * this.tile.upgradeCost;
 		if(this.isHotel) {
 			return value + (this.tile.upgradeCost * 4);
 		}
@@ -191,11 +191,11 @@ class Property extends Phaser.GameObjects.Rectangle {
 	 * @private
 	 */
 	_update(cb=null) {
-		let frame = this.houses <= 4 && !this.isHotel ? `house${this.houses}` : "hotel";
-		let timeline = this.scene.tweens.createTimeline();
+		const frame = this.houses <= 4 && !this.isHotel ? `house${this.houses}` : "hotel";
+		const timeline = this.scene.tweens.createTimeline();
 
 		if(this.houseGraphic.visible) {
-			let hideTween = {
+			const hideTween = {
 				targets: this.houseGraphic,
 				ease: "Back.easeIn",
 				scale: 0,
@@ -220,7 +220,7 @@ class Property extends Phaser.GameObjects.Rectangle {
 		}
 
 		if(this.houses > 0) {
-			let showTween = {
+			const showTween = {
 				targets: this.houseGraphic,
 				ease: "Back.easeOut",
 				scale: 1

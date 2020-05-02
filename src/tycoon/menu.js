@@ -15,16 +15,16 @@ class Menu extends Phaser.GameObjects.Container {
 	constructor(scene) {
 		super(scene);
 
-		let background = new RoundRectangle(this.scene, 0, 0, 600, 650, 10, 0xffffff);
-		let topOfMenu = background.x - background.height / 2;
-		let leftOfMenu = background.y - background.width / 2;
+		const background = new RoundRectangle(this.scene, 0, 0, 600, 650, 10, 0xffffff);
+		const topOfMenu = background.x - background.height / 2;
+		const leftOfMenu = background.y - background.width / 2;
 
-		let logo = new Phaser.GameObjects.Sprite(this.scene, 0, topOfMenu + 80, "logo");
-		let playerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, logo.y + 60, "Players", MenuStyle);
-		let computerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, playerText.y + 150, "Computer", MenuStyle);
-		let timerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, computerText.y + 150, "Timer", MenuStyle);
-		let playerBackground = new RoundRectangle(this.scene, 0, playerText.y + 90, 550, 90, 10, 0xD7D7D7);
-		let computerBackground = new RoundRectangle(this.scene, 0, computerText.y + 90, 550, 90, 10, 0xD7D7D7);
+		const logo = new Phaser.GameObjects.Sprite(this.scene, 0, topOfMenu + 80, "logo");
+		const playerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, logo.y + 60, "Players", MenuStyle);
+		const computerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, playerText.y + 150, "Computer", MenuStyle);
+		const timerText = new Phaser.GameObjects.Text(this.scene, leftOfMenu + 25, computerText.y + 150, "Timer", MenuStyle);
+		const playerBackground = new RoundRectangle(this.scene, 0, playerText.y + 90, 550, 90, 10, 0xD7D7D7);
+		const computerBackground = new RoundRectangle(this.scene, 0, computerText.y + 90, 550, 90, 10, 0xD7D7D7);
 
 		this.button = new Button(this.scene, leftOfMenu + 25, computerBackground.y + 180, 550, 70, "Play", Buttons.AMBER);
 
@@ -55,12 +55,12 @@ class Menu extends Phaser.GameObjects.Container {
 		this.slider = new RoundRectangle(this.scene, 0, 0, 0, 0, 10, Buttons.AMBER, 0.5);
 		this.slider.setStrokeStyle(3, Buttons.AMBER).setOrigin(0).setInteractive();
 
-		let timerOptionText = ["Off", "30min", "1hr", "1hr 30min", "2hr"];
+		const timerOptionText = ["Off", "30min", "1hr", "1hr 30min", "2hr"];
 		this.timerOptions = [];
 		let timerMargin = 40;
 		for(let i = 0; i < timerOptionText.length; i++) {
-			let option = timerOptionText[i];
-			let text = new Phaser.GameObjects.Text(this.scene, x + timerMargin, y, option, MenuStyle);
+			const option = timerOptionText[i];
+			const text = new Phaser.GameObjects.Text(this.scene, x + timerMargin, y, option, MenuStyle);
 			text.setInteractive({useHandCursor: true});
 			text.on("pointerover", this.moveTimerSlider.bind(this, i));
 			text.on("pointerup", this.setTimerOption.bind(this, i));
@@ -91,8 +91,8 @@ class Menu extends Phaser.GameObjects.Container {
 		this.computerTokens = [];
 		let tokenMargin = 80;
 		for(let i = 0; i < 6; i++) {
-			let playerToken = new Phaser.GameObjects.Sprite(this.scene, x + tokenMargin, y, "tokens", getTokenSpriteByPlayerId(i));
-			let computerToken = new Phaser.GameObjects.Sprite(this.scene, x + tokenMargin, y2, "tokens", getTokenSpriteByPlayerId(i));
+			const playerToken = new Phaser.GameObjects.Sprite(this.scene, x + tokenMargin, y, "tokens", getTokenSpriteByPlayerId(i));
+			const computerToken = new Phaser.GameObjects.Sprite(this.scene, x + tokenMargin, y2, "tokens", getTokenSpriteByPlayerId(i));
 
 			playerToken.setInteractive({useHandCursor: true});
 			computerToken.setInteractive({useHandCursor: true});
@@ -144,7 +144,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 */
 	disableComputerTokens() {
 		for(let i = 0; i < this.playerCount; i++) {
-			let computerToken = this.computerTokens[i];
+			const computerToken = this.computerTokens[i];
 			computerToken.setAlpha(0.5);
 			computerToken.disableInteractive();
 		}
@@ -155,7 +155,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 */
 	enableComputerTokens() {
 		for(let i = 0; i < 6; i++) {
-			let computerToken = this.computerTokens[i];
+			const computerToken = this.computerTokens[i];
 			computerToken.setAlpha(1);
 			computerToken.setInteractive();
 		}
@@ -170,7 +170,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @param {integer} count The player count.
 	 */
 	setPlayerCount(count) {
-		let firstPlayer = this.playerTokens[0];
+		const firstPlayer = this.playerTokens[0];
 		this.playerSlider.setVisible(count > 0);
 		this.playerSlider.setPosition((firstPlayer.x - firstPlayer.width / 2) - 20, (firstPlayer.y - firstPlayer.height / 2) - 10);
 		this.playerSlider.setSize((firstPlayer.width * count) + 38 * count, firstPlayer.height + 20);
@@ -194,7 +194,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 */
 	setComputerCount(count) {
 		if(this.playerCount < this.computerTokens.length) {
-			let firstPlayer = this.computerTokens[this.playerCount];
+			const firstPlayer = this.computerTokens[this.playerCount];
 		
 			this.computerSlider.setPosition((firstPlayer.x - firstPlayer.width / 2) - 20, (firstPlayer.y - firstPlayer.height / 2) - 10);
 			this.computerSlider.setSize((firstPlayer.width * count) + 38 * count, firstPlayer.height + 20);
@@ -215,9 +215,9 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @param {integer} option The timer option.
 	 */
 	setTimerOption(option) {
-		let oldOptionText = this.timerOptions[this.timerOption];
+		const oldOptionText = this.timerOptions[this.timerOption];
 		oldOptionText.setColor("#000000");
-		let newOptionText = this.timerOptions[option];
+		const newOptionText = this.timerOptions[option];
 		newOptionText.setColor("#E5AE19");
 		this.slider.setPosition(newOptionText.x - 10, newOptionText.y - 10);
 		this.slider.setSize(newOptionText.width + 20, newOptionText.height + 20);
@@ -231,7 +231,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @param {integer} count The player count.
 	 */
 	movePlayerSlider(count) {
-		let firstPlayer = this.playerTokens[0];
+		const firstPlayer = this.playerTokens[0];
 		this.playerSlider.setVisible(count > 0);
 		this.scene.tweens.add({
 			targets: this.playerSlider,
@@ -249,7 +249,7 @@ class Menu extends Phaser.GameObjects.Container {
 	moveComputerSlider(count) {
 		this.computerSlider.setVisible(count > 0);
 		if(this.playerCount < this.computerTokens.length) {
-			let firstPlayer = this.computerTokens[this.playerCount];
+			const firstPlayer = this.computerTokens[this.playerCount];
 			this.scene.tweens.add({
 				targets: this.computerSlider,
 				ease: "Cubic.easeOut",
@@ -266,7 +266,7 @@ class Menu extends Phaser.GameObjects.Container {
 	 * @param {integer} option The timer option.
 	 */
 	moveTimerSlider(option) {
-		let text = this.timerOptions[option];
+		const text = this.timerOptions[option];
 		this.scene.tweens.add({
 			targets: this.slider,
 			ease: "Cubic.easeOut",

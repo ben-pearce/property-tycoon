@@ -64,7 +64,7 @@ class Dice extends Phaser.Events.EventEmitter {
 	 * moved.
 	 */
 	requestRoll() {
-		let pointer = this.scene.input.activePointer;
+		const pointer = this.scene.input.activePointer;
 		this.reset();
 
 		this.rollSprite.setVisible(true);
@@ -109,10 +109,10 @@ class Dice extends Phaser.Events.EventEmitter {
 		this.diceOneSprite.setPosition(pointer.x, pointer.y);
 		this.diceTwoSprite.setPosition(pointer.x, pointer.y);
 
-		let minx = this.game.board.x + this.game.board.background.x;
-		let miny = this.game.board.y + this.game.board.background.y;
-		let maxx = this.game.board.x + this.game.board.background.x + this.game.board.background.width;
-		let maxy = this.game.board.y + this.game.board.background.y + this.game.board.background.height;
+		const minx = this.game.board.x + this.game.board.background.x;
+		const miny = this.game.board.y + this.game.board.background.y;
+		const maxx = this.game.board.x + this.game.board.background.x + this.game.board.background.width;
+		const maxy = this.game.board.y + this.game.board.background.y + this.game.board.background.height;
 
 		this.scene.tweens.add({
 			targets: this.diceOneSprite,

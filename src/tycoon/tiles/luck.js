@@ -21,9 +21,9 @@ class Luck extends Tile {
 
 		this.text.setY(this.y + 10);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2) + 10;
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "chest");
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2) + 10;
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "chest");
 		this.add(graphic);
 	}
 

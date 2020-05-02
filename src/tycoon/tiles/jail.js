@@ -22,13 +22,13 @@ class Jail extends Tile {
 
 		this.text.setVisible(false);
 
-		let x = this.background.x + (this.background.width / 3);
-		let y = this.background.y + (this.background.height / 3);
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "jail");
+		const x = this.background.x + (this.background.width / 3);
+		const y = this.background.y + (this.background.height / 3);
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "jail");
 
-		let jailHeight = this.background.height * 0.70;
-		let jailWidth = this.background.width * 0.70;
-		let jailPlatform = new Phaser.GameObjects.Rectangle(this.scene, this.x, this.y, jailHeight, jailWidth, 0xF7941D);
+		const jailHeight = this.background.height * 0.70;
+		const jailWidth = this.background.width * 0.70;
+		const jailPlatform = new Phaser.GameObjects.Rectangle(this.scene, this.x, this.y, jailHeight, jailWidth, 0xF7941D);
 		jailPlatform.setOrigin(0).setStrokeStyle(3, 0x000000);
 
 		this.add([jailPlatform, graphic]);
@@ -94,7 +94,7 @@ class Jail extends Tile {
 	 */
 	onLanded(player, cb=null) {
 		if(player.isJailed) {
-			let jailCard = new JailCard(this.scene, this.game, player);
+			const jailCard = new JailCard(this.scene, this.game, player);
 			jailCard.stayButton.on("pointerup", () => {
 				this.game.prompt.closeWithAnim(cb);
 			});

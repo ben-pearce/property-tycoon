@@ -24,10 +24,10 @@ class CashText extends Phaser.GameObjects.Text {
 	 * @param {integer} cash The cash value.
 	 */
 	constructor(target, cash) {
-		let sign = (cash > 0) ? "+" : "-";
-		let amount = Math.abs(cash);
-		let string = `Cash: ${sign}£${amount}`;
-		let style = Object.assign({
+		const sign = (cash > 0) ? "+" : "-";
+		const amount = Math.abs(cash);
+		const string = `Cash: ${sign}£${amount}`;
+		const style = Object.assign({
 			color: (cash > 0) ? "#008C00" : "#FF0000",
 		}, CashUpdateStyle);
 		super(target.scene, target.x - target.width, target.y - target.height, string, style);
@@ -40,7 +40,7 @@ class CashText extends Phaser.GameObjects.Text {
 	 * Call to start animation.
 	 */
 	play() {
-		let timeline = this.scene.tweens.createTimeline();
+		const timeline = this.scene.tweens.createTimeline();
 
 		timeline.add({
 			targets: this,

@@ -28,7 +28,7 @@ class ActionCard extends Card {
 
 		this.player = player;
 
-		let title = new Phaser.GameObjects.Text(this.scene, 0, -250, config.name, CardStyle);
+		const title = new Phaser.GameObjects.Text(this.scene, 0, -250, config.name, CardStyle);
 		title.setStyle({
 			fixedWidth: this.background.width,
 			wordWrap: {width: this.background.width - 50, useAdvancedWrap: true}

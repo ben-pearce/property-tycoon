@@ -26,7 +26,7 @@ class TimerHud extends Phaser.GameObjects.Container {
 		this.hud = hud;
 		this.timer = timer;
 
-		let background = new RoundRectangle(this.scene, 0, 0, 300, 60, 10, 0x000000, 0.75);
+		const background = new RoundRectangle(this.scene, 0, 0, 300, 60, 10, 0x000000, 0.75);
 		background.setOrigin(0);
 
 		this.timerText = new Phaser.GameObjects.Text(this.scene, 0, 0, timer.toString(), TimerStyle);

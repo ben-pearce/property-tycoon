@@ -11,7 +11,7 @@ import {TokenSprites, TokenNames} from "../enums";
  * @returns {String} The sprite name.
  */
 function getTokenSpriteByPlayerId(playerId) {
-	let sprites = [
+	const sprites = [
 		TokenSprites.BOOT, 
 		TokenSprites.CAT, 
 		TokenSprites.GOBLET, 
@@ -33,7 +33,7 @@ function getTokenSpriteByPlayerId(playerId) {
  * @returns {String} The token name.
  */
 function getTokenNameByPlayerId(playerId) {
-	let names = [
+	const names = [
 		TokenNames.BOOT, 
 		TokenNames.CAT, 
 		TokenNames.GOBLET, 
@@ -58,7 +58,7 @@ function getTokenNameByPlayerId(playerId) {
  * @returns {Integer} The number of seconds.
  */
 function getTimerSecondsByOption(option) {
-	let timerOptions = [
+	const timerOptions = [
 		null,
 		1800,
 		3600,

@@ -37,18 +37,18 @@ class Hud extends Phaser.GameObjects.Container {
 
 		this.players = [];
 
-		let leftX = 40;
-		let rightX = 1160;
+		const leftX = 40;
+		const rightX = 1160;
 
-		let bankY = 35;
-		let timerY = 805;
-		let parkingY = 253;
+		const bankY = 35;
+		const timerY = 805;
+		const parkingY = 253;
 
 		for(let i = 0; i < game.players.length; i++) {
-			let player = game.players[i];
-			let playerHud = new PlayerHud(scene, this, player);
+			const player = game.players[i];
+			const playerHud = new PlayerHud(scene, this, player);
 			
-			let playerY = (playerHud.getBounds().height * i) + (15 * i) + 35;
+			const playerY = (playerHud.getBounds().height * i) + (15 * i) + 35;
 			playerHud.setPosition(rightX, playerY);
 
 			this.players.push(playerHud);

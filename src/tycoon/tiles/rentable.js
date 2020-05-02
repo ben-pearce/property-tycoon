@@ -43,7 +43,7 @@ class Rentable extends Purchasable {
 	 * @override
 	 */
 	getValue() {
-		let value = this.cost + this.property.getValue();
+		const value = this.cost + this.property.getValue();
 		if(this.isMortgaged) {
 			return value / 2;
 		}
@@ -101,14 +101,14 @@ class Rentable extends Purchasable {
 	 * @returns {boolean} Can the property be upgraded or not.
 	 */
 	isUpgradable() {
-		let monopolyOwner = this.board.getMonopolyOwner(this);
-		let isMonopoly = monopolyOwner !== null;
+		const monopolyOwner = this.board.getMonopolyOwner(this);
+		const isMonopoly = monopolyOwner !== null;
 
 		if(isMonopoly) {
-			let colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
-			let upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
-			let minUpgradeCount = Math.min(...upgradeCounts);
-			let upgradable = this.property.getUpgradeAsNumber() < minUpgradeCount + 1;
+			const colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			const upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			const minUpgradeCount = Math.min(...upgradeCounts);
+			const upgradable = this.property.getUpgradeAsNumber() < minUpgradeCount + 1;
 			return upgradable && this.property.isUpgradable();
 		}
 		return false;
@@ -121,12 +121,12 @@ class Rentable extends Purchasable {
 	 * @returns {boolean} Can the property be downgraded or not.
 	 */
 	isDowngradable() {
-		let upgradeCount = this.property.getUpgradeAsNumber();
+		const upgradeCount = this.property.getUpgradeAsNumber();
 		if(upgradeCount > 0) {
-			let colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
-			let upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
-			let maxUpgradeCount = Math.max(...upgradeCounts);
-			let downgradable = this.property.getUpgradeAsNumber() > maxUpgradeCount - 1;
+			const colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			const upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			const maxUpgradeCount = Math.max(...upgradeCounts);
+			const downgradable = this.property.getUpgradeAsNumber() > maxUpgradeCount - 1;
 			return downgradable && this.property.isDowngradable();
 		}
 		return false;
@@ -201,10 +201,10 @@ class Rentable extends Purchasable {
 		super.onLanded(player);
 		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
 			let rentCharged = this.getRent();
-			let monopolyOwner = this.game.board.getMonopolyOwner(this);
+			const monopolyOwner = this.game.board.getMonopolyOwner(this);
 			if(monopolyOwner !== null) {
-				let coloredTiles = this.game.board.getRentableTilesByColor(this.color);
-				let totalUpgrades = coloredTiles.reduce((upgrades, tile) => upgrades + tile.property.getUpgradeAsNumber());
+				const coloredTiles = this.game.board.getRentableTilesByColor(this.color);
+				const totalUpgrades = coloredTiles.reduce((upgrades, tile) => upgrades + tile.property.getUpgradeAsNumber());
 				if(totalUpgrades == 0) {
 					rentCharged *= 2;
 				}

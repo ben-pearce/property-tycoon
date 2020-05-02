@@ -20,9 +20,9 @@ class Station extends Purchasable {
 
 		this.text.setY(this.y + 10);
 
-		let x = this.background.x + (this.background.width / 2);
-		let y = this.background.y + (this.background.height / 2) + 10;
-		let graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "station");
+		const x = this.background.x + (this.background.width / 2);
+		const y = this.background.y + (this.background.height / 2) + 10;
+		const graphic = new Phaser.GameObjects.Sprite(this.scene, x, y, "tiles", "station");
 		
 		this.add(graphic);
 	}
@@ -36,8 +36,8 @@ class Station extends Purchasable {
 	onLanded(player) {
 		super.onLanded(player);
 		if(this.owner !== null && player !== this.owner && !this.isMortgaged && !this.owner.isJailed) {
-			let ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
-			let rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
+			const ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
+			const rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
 
 			player.withdraw(rentCharged);
 			this.owner.deposit(rentCharged);

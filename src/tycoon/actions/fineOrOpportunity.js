@@ -33,15 +33,13 @@ class FineOrOpportunity extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		let fineCard = new FineCard(game.scene, game, this.fine);
+		const fineCard = new FineCard(game.scene, game, this.fine);
 
-		let takeCard = () => {
-			game.pickUpCard(player, game.opportunityCards, cb);
-		};
+		const takeCard = () => game.pickUpCard(player, game.opportunityCards, cb);
 
 		fineCard.fineButton.on("pointerup", () => {
 			game.prompt.closeWithAnim(() => {
-				let parking = game.board.getSingletonTileByType(Parking);
+				const parking = game.board.getSingletonTileByType(Parking);
 				player.withdraw(this.fine);
 				parking.pay(this.fine);
 				game.nextPlayer();
