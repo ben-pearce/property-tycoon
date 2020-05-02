@@ -4,6 +4,9 @@ import BankHud from "./bankHud";
 import ParkingHud from "./parkingHud";
 import TimerHud from "./timerHud";
 import Parking from "../tiles/parking";
+import Button from "../ui/button";
+import {Buttons} from "../../enums";
+import {ActionStyle} from "../../styles";
 
 /**
  * @namespace Hud
@@ -63,11 +66,16 @@ class Hud extends Phaser.GameObjects.Container {
 		this.timer = new TimerHud(scene, this, game.timer);
 		this.timer.setPosition(leftX, timerY);
 
+		this.doneButton = new Button(scene, rightX, timerY, 300, 50, "Done", Buttons.GREEN);
+		this.actionText = new Phaser.GameObjects.Text(scene, 375, 25, "", ActionStyle);
+
 		if(game.timer.seconds === null) {
 			this.timer.setVisible(false);
 		}
 
-		this.add([this.bank, this.parking, this.timer, ...this.players]);
+		this.add([this.bank, this.parking, this.timer, ...this.players, this.doneButton, this.actionText]);
+	}
+
 	/**
 	 * Sets whether the "Properties" and "Forfeit" buttons 
 	 * on the player huds are clickable or not.

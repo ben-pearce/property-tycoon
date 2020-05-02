@@ -63,6 +63,15 @@ const WinStyle = {
 	fontSize: "100px",
 	align: "center"
 };
+
+const ActionStyle = {
+	fontFamily: "Arial",
+	color: "#FFFFFF", 
+	fontSize: "30px",
+	align: "center",
+	fixedWidth: "740"
+};
+
 export {
 	TileTextStyle,
 	CashTextStyle,
@@ -74,4 +83,5 @@ export {
 	MenuStyle,
 	CardStyle,
 	WinStyle,
+	ActionStyle
 };
