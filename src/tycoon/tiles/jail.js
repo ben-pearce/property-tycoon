@@ -90,23 +90,20 @@ class Jail extends Tile {
 	 * 
 	 * @param {Player} player The player to charge or Jail.
 	 * @param {?Player~animationCallback} [cb=null] The callback to invoke after animation completes.
+	 * @fires Player#jaildrop
+	 * 
 	 * @override
 	 */
 	onLanded(player, cb=null) {
 		if(player.isJailed) {
 			const jailCard = new JailCard(this.scene, this.game, player);
-			jailCard.stayButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(cb);
-			});
+			jailCard.stayButton.on("pointerup", () => this.game.prompt.closeWithAnim(cb));
 	
-			jailCard.leaveButton.on("pointerup", () => {
-				this.game.prompt.closeWithAnim(() => {
-					let parkingTile = this.game.board.getSingletonTileByType(Parking);
-					player.withdraw(50);
-					parkingTile.pay(50);
-					player.unjail(cb);
-				});
-			});
+			const parkingTile = this.game.board.getSingletonTileByType(Parking);
+			jailCard.leaveButton.setEnabled(player.cash >= 50);
+			jailCard.leaveButton.on("pointerup", () => 
+				this.game.prompt.closeWithAnim(() => 
+					player.charge(50, parkingTile, () => player.unjail(cb))));
 	
 			if(player.getOutOfJailCard.length > 0) {
 				const [getOutOfJailCard, cardDeck] = player.getOutOfJailCard.shift();

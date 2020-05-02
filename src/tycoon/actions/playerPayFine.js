@@ -32,10 +32,10 @@ class PlayerPayFine extends BaseAction {
 	 */
 	do(game, player, cb) {
 		const parking = game.board.getSingletonTileByType(Parking);
-		player.withdraw(this.fine);
-		parking.pay(this.fine);
-		game.nextPlayer();
-		cb();
+		player.charge(this.fine, parking, () => {
+			game.showSaleInterface(player);
+			cb();
+		});
 	}
 }
 

@@ -39,9 +39,7 @@ class Station extends Purchasable {
 			const ownedStations = this.board.getTilesOwnedByPlayer(this.owner, Station);
 			const rentCharged = [25, 50, 100, 200][ownedStations.length - 1];
 
-			player.withdraw(rentCharged);
-			this.owner.deposit(rentCharged);
-			this.game.nextPlayer();
+			player.charge(rentCharged, this.owner, () => this.game.showSaleInterface(player));
 		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
 			this.game.showSaleInterface(player);
 		}

@@ -29,10 +29,10 @@ class PlayerPayBank extends BaseAction {
 	 * @param {BaseAction~actionCompleteCallback} cb The callback to be invoked once action is complete.
 	 */
 	do(game, player, cb) {
-		player.withdraw(this.cash);
-		game.bank.deposit(this.cash);
-		game.nextPlayer();
-		cb();
+		player.charge(this.cash, game.bank, () => {
+			game.showSaleInterface(player);
+			cb();
+		});
 	}
 }
 

@@ -202,12 +202,7 @@ class Rentable extends Purchasable {
 					rentCharged *= 2;
 				}
 			}
-			player.withdraw(rentCharged);
-			this.owner.deposit(rentCharged);
-			this.game.nextPlayer();
-		} else if(this.owner == player) {
-			this.cardInstance.auctionPlayerButton.setVisible(!this.property.isUpgraded);
-			this.cardInstance.sellUpgradeButton.setVisible(this.property.isUpgraded);
+			player.charge(rentCharged, this.owner, () => this.game.showSaleInterface(player));
 		}
 	}
 }
