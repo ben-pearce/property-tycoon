@@ -114,6 +114,22 @@ class GameManager extends Phaser.GameObjects.Group {
 	 * Advances the game turn.
 	 */
 	nextPlayer() {
+		const lastPlayerId = this.players.map(e => e.isRetired).lastIndexOf(false);
+		if(this.timer.complete && this.currentPlayer == lastPlayerId) {
+			const maxNetWorth = Math.max(...this.players.map(e => e.getNetWorth()));
+			const winningPlayers = this.players.filter(e => e.getNetWorth() === maxNetWorth);
+			const winningPlayerNames = winningPlayers.map(e => getTokenNameByPlayerId(e.id));
+			
+			this.hud.setPlayerHudEnabled(false);
+			this.dice.reset();
+
+			const winText = new Phaser.GameObjects.Text(this.scene, 0, 0, `${winningPlayerNames.join(", ")} wins!`, WinStyle);
+			winText.setStroke(0x000000, 10);
+			this.prompt.show(winText);
+			
+			return;
+		}
+		
 		if(this.currentPlayer === null) {
 			this.currentPlayer = 0;
 			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
