@@ -15,7 +15,7 @@ import Purchasable from "./tiles/purchasable";
  * @property {boolean} isJailed Is player in jail or not.
  * @property {boolean} hasPassedGo Has the player passed Go tile or not.
  * @property {boolean} isComputer Is this player a computer or not.
- * @property {?(CardConfig|Array)} getOutOfJailCard The get out of jail card this player holds and the deck.
+ * @property {boolean} isRetired Has this player retired from the game.
  * @property {integer} jailTurnsMissed Number of turns missed due to jail.
  * @property {integer} doubleRollStreak Number of times player has rolled double.
  */
@@ -37,6 +37,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.hasPassedGo = false;
 		this.isComputer = false;
 		this.getOutOfJailCard = null;
+		this.isRetired = false;
 		this.jailTurnsMissed = 0;
 		this.doubleRollStreak = 0;
 	}
@@ -96,6 +97,42 @@ class Player extends Phaser.GameObjects.Sprite {
 		const jailTile = this.game.board.getSingletonTileByType(Jail);
 		this.isJailed = false;
 		this.jumpToTile(jailTile, cb);
+	}
+
+	/**
+	 * Retires this player from the game. 
+	 * 
+	 * All player assets will be returned to the bank
+	 * and funds raised from the sale will be deposited into
+	 * the location specified.
+	 * 
+	 * @param {Player|Bank|Parking} depositInto The location to deposit to.
+	 * @fires Player#retire
+	 */
+	retire(depositInto) {
+		const netWorth = this.getNetWorth();
+
+		this.isRetired = true;
+		const ownedTiles = this.game.board.getTilesOwnedByPlayer(this, Purchasable);
+		for(let i = 0; i < ownedTiles.length; i++) {
+			const tile = ownedTiles[i];
+			tile.sell(0);
+		}
+		
+		const index = this.tile.players.indexOf(this);
+		this.tile.players.splice(index, 1);
+		this.tile = null;
+
+		this.game.playerContainer.remove(this);
+
+		this.withdraw(this.cash);
+		depositInto.deposit(netWorth);
+
+		if(this.game.currentPlayer == this.id) {
+			this.game.nextPlayer();
+		}
+
+		this.emit("retire", this);
 	}
 
 	/**
@@ -223,6 +260,13 @@ class Player extends Phaser.GameObjects.Sprite {
  * 
  * @event Player#withdraw
  * @param {integer} sum The amount withdrawn.
+ */
+
+/**
+/**
+ * Event fired when player retires from the game.
+ * 
+ * @event Player#retire
  */
 
 /**

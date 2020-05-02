@@ -144,7 +144,7 @@ class Purchasable extends Tile {
 			for(let i = 0; i < this.game.players.length; i++) {
 				const player = this.game.players[i];
 
-				if(!player.isJailed && this.owner !== player) {
+				if(!player.isJailed && !player.isRetired && this.owner !== player) {
 					// eslint-disable-next-line no-undef
 					let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
 
