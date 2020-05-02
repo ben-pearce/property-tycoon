@@ -3,6 +3,7 @@ import {PlayerNameStyle, PlayerCashStyle} from "../../styles";
 import {getTokenNameByPlayerId, getTokenSpriteByPlayerId} from "../utils";
 import {Hud} from "../../enums";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
+import Purchasable from "../tiles/purchasable";
 
 /**
  * This class represents a player HUD object in the 
@@ -31,15 +32,19 @@ class PlayerHud extends Phaser.GameObjects.Container {
 		this.player = player;
 		this.cash = player.cash;
 
-		this.background = new RoundRectangle(this.scene, 0, 0, 300, 100, 10, 0x000000, 0.75);
+		this.background = new RoundRectangle(this.scene, 0, 0, 300, 110, 10, 0x000000, 0.75);
 		this.background.setOrigin(0);
 
 		const tokenGraphic = new Phaser.GameObjects.Sprite(this.scene, 40, 40, "tokens", getTokenSpriteByPlayerId(player.id));
 		const nameText = new Phaser.GameObjects.Text(this.scene, 80, 10, getTokenNameByPlayerId(player.id), PlayerNameStyle);
 		nameText.setStroke(0x000000, 3);
 
-		this.cashText = new Phaser.GameObjects.Text(this.scene, 83, 45, `Cash £${player.cash}`, PlayerCashStyle);
-		this.add([this.background, tokenGraphic, nameText, this.cashText]);
+		const computerGraphic = new Phaser.GameObjects.Sprite(this.scene, 270, 20, "hud", "computer");
+		const copGraphic = new Phaser.GameObjects.Sprite(this.scene, 270, 20, "hud", "cop");
+
+		computerGraphic.setVisible(player.isComputer);
+		copGraphic.setY(player.isComputer ? 55 : 20).setVisible(false);
+
 		this.propertiesButton = new Phaser.GameObjects.Text(this.scene, 20, 85, "Properties", PlayerCashStyle);
 		this.forfeitButton = new Phaser.GameObjects.Text(this.scene, 240, 85, "Forfeit", PlayerCashStyle);
 
@@ -69,6 +74,10 @@ class PlayerHud extends Phaser.GameObjects.Container {
 
 		this.player.on("deposit", this._updateCash.bind(this));
 		this.player.on("withdraw", this._updateCash.bind(this));
+
+		this.player.on("jailpickup", copGraphic.setVisible.bind(copGraphic, true));
+		this.player.on("jaildrop",   copGraphic.setVisible.bind(copGraphic, false));
+
 		this.player.on("retire", this.setAlpha.bind(this, 0.5));
 	}
 
