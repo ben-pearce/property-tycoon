@@ -80,10 +80,10 @@ class Prompt extends Phaser.GameObjects.Container {
 	 */
 	closeWithAnim(cb=null) {
 		const onComplete = () => {
-			this.close();
 			if(typeof cb === "function") {
 				cb();
 			}
+			this.close();
 		};
 
 		if(this.promptGameObject instanceof Card) {
@@ -105,6 +105,7 @@ class Prompt extends Phaser.GameObjects.Container {
 	 * Calling this will close the prompt first.
 	 * 
 	 * @param {Phaser.GameObjects} promptGameObject The game object to show.
+	 * @fires Prompt#show
 	 */
 	show(promptGameObject) {
 		if(this.isShowing) {
@@ -114,13 +115,21 @@ class Prompt extends Phaser.GameObjects.Container {
 		this.promptGameObject = promptGameObject;
 		this.add(this.promptGameObject);
 
+		const x = (this.scene.game.config.width / 2) - (this.promptGameObject.width / 2);
+		const y = (this.scene.game.config.height / 2) - (this.promptGameObject.height / 2);
+		this.promptGameObject.setPosition(x, y);
+
 		this.background.setVisible(true);
 		this.isShowing = true;
+
+		this.emit("show");
 	}
 
 	/**
 	 * Hides the game object and this prompt and
 	 * then removes the game object from the container.
+	 * 
+	 * @fires Prompt#close
 	 */
 	close() {
 		this.remove(this.promptGameObject);
@@ -128,6 +137,8 @@ class Prompt extends Phaser.GameObjects.Container {
 		
 		this.background.setVisible(false);
 		this.isShowing = false;
+
+		this.emit("close");
 	}
 }
 
@@ -136,4 +147,15 @@ class Prompt extends Phaser.GameObjects.Container {
  * @callback Prompt~animationCallback
  */
 
+/**
+ * Event fired when prompt is shown.
+ * 
+ * @event Prompt#show
+ */
+
+/**
+ * Event fired when prompt is closed.
+ * 
+ * @event Prompt#close
+ */
 export default Prompt;
