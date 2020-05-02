@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import BoardConfig from "../tiles";
 import {Tiles} from "../enums";
 import Rentable from "./tiles/rentable";
+import Tile from "./tiles/tile";
 
 /**
  * This class represents our game board.
@@ -188,9 +189,9 @@ class Board extends Phaser.GameObjects.Container {
 	 * board.getTilesOwnedByPlayer(player)
 	 * 
 	 * @param {Player} player The player to find owned tiles for.
-	 * @param {?Type} [tileType=null] The type of tile to find.
+	 * @param {Type} [tileType=Tile] The type of tile to find.
 	 */
-	getTilesOwnedByPlayer(player, tileType=null) {
+	getTilesOwnedByPlayer(player, tileType=Tile) {
 		const ownedTiles = [];
 		for(let i = 0; i < this.tiles.length; i++) {
 			const t = this.tiles[i];
