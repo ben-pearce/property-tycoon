@@ -47,10 +47,11 @@ class Utility extends Purchasable {
 				const rentCharged = [(diceOne + diceTwo) * 4, (diceOne + diceTwo) * 10][ownedUtilities.length - 1];
 				player.withdraw(rentCharged);
 				this.owner.deposit(rentCharged);
+			} else {
+				this.game.showSaleInterface(player);
 			}
-			this.game.nextPlayer();
 		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
-			this.game.nextPlayer();
+			this.game.showSaleInterface(player);
 		}
 	}
 }

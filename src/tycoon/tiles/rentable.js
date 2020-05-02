@@ -165,28 +165,19 @@ class Rentable extends Purchasable {
 		this.cardInstance.sellButton.setEnabled(!this.property.isUpgraded);
 
 		this.cardInstance.upgradeButton.setEnabled(!this.isMortgaged && player.cash > this.property.getUpgradeCost() && this.isUpgradable());
-		this.cardInstance.upgradeButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.upgrade();
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.upgradeButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.upgrade()));
 
 		this.cardInstance.sellUpgradeButton.setEnabled(!this.isMortgaged && this.isDowngradable());
-		this.cardInstance.sellUpgradeButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.downgrade();
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.sellUpgradeButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.downgrade()));
 
-		this.cardInstance.auctionPlayerButton.on("pointerup", () => {
-			this.game.prompt.closeWithAnim(() => {
-				this.auction();
-				this.game.nextPlayer();
-			});
-		});
+		this.cardInstance.auctionPlayerButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.auction()));
+	}
 
+	showCard(player) {
+		super.showCard(player);
+		this.cardInstance.auctionPlayerButton.setVisible(!this.property.isUpgraded && !this.isMortgaged);
+		this.cardInstance.upgradeButton.setVisible(!this.isMortgaged);
+		this.cardInstance.sellUpgradeButton.setVisible(this.property.isUpgraded && !this.isMortgaged);
 	}
 
 	/**

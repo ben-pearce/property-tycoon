@@ -53,7 +53,7 @@ class Go extends Tile {
 	 */
 	onLanded(player) {
 		if(player.tile !== null) {
-			this.game.nextPlayer();
+			this.game.showSaleInterface(player);
 		}
 		super.onLanded(player);
 	}

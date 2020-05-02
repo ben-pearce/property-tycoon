@@ -43,7 +43,7 @@ class Station extends Purchasable {
 			this.owner.deposit(rentCharged);
 			this.game.nextPlayer();
 		} else if(this.owner !== null && player !== this.owner && this.isMortgaged) {
-			this.game.nextPlayer();
+			this.game.showSaleInterface(player);
 		}
 	}
 }
