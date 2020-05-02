@@ -170,11 +170,14 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		const timeline = this.scene.tweens.createTimeline();
 		const l = this.game.board.tiles.length;
+
+		const duration = 4000;
 		let distance = (((tile.id - this.tile.id) % l) + l) % l;
+		distance = direction == Direction.FORWARDS ? distance : l - distance;
 
 		for(let i = (this.tile.id + direction + l) % l; i != (tile.id + direction + l) % l; i = (i + direction + l) % l) {
-			let tempTile = this.game.board.tiles[i];
-			let [x, y] = tempTile.getPlayerXY();
+			const tempTile = this.game.board.tiles[i];
+			const [x, y] = tempTile.getPlayerXY();
 
 			timeline.add({
 				targets: this,
