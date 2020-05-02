@@ -30,6 +30,7 @@ function preload() {
 	this.load.multiatlas("tokens", "assets/tokens.json", "assets");
 	this.load.multiatlas("tiles", "assets/tiles.json", "assets");
 	this.load.multiatlas("upgrades", "assets/upgrades.json", "assets");
+	this.load.multiatlas("hud", "assets/hud.json", "assets");
 	this.load.image("wallpaper", "assets/wall.png");
 	this.load.image("logo", "assets/logo.png");
 }
