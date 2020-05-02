@@ -79,15 +79,15 @@ class Purchasable extends Tile {
 	purchase(player, cost=null) {
 		cost = cost == null ? this.cost : cost;
 		if(this.owner === null && player.cash > cost) {
+			this.owner = player;
+
 			player.withdraw(cost);
 			this.game.bank.deposit(cost);
-
-			this.owner = player;
 		} else if(this.owner !== null && player.cash > cost) {
+			this.owner = player;
+
 			player.withdraw(cost);
 			this.owner.deposit(cost);
-
-			this.owner = player;
 		}
 	}
 
@@ -97,10 +97,9 @@ class Purchasable extends Tile {
 	 */
 	mortgage() {
 		if(this.owner !== null && !this.isMortgaged) {
-			this.game.bank.withdraw(this.getValue() / 2);
-			this.owner.deposit(this.getValue() / 2);
-			
 			this.isMortgaged = true;
+			this.game.bank.withdraw(this.getValue());
+			this.owner.deposit(this.getValue());
 		}
 	}
 
@@ -110,10 +109,9 @@ class Purchasable extends Tile {
 	 */
 	unmortgage() {
 		if(this.owner !== null && this.isMortgaged && this.owner.cash > this.getValue()) {
-			this.owner.withdraw(this.getValue());
-			this.game.bank.deposit(this.getValue());
-
 			this.isMortgaged = false;
+			this.owner.withdraw(this.getMortgageValue());
+			this.game.bank.deposit(this.getMortgageValue());
 		}
 	}
 

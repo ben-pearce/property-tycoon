@@ -137,9 +137,9 @@ class Rentable extends Purchasable {
 	 * the player the amount required for the upgrade.
 	 */
 	upgrade() {
+		this.property.upgrade();
 		this.owner.withdraw(this.property.getUpgradeCost());
 		this.game.bank.deposit(this.property.getUpgradeCost());
-		this.property.upgrade();
 	}
 
 	/**
@@ -147,9 +147,9 @@ class Rentable extends Purchasable {
 	 * the player the amount the property is valued at.
 	 */
 	downgrade() {
+		this.property.downgrade();
 		this.game.bank.withdraw(this.property.getDowngradeValue());
 		this.owner.deposit(this.property.getDowngradeValue());
-		this.property.downgrade();
 	}
 
 	/**
