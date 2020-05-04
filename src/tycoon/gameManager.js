@@ -113,37 +113,6 @@ class GameManager extends Phaser.GameObjects.Group {
 	}
 
 	/**
-	 * Asks player if they wish to upgrade/downgrade/sell/mortgage
-	 * properties before moving to next player.
-	 * 
-	 * If player has no owned properties, will move to next
-	 * player instantly.
-	 */
-	showSaleInterface(player) {
-		const ownedTiles = this.board.getTilesOwnedByPlayer(player, Purchasable);
-		if(player.debt > 0) {
-			this.board.setTilesActive(ownedTiles);
-			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you must raise funds of £${player.debt}.`).setVisible(true);
-		} else if(ownedTiles.length > 0) {
-			this.board.setTilesActive(ownedTiles);
-
-			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you may modify properties now.`).setVisible(true);
-
-			this.hud.doneButton.removeListener("pointerup");
-			this.hud.doneButton.on("pointerup", this.nextPlayer.bind(this));
-			this.hud.doneButton.setVisible(true);
-		} else if(!player.isRetired) {
-			this.nextPlayer();
-		}
-	}
-
-	hideSaleInterface() {
-		this.hud.doneButton.setVisible(false);
-		this.hud.actionText.setVisible(false);
-		this.board.setTilesActive(null);
-	}
-
-	/**
 	 * Advances the game turn.
 	 */
 	nextPlayer() {
@@ -236,6 +205,42 @@ class GameManager extends Phaser.GameObjects.Group {
 			});
 		});
 		this.prompt.showWithAnim(actionCard);
+	}
+
+	/**
+	 * Asks player if they wish to upgrade/downgrade/sell/mortgage
+	 * properties before moving to next player.
+	 * 
+	 * If player has no owned properties, will move to next
+	 * player instantly.
+	 * 
+	 * @param {Player} player The player to show the sale interface for.
+	 */
+	showSaleInterface(player) {
+		const ownedTiles = this.board.getTilesOwnedByPlayer(player, Purchasable);
+		if(player.debt > 0) {
+			this.board.setTilesActive(ownedTiles);
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you must raise funds of £${player.debt}.`).setVisible(true);
+		} else if(ownedTiles.length > 0) {
+			this.board.setTilesActive(ownedTiles);
+
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you may modify properties now.`).setVisible(true);
+
+			this.hud.doneButton.removeListener("pointerup");
+			this.hud.doneButton.on("pointerup", this.nextPlayer.bind(this));
+			this.hud.doneButton.setVisible(true);
+		} else if(!player.isRetired) {
+			this.nextPlayer();
+		}
+	}
+
+	/**
+	 * Hides the sale interface.
+	 */
+	hideSaleInterface() {
+		this.hud.doneButton.setVisible(false);
+		this.hud.actionText.setVisible(false);
+		this.board.setTilesActive(null);
 	}
 
 	/**
