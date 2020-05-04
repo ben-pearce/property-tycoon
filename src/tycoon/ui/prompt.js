@@ -46,6 +46,7 @@ class Prompt extends Phaser.GameObjects.Container {
 	 * 
 	 * @param {Phaser.GameObject} promptGameObject The game object to show in the prompt window.
 	 * @param {?Prompt~animationCallback} [cb=null] Callback invoked when animation completes.
+	 * @fires Prompt#show
 	 */
 	showWithAnim(promptGameObject, cb=null) {
 		this.show(promptGameObject);
@@ -58,6 +59,7 @@ class Prompt extends Phaser.GameObjects.Container {
 			if(typeof cb === "function") {
 				cb();
 			}
+			this.emit("show");
 		};
 
 		if(this.promptGameObject instanceof Card) {
@@ -77,13 +79,15 @@ class Prompt extends Phaser.GameObjects.Container {
 	 * closes this prompt view.
 	 * 
 	 * @param {?Prompt~animationCallback} [cb=null] Callback invoked when animation completes.
+	 * @fires Prompt#close
 	 */
 	closeWithAnim(cb=null) {
 		const onComplete = () => {
+			this.close();
 			if(typeof cb === "function") {
 				cb();
 			}
-			this.close();
+			this.emit("close");
 		};
 
 		if(this.promptGameObject instanceof Card) {
@@ -105,7 +109,6 @@ class Prompt extends Phaser.GameObjects.Container {
 	 * Calling this will close the prompt first.
 	 * 
 	 * @param {Phaser.GameObjects} promptGameObject The game object to show.
-	 * @fires Prompt#show
 	 */
 	show(promptGameObject) {
 		if(this.isShowing) {
@@ -121,15 +124,11 @@ class Prompt extends Phaser.GameObjects.Container {
 
 		this.background.setVisible(true);
 		this.isShowing = true;
-
-		this.emit("show");
 	}
 
 	/**
 	 * Hides the game object and this prompt and
 	 * then removes the game object from the container.
-	 * 
-	 * @fires Prompt#close
 	 */
 	close() {
 		this.remove(this.promptGameObject);
@@ -137,8 +136,6 @@ class Prompt extends Phaser.GameObjects.Container {
 		
 		this.background.setVisible(false);
 		this.isShowing = false;
-
-		this.emit("close");
 	}
 }
 
