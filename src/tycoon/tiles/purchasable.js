@@ -241,7 +241,10 @@ class Purchasable extends Tile {
 		super.onLanded(player);
 
 		if((this.owner == null && player.hasPassedGo) || this.owner == player) {
-			this.showCard(player);
+			const ownedTiles = this.game.board.getTilesOwnedByPlayer(player, Purchasable);
+			this.game.board.highlightTiles(ownedTiles);
+
+			setTimeout(this.showCard.bind(this, player), 150);
 		} else if((this.owner == null && !player.hasPassedGo) || this.isMortgaged || this.owner.isJailed) {
 			this.game.showSaleInterface(player);
 		}
