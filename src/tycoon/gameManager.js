@@ -132,7 +132,7 @@ class GameManager extends Phaser.GameObjects.Group {
 			this.hud.doneButton.removeListener("pointerup");
 			this.hud.doneButton.on("pointerup", this.nextPlayer.bind(this));
 			this.hud.doneButton.setVisible(true);
-		} else {
+		} else if(!player.isRetired) {
 			this.nextPlayer();
 		}
 	}
