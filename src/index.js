@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 import GameManager from "./tycoon/gameManager";
-import Menu from "./tycoon/menu";
+import Menu from "./tycoon/ui/menu";
 
 // phaser setup stuff
 const config = {
