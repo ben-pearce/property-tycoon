@@ -3,6 +3,8 @@ import Tile from "./tile";
 import {CashTextStyle} from "../../styles";
 import {getTokenNameByPlayerId} from "../utils";
 import PurchasableCard from "../cards/purchasableCard";
+import {Computer} from "../../enums";
+import {getPurchaseDecision, getBidDecision} from "../computer";
 
 /**
  * All "purchasable" tiles inherit this class.
@@ -171,12 +173,17 @@ class Purchasable extends Tile {
 				const player = this.game.players[i];
 
 				if(!player.isJailed && !player.isRetired && this.owner !== player) {
-					// eslint-disable-next-line no-undef
-					let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
-
-					while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
+					let playerBid = 0;
+					if(player.isComputer) {
+						playerBid = getBidDecision(this, player);
+					} else {
 						// eslint-disable-next-line no-undef
-						playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, please enter a valid bid: `));
+						let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
+
+						while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
+							// eslint-disable-next-line no-undef
+							playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, please enter a valid bid: `));
+						}
 					}
 					
 					if(playerBid > 0) {
@@ -205,16 +212,27 @@ class Purchasable extends Tile {
 	 * @param {Player} player The player the buttons should act upon.
 	 */
 	registerCardButtons(player) {
-		this.cardInstance.buyButton.setEnabled(player.cash > this.cost);
-		this.cardInstance.buyButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.purchase(player)));
-		this.cardInstance.auctionButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.auction()));
+		if(player.isComputer) {
+			this.cardInstance.setEnabled(false);
+			if(player === this.owner) {
+				setTimeout(() => this.game.prompt.closeWithAnim(), Computer.THINKING_TIMEOUT_MS);
+			} else {
+				const purchaseDecision = getPurchaseDecision(this, player, () => this.purchase(player), () => this.auction());
+				setTimeout(() => this.game.prompt.closeWithAnim(purchaseDecision), Computer.THINKING_TIMEOUT_MS);
+			}
+		} else {
+			this.cardInstance.buyButton.setEnabled(player.cash > this.cost);
+			this.cardInstance.buyButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.purchase(player)));
+			this.cardInstance.auctionButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.auction()));
+	
+			this.cardInstance.unmortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.unmortgage()));
+			this.cardInstance.mortgageButton.setEnabled(this.getMortgageValue() > 0);
+			this.cardInstance.mortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.mortgage()));
+	
+			this.cardInstance.sellButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.sell()));
+			this.cardInstance.continueButton.on("pointerup", () => this.game.prompt.closeWithAnim());
+		}
 
-		this.cardInstance.unmortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.unmortgage()));
-		this.cardInstance.mortgageButton.setEnabled(this.getMortgageValue() > 0);
-		this.cardInstance.mortgageButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.mortgage()));
-
-		this.cardInstance.sellButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.sell()));
-		this.cardInstance.continueButton.on("pointerup", () => this.game.prompt.closeWithAnim());
 	}
 
 	/**
