@@ -1,9 +1,9 @@
 import Phaser from "phaser";
-import {MenuStyle} from "../styles";
-import {getTokenSpriteByPlayerId, getTimerSecondsByOption} from "./utils";
+import {MenuStyle} from "../../styles";
+import {getTokenSpriteByPlayerId, getTimerSecondsByOption} from "../utils";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
-import Button from "./ui/button";
-import {Buttons} from "../enums";
+import Button from "./button";
+import {Buttons} from "../../enums";
 
 /**
  * This class represents the game menu.
