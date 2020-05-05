@@ -122,6 +122,17 @@ const Direction = Object.freeze({
 	BACKWARDS: -1
 });
 
+/**
+ * Enum for computer players.
+ * 
+ * @readonly
+ * @memberof Enums
+ * @enum {integer}
+ */
+const Computer = Object.freeze({
+	THINKING_TIMEOUT_MS: 500
+});
+
 export {
 	Tiles,
 	Colors,
@@ -130,5 +141,6 @@ export {
 	Hud,
 	Cards,
 	Buttons,
-	Direction
+	Direction,
+	Computer
 };

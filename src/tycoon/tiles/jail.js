@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import Tile from "./tile";
 import JailCard from "../cards/jailCard";
 import Parking from "./parking";
+import {Computer} from "../../enums";
+import {getJailDecision} from "../computer";
 
 /**
  * This class represents the Jail tile.
@@ -97,13 +99,7 @@ class Jail extends Tile {
 	onLanded(player, cb=null) {
 		if(player.isJailed) {
 			const jailCard = new JailCard(this.scene, this.game, player);
-			jailCard.stayButton.on("pointerup", () => this.game.prompt.closeWithAnim(cb));
-	
 			const parkingTile = this.game.board.getSingletonTileByType(Parking);
-			jailCard.leaveButton.setEnabled(player.cash >= 50);
-			jailCard.leaveButton.on("pointerup", () => 
-				this.game.prompt.closeWithAnim(() => 
-					player.charge(50, parkingTile, () => player.unjail(cb))));
 	
 			if(player.getOutOfJailCard.length > 0) {
 				const [getOutOfJailCard, cardDeck] = player.getOutOfJailCard.shift();
@@ -112,7 +108,19 @@ class Jail extends Tile {
 					player.emit("jaildrop");
 				}
 				player.unjail(cb);
+			} else if(player.isComputer) {
+				this.game.prompt.showWithAnim(jailCard, () => {
+					jailCard.setEnabled(false);
+					const bailDecision = getJailDecision(player, () => player.charge(50, parkingTile, () => player.unjail(cb)), cb);
+					setTimeout(() => this.game.prompt.closeWithAnim(bailDecision), Computer.THINKING_TIMEOUT_MS);
+				});
 			} else {
+				jailCard.stayButton.on("pointerup", () => this.game.prompt.closeWithAnim(cb));
+				jailCard.leaveButton.setEnabled(player.cash >= 50);
+				jailCard.leaveButton.on("pointerup", () => 
+					this.game.prompt.closeWithAnim(() => 
+						player.charge(50, parkingTile, () => player.unjail(cb))));
+				
 				this.game.prompt.showWithAnim(jailCard);
 			}
 		} else if(this.players.indexOf(player) == -1) {

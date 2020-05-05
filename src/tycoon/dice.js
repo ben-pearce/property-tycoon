@@ -74,6 +74,19 @@ class Dice extends Phaser.Events.EventEmitter {
 	}
 
 	/**
+	 * Moves the die to the centre of the board and
+	 * then auto-clicks to start the dice roll.
+	 */
+	computerRoll() {
+		const x = this.game.board.x + this.game.board.background.x + (this.game.board.background.width / 2);
+		const y = this.game.board.y + this.game.board.background.y + (this.game.board.background.height / 2);
+		const fakePointer = {x: x, y: y};
+
+		this.reset();
+		this.clickRoll(fakePointer);
+	}
+
+	/**
 	 * This is called when the mouse cursor moves.
 	 * 
 	 * It just moves the rollSprite to the cursor.

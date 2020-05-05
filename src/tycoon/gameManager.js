@@ -12,7 +12,10 @@ import ActionCard from "./cards/actionCard";
 import GetOutOfJail from "./actions/getOutOfJail";
 import {WinStyle} from "../styles";
 import {getTokenNameByPlayerId} from "./utils";
+import {Computer} from "../enums";
 import Purchasable from "./tiles/purchasable";
+import {getTilesToUpgrade, getTilesToSell} from "./computer";
+import Rentable from "./tiles/rentable";
 
 /**
  * This is our Game Controller, it is in charge
@@ -133,6 +136,11 @@ class GameManager extends Phaser.GameObjects.Group {
 			
 			return;
 		}
+
+		const playersRemaining = this.players.reduce((remaining, player) => remaining + !player.isRetired, 0);
+		if(playersRemaining === 0) {
+			return;
+		}
 		
 		if(this.currentPlayer === null) {
 			this.currentPlayer = 0;
@@ -170,8 +178,15 @@ class GameManager extends Phaser.GameObjects.Group {
 
 			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
 		}
+
+		const p = this.players[this.currentPlayer];
 		this.hud.setPlayerHudEnabled(true);
-		this.dice.requestRoll();
+
+		if(p.isComputer) {
+			this.dice.computerRoll();
+		} else {
+			this.dice.requestRoll();
+		}
 	}
 
 	/**
@@ -187,7 +202,8 @@ class GameManager extends Phaser.GameObjects.Group {
 	pickUpCard(player, deck, cb=null){
 		const card = deck.shift();
 		const actionCard = new ActionCard(this.scene, this, card, player);
-		actionCard.continueButton.on("pointerup", () => {
+
+		const continueAction = () => {
 			this.prompt.closeWithAnim(() => {
 				card.action.do(this, player, () => {
 					// Don't place the card back in the deck if it's GetOutOfJail.
@@ -203,8 +219,20 @@ class GameManager extends Phaser.GameObjects.Group {
 					}
 				});
 			});
-		});
-		this.prompt.showWithAnim(actionCard);
+		};
+
+		const computerAction = () => {
+			actionCard.setEnabled(false);
+			setTimeout(continueAction, Computer.THINKING_TIMEOUT_MS);
+		};
+
+		if(player.isComputer) {
+			this.prompt.showWithAnim(actionCard, computerAction);
+		} else {
+			actionCard.continueButton.on("pointerup", continueAction);
+			this.prompt.showWithAnim(actionCard);
+		}
+
 	}
 
 	/**
@@ -218,9 +246,37 @@ class GameManager extends Phaser.GameObjects.Group {
 	 */
 	showSaleInterface(player) {
 		const ownedTiles = this.board.getTilesOwnedByPlayer(player, Purchasable);
-		if(player.debt > 0) {
+		if(player.debt > 0 && player.isComputer) {
+			this.board.highlightTiles(ownedTiles);
+			const payDebt = () => {
+				const tilesToSell = getTilesToSell(player);
+				while(player.debt > 0) {
+					const tile = tilesToSell.shift();
+					if(tile instanceof Rentable && tile.property.isUpgraded) {
+						tile.downgrade();
+						tilesToSell.unshift(tile);
+					} else {
+						tile.sell();
+					}
+				}
+			};
+			setTimeout(payDebt, Computer.THINKING_TIMEOUT_MS);
+
+		} else if(player.debt > 0) {
 			this.board.setTilesActive(ownedTiles);
 			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you must raise funds of £${player.debt}.`).setVisible(true);
+		} else if(ownedTiles.length > 0 && player.isComputer) {
+			this.board.highlightTiles(ownedTiles);
+
+			const upgradeProperties = () => {
+				const tilesToUpgrade = getTilesToUpgrade(player);
+				for(let i = 0; i < tilesToUpgrade.length; i++) {
+					const tile = tilesToUpgrade[i];
+					tile.upgrade();
+				}
+				setTimeout(this.nextPlayer.bind(this), Computer.THINKING_TIMEOUT_MS);
+			};
+			setTimeout(upgradeProperties, Computer.THINKING_TIMEOUT_MS);
 		} else if(ownedTiles.length > 0) {
 			this.board.setTilesActive(ownedTiles);
 

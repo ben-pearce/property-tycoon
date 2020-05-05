@@ -1,6 +1,8 @@
 import BaseAction from "./action";
 import FineCard from "../cards/fineCard";
 import Parking from "../tiles/parking";
+import {Computer} from "../../enums";
+import {getFineDecision} from "../computer";
 
 /**
  * Action class that asks player to pay a fine or
@@ -36,18 +38,27 @@ class FineOrOpportunity extends BaseAction {
 
 		const takeCard = () => game.pickUpCard(player, game.opportunityCards, cb);
 
-		fineCard.fineButton.on("pointerup", () => {
-			game.prompt.closeWithAnim(() => {
-				const parking = game.board.getSingletonTileByType(Parking);
-				player.charge(this.fine, parking, () => {
-					game.showSaleInterface(player);
-					cb();
-				});
+		const payFine = () => {
+			const parking = game.board.getSingletonTileByType(Parking);
+			player.charge(this.fine, parking, () => {
+				game.showSaleInterface(player);
+				cb();
 			});
-		});
+		};
 
-		fineCard.opportunityButton.on("pointerup", () => game.prompt.closeWithAnim(takeCard));
-		game.prompt.showWithAnim(fineCard);
+		if(player.isComputer) {
+			const fineDecision = getFineDecision(player, this.fine, payFine, takeCard);
+			game.prompt.showWithAnim(fineCard, () => {
+				fineCard.setEnabled(false);
+				setTimeout(() => game.prompt.closeWithAnim(fineDecision), Computer.THINKING_TIMEOUT_MS);
+			});
+			
+		} else {
+			fineCard.fineButton.on("pointerup", game.prompt.closeWithAnim(payFine));
+			fineCard.opportunityButton.on("pointerup", game.prompt.closeWithAnim(takeCard));
+			game.prompt.showWithAnim(fineCard);
+		}
+
 	}
 }
 
