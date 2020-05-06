@@ -178,7 +178,7 @@ class Purchasable extends Tile {
 						playerBid = getBidDecision(this, player);
 					} else {
 						// eslint-disable-next-line no-undef
-						let playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
+						playerBid = Number(prompt(`${getTokenNameByPlayerId(player.id)}, enter your bid: `));
 
 						while(playerBid !== null && !Number.isInteger(playerBid) || playerBid > player.cash) {
 							// eslint-disable-next-line no-undef
