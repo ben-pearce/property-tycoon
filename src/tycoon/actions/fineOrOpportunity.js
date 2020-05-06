@@ -54,8 +54,9 @@ class FineOrOpportunity extends BaseAction {
 			});
 			
 		} else {
-			fineCard.fineButton.on("pointerup", game.prompt.closeWithAnim(payFine));
-			fineCard.opportunityButton.on("pointerup", game.prompt.closeWithAnim(takeCard));
+			fineCard.fineButton.on("pointerup", () => game.prompt.closeWithAnim(payFine));
+			fineCard.opportunityButton.on("pointerup", () => game.prompt.closeWithAnim(takeCard));
+			
 			game.prompt.showWithAnim(fineCard);
 		}
 
