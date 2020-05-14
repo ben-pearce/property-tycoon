@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "start": "webpack-dev-server --config webpack/base.js --open",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "eslint": "^6.8.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "mocha": "^7.1.2",
     "raw-loader": "^3.1.0",
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
@@ -33,6 +35,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "phaser": "^3.22.0"
+    "phaser": "^3.22.0",
+    "phaser3-rex-plugins": "^1.1.11"
   }
 }
