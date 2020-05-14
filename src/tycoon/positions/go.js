@@ -6,10 +6,7 @@ class Go extends Position {
 	}
 
 	onLanded() {
-		//player collects $200 for passing GO if he lands on position 0"
-		if (position = 0) {
-			player.money += 200;
-		}
+
 	}
 
 	onPassed() {
