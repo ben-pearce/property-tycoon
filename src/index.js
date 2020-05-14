@@ -1,13 +1,14 @@
 import Phaser from "phaser";
+import Board from "./tycoon/board";
+import Dice from "./tycoon/dice";
+import Player from "./tycoon/player";
 
-import GameManager from "./tycoon/gameManager";
-import Menu from "./tycoon/ui/menu";
 
 // phaser setup stuff
 const config = {
 	type: Phaser.AUTO,
 	parent: "tycoon",
-	width: 1500,
+	width: 1200,
 	height: 900,
 	transparent: true,
 	scene: {
@@ -28,53 +29,40 @@ const game = new Phaser.Game(config);
 function preload() {
 	this.load.multiatlas("dice", "assets/dice.json", "assets");
 	this.load.multiatlas("tokens", "assets/tokens.json", "assets");
-	this.load.multiatlas("tiles", "assets/tiles.json", "assets");
-	this.load.multiatlas("upgrades", "assets/upgrades.json", "assets");
-	this.load.multiatlas("hud", "assets/hud.json", "assets");
-	this.load.image("wallpaper", "assets/wall.png");
-	this.load.image("logo", "assets/logo.png");
 }
 
 /**
  * Entrypoint for program.
  * 
- * Sets up GameManager instance.
+ * Create the board and move it to the middle of the screen.
+ * 
+ * Create dice and players and game management.
+ * 
+ * TODO: Move all this logic to its own class?
  */
 function create() {
-	const menuScene = this.scene.add("menu", {}, true);
-	const gameScene = this.scene.add("game", {});
+	let scene = game.scene.add("board", {}, true);
 	
-	const menu = new Menu(menuScene);
-	
-	menu.setPosition(
-		(game.config.width / 2),
-		(game.config.height / 2)
+	let board = new Board(game, scene, 0, 0);
+	scene.add.existing(board);
+
+	let boardDimensions = board.getBounds();
+	board.setPosition(
+		(game.config.width / 2) - boardDimensions.width / 2, 
+		(game.config.height / 2) - boardDimensions.height / 2
 	);
 
-	menuScene.add.existing(menu);
+	let dice = new Dice(board);
+	dice.requestRoll();
 
-	menu.setScale(0);
-	menuScene.tweens.add({
-		targets: menu,
-		ease: "Back.easeOut",
-		scale: 1
-	});
+	let p = new Player(board);
+	p.moveToPosition(0);
 
-	menu.on("start", (config) => {
-		menuScene.tweens.add({
-			targets: menu,
-			ease: "Back.easeIn",
-			y: game.config.height * 2,
-			onComplete: () => {
-				const gameManager = new GameManager(gameScene, config);
-				gameScene.add.existing(gameManager);
-
-				this.scene.switch("menu", "game");
-				this.scene.run("game");
-
-				menu.setY(game.config.height / 2);
-			}
-		});
+	dice.on("landed", (result) => {
+		let roll = result[0] + result[1];
+		let newPos = (p.position + roll) % 39;
+		p.moveToPosition(newPos);
+		dice.requestRoll();
 	});
 }
 

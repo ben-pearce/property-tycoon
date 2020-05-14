@@ -1,336 +1,345 @@
-import Go from "./tycoon/tiles/go";
-import Jail from "./tycoon/tiles/jail";
-import Cop from "./tycoon/tiles/cop";
+import Go from "./tycoon/positions/go";
+import Jail from "./tycoon/positions/jail";
 
-import Opportunity from "./tycoon/tiles/opportunity";
-import Luck from "./tycoon/tiles/luck";
+import Opportunity from "./tycoon/positions/opportunity";
+import Luck from "./tycoon/positions/luck";
 
-import Parking from "./tycoon/tiles/parking";
-import Tax from "./tycoon/tiles/tax";
+import Parking from "./tycoon/positions/parking";
+import Tax from "./tycoon/positions/tax";
 
-import Rentable from "./tycoon/tiles/rentable";
-import Station from "./tycoon/tiles/station";
-import Utility from "./tycoon/tiles/utility";
-
-import {Colors} from "./enums";
-
-/**
- * @typedef {Object} TileConfig
- * @property {integer} id The unique ID.
- * @property {Type} type The tile class.
- * @property {Colors} color The color group.
- * @property {string} graphic Sprite to use as graphic.
- * @property {integer} cost The cost of property purchase.
- * @property {integer} upgrade The cost of a house upgrade.
- * @property {integer[]} rent The cost of rent for each upgrade.
- */
+import Rentable from "./tycoon/positions/rentable";
+import Station from "./tycoon/positions/station";
+import Utility from "./tycoon/positions/utility";
 
 export default [
 	{
-		id: 0,
+		id: 1,
 		name: "Go",
+		buy: false,
+		action: "Collect \u00a3200",
 		type: Go
 	},
 	{
-		id: 1,
+		id: 2,
 		name: "Crapper Street",
-		color: Colors.BROWN,
+		buy: true,
+		group: "Brown",
 		cost: 60,
 		rent: [2, 10, 30, 90, 160, 250],
-		upgrade: 50,
 		type: Rentable
-	},
-	{
-		id: 2,
-		name: "Pot Luck",
-		type: Luck
 	},
 	{
 		id: 3,
-		name: "Gangsters Paradise",
-		color: Colors.BROWN,
-		cost: 60,
-		rent: [4, 20, 60, 180, 320, 450],
-		upgrade: 50,
-		type: Rentable
+		name: "Pot Luck",
+		buy: false,
+		action: "Take card",
+		type: Luck
 	},
 	{
 		id: 4,
-		name: "Income Tax",
-		graphic: "tax",
-		cost: 100,
-		type: Tax
+		name: "Gangsters Paradise",
+		buy: true,
+		group: "Brown",
+		cost: 60,
+		rent: [4, 20, 60, 180, 320, 450],
+		type: Rentable
 	},
 	{
 		id: 5,
+		name: "Income Tax",
+		buy: false,
+		action: "Pay \u00a3200",
+		type: Tax
+	},
+	{
+		id: 6,
 		name: "Brighton Station",
+		buy: true,
 		group: "Station",
 		cost: 200,
 		type: Station
 	},
 	{
-		id: 6,
+		id: 7,
 		name: "Weeping Angel",
-		color: Colors.BLUE,
+		buy: true,
+		group: "Blue",
 		cost: 100,
 		rent: [6, 30, 90, 270, 400, 550],
-		upgrade: 50,
 		type: Rentable
-	},
-	{
-		id: 7,
-		name: "Opportunity Knocks",
-		graphic: "opportunity",
-		type: Opportunity
 	},
 	{
 		id: 8,
-		name: "Potts Avenue",
-		color: Colors.BLUE,
-		cost: 100,
-		rent: [6, 30, 90, 270, 400, 550],
-		upgrade: 50,
-		type: Rentable
+		name: "Opportunity Knocks",
+		buy: false,
+		action: "Take card",
+		type: Opportunity
 	},
 	{
 		id: 9,
-		name: "Nardole Drive",
-		color: Colors.BLUE,
-		cost: 120,
-		rent: [8, 40, 100, 300, 450, 600],
-		upgrade: 50,
-		type: Rentable,
-	},
-	{
-		id: 10,
-		name: "Jail/Just visiting",
-		type: Jail
-	},
-	{
-		id: 11,
-		name: "Skywalker Drive",
-		color: Colors.PURPLE,
-		cost: 140,
-		rent: [10, 50, 150, 450, 625, 750],
-		upgrade: 100,
+		name: "Potts Avenue",
+		buy: true,
+		group: "Blue",
+		cost: 100,
+		rent: [6, 30, 90, 270, 400, 550],
 		type: Rentable
 	},
 	{
+		id: 10,
+		name: "Nardole Drive",
+		buy: true,
+		group: "Blue",
+		cost: 120,
+		rent: [8, 40, 100, 300, 450, 600],
+		type: Rentable,
+	},
+	{
+		id: 11,
+		name: "Jail/Just visiting",
+		buy: false,
+		action: "",
+		type: Jail
+	},
+	{
 		id: 12,
+		name: "Skywalker Drive",
+		buy: true,
+		group: "Purple",
+		cost: 140,
+		rent: [10, 50, 150, 450, 625, 750],
+		type: Rentable
+	},
+	{
+		id: 13,
 		name: "Tesla Power Co",
-		graphic: "electric",
+		buy: true,
+		group: "Utilities",
 		cost: 150,
 		type: Utility
 	},
 	{
-		id: 13,
+		id: 14,
 		name: "Wookie Hole",
-		color: Colors.PURPLE,
+		buy: true,
+		group: "Purple",
 		cost: 140,
 		rent: [10, 50, 150, 450, 625, 750],
-		upgrade: 100,
-		type: Rentable
-	},
-	{
-		id: 14,
-		name: "Rey Lane",
-		color: Colors.PURPLE,
-		cost: 160,
-		rent: [12, 60, 180, 500, 700, 900],
-		upgrade: 100,
 		type: Rentable
 	},
 	{
 		id: 15,
+		name: "Rey Lane",
+		buy: true,
+		group: "Purple",
+		cost: 160,
+		rent: [12, 60, 180, 500, 700, 900],
+		type: Rentable
+	},
+	{
+		id: 16,
 		name: "Hove Station",
+		buy: true,
 		group: "Station",
 		cost: 200,
 		type: Station
 	},
 	{
-		id: 16,
+		id: 17,
 		name: "Cooper Drive",
-		color: Colors.ORANGE,
+		buy: true,
+		group: "Orange",
 		cost: 180,
 		rent: [14, 70, 200, 550, 750, 950],
-		upgrade: 100,
 		type: Rentable
-	},
-	{
-		id: 17,
-		name: "Pot Luck",
-		type: Luck
 	},
 	{
 		id: 18,
-		name: "Wolowitz Street",
-		color: Colors.ORANGE,
-		cost: 180,
-		rent: [14, 70, 200, 550, 750, 950],
-		upgrade: 100,
-		type: Rentable
+		name: "Pot Luck",
+		buy: false,
+		action: "Take card",
+		type: Luck
 	},
 	{
 		id: 19,
-		name: "Penny Lane",
-		color: Colors.ORANGE,
-		cost: 200,
-		rent: [16, 80, 220, 600, 800, 1000],
-		upgrade: 100,
+		name: "Wolowitz Street",
+		buy: true,
+		group: "Orange",
+		cost: 180,
+		rent: [14, 70, 200, 550, 750, 950],
 		type: Rentable
 	},
 	{
 		id: 20,
-		name: "Free Parking",
-		type: Parking
+		name: "Penny Lane",
+		buy: true,
+		group: "Orange",
+		cost: 200,
+		rent: [16, 80, 220, 600, 800, 1000],
+		type: Rentable
 	},
 	{
 		id: 21,
-		name: "Yue Fei Square",
-		color: Colors.RED,
-		cost: 220,
-		rent: [18, 90, 250, 700, 875, 1050],
-		upgrade: 150,
-		type: Rentable
+		name: "Free Parking",
+		buy: false,
+		action: "Collect fines",
+		type: Parking
 	},
 	{
 		id: 22,
-		name: "Opportunity Knocks",
-		graphic: "opportunity2",
-		type: Opportunity
-	},
-	{
-		id: 23,
-		name: "Mulan Rouge",
-		color: Colors.RED,
+		name: "Yue Fei Square",
+		buy: true,
+		group: "Red",
 		cost: 220,
 		rent: [18, 90, 250, 700, 875, 1050],
-		upgrade: 150,
 		type: Rentable
 	},
 	{
+		id: 23,
+		name: "Opportunity Knocks",
+		buy: false,
+		action: "Take card",
+		type: Opportunity
+	},
+	{
 		id: 24,
-		name: "Han Xin Gardens",
-		color: Colors.RED,
-		cost: 240,
-		rent: [20, 100, 300, 750, 925, 1100],
-		upgrade: 150,
+		name: "Mulan Rouge",
+		buy: true,
+		group: "Red",
+		cost: 220,
+		rent: [18, 90, 250, 700, 875, 1050],
 		type: Rentable
 	},
 	{
 		id: 25,
-		name: "Falmer Station",
-		group: "Station",
-		cost: 200,
-		type: Station
+		name: "Han Xin Gardens",
+		buy: true,
+		group: "Red",
+		cost: 240,
+		rent: [20, 100, 300, 750, 925, 1100],
+		type: Rentable
 	},
 	{
 		id: 26,
-		name: "Kirk Close",
-		color: Colors.YELLOW,
-		cost: 260,
-		rent: [22, 110, 330, 800, 975, 1150],
-		upgrade: 150,
+		name: "Falmer Station",
+		buy: true,
+		group: "Station",
+		cost: 200,
 		type: Rentable
 	},
 	{
 		id: 27,
-		name: "Picard Avenue",
-		color: Colors.YELLOW,
+		name: "Kirk Close",
+		buy: true,
+		group: "Yellow",
 		cost: 260,
 		rent: [22, 110, 330, 800, 975, 1150],
-		upgrade: 150,
 		type: Rentable
 	},
 	{
 		id: 28,
-		name: "Edison Water",
-		cost: 150,
-		graphic: "water",
-		type: Utility
+		name: "Picard Avenue",
+		buy: true,
+		group: "Yellow",
+		cost: 260,
+		rent: [22, 110, 330, 800, 975, 1150],
+		type: Rentable
 	},
 	{
 		id: 29,
-		name: "Crusher Creek",
-		color: Colors.YELLOW,
-		cost: 280,
-		rent: [22, 120, 360, 850, 1025, 1200],
-		upgrade: 150,
-		type: Rentable
+		name: "Edison Water",
+		buy: true,
+		group: "Utilities",
+		cost: 150,
+		type: Utility
 	},
 	{
 		id: 30,
-		name: "Go to Jail",
-		type: Cop
+		name: "Crusher Creek",
+		buy: true,
+		group: "Yellow",
+		cost: 280,
+		rent: [22, 120, 360, 850, 1025, 1200],
+		type: Utility
 	},
 	{
 		id: 31,
-		name: "Sirat Mews",
-		color: Colors.GREEN,
-		cost: 300,
-		rent: [26, 130, 390, 900, 1100, 1275],
-		upgrade: 200,
-		type: Rentable
+		name: "Go to Jail",
+		buy: false,
+		action: "",
+		type: Jail
 	},
 	{
 		id: 32,
-		name: "Ghengis Crescent",
-		color: Colors.GREEN,
+		name: "Sirat Mews",
+		buy: true,
+		group: "Green",
 		cost: 300,
 		rent: [26, 130, 390, 900, 1100, 1275],
-		upgrade: 200,
 		type: Rentable
 	},
 	{
 		id: 33,
-		name: "Pot Luck",
-		type: Luck
-	},
-	{
-		id: 34,
-		name: "Ibis Close",
-		color: Colors.GREEN,
-		cost: 320,
-		rent: [28, 150, 450, 1000, 1200, 1400],
-		upgrade: 200,
+		name: "Ghengis Crescent",
+		buy: true,
+		group: "Green",
+		cost: 300,
+		rent: [26, 130, 390, 900, 1100, 1275],
 		type: Rentable
 	},
 	{
+		id: 34,
+		name: "Pot Luck",
+		buy: false,
+		action: "Take card",
+		type: Luck
+	},
+	{
 		id: 35,
+		name: "Ibis Close",
+		buy: true,
+		group: "Green",
+		cost: 320,
+		rent: [28, 150, 450, 1000, 1200, 1400],
+		type: Rentable
+	},
+	{
+		id: 36,
 		name: "Lewes Station",
+		buy: true,
 		group: "Station",
 		cost: 200,
 		type: Station
 	},
 	{
-		id: 36,
+		id: 37,
 		name: "Opportunity Knocks",
-		graphic: "opportunity3",
+		buy: false,
+		action: "",
 		type: Opportunity
 	},
 	{
-		id: 37,
+		id: 38,
 		name: "Hawking Way",
-		color: Colors.DEEP_BLUE,
+		buy: true,
+		group: "Deep blue",
 		cost: 350,
 		rent: [35, 175, 500, 1100, 1300, 1500],
-		upgrade: 200,
 		type: Rentable
 	},
 	{
-		id: 38,
+		id: 39,
 		name: "Super Tax",
-		graphic: "luxury",
-		cost: 200,
+		buy: false,
+		action: "Pay \u00a3100",
 		type: Tax
 	},
 	{
-		id: 39,
+		id: 40,
 		name: "Turing Heights",
-		color: Colors.DEEP_BLUE,
+		buy: true,
+		group: "Deep blue",
 		cost: 400,
 		rent: [50, 200, 600, 1400, 1700, 2000],
-		upgrade: 200,
 		type: Rentable
 	}
 ];
