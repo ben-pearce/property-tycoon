@@ -29,10 +29,10 @@ On Windows 10
 
 Use the [installer](https://nodejs.org/en/download/).
 
-Next, clone or [download](https://github.com/ben-pearce/PropertyTycoon/archive/master.zip) the repository.
+Next, clone or [download](https://github.com/ketnipz/property-tycoon/archive/master.zip) the repository.
 
 ```
-$ git clone https://github.com/ben-pearce/PropertyTycoon
+$ git clone https://github.com/ketnipz/property-tycoon
 ```
 
 Extract, navigate to location of repo and run `npm install` to get the dependencies.
@@ -44,7 +44,7 @@ $ npm install
 
 To test the game, run `npm start` (Auto-opens in browser).
 
-To build the game, run `npm build`.
+To build the game, run `npm run build`.
 
 ## Documentation
 
