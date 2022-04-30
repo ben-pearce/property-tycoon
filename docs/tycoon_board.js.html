@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tycoon/board.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tycoon/board.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Phaser from "phaser";
+import BoardConfig from "../tiles";
+import {Tiles} from "../enums";
+import Rentable from "./tiles/rentable";
+import Tile from "./tiles/tile";
+
+/**
+ * This class represents our game board.
+ * 
+ * @extends Phaser.GameObjects.Container
+ * 
+ * @property {Phaser.GameObjects.Rectangle} background The board background.
+ * @property {Tile[]} tiles The tiles around the board.
+ * 
+ */
+class Board extends Phaser.GameObjects.Container {
+	/**
+	 * Creates board background, tiles and adds logo.
+	 * 
+	 * @param {Phaser.Scene} scene The scene this board belongs to.
+	 * @param {GameManager} game Game manager this board belongs to.
+	 */
+	constructor(scene, game) {
+		super(scene, 0, 0);
+
+		this.game = game;
+		this.dimension = BoardConfig.length / 4;
+
+		this.background = new Phaser.GameObjects.Rectangle(
+			this.scene, 
+			Tiles.HEIGHT,
+			Tiles.HEIGHT, 
+			Tiles.WIDTH*(this.dimension-1), 
+			Tiles.WIDTH*(this.dimension-1), 
+			Tiles.COLOR);
+		this.background.setOrigin(0);
+		
+		const wallpaper = new Phaser.GameObjects.Sprite(
+			this.scene, 
+			this.background.x + (this.background.width / 2), 
+			this.background.y + (this.background.height / 2), 
+			"wallpaper");
+
+		this.tiles = this._drawTiles();
+
+		this.add([this.background, wallpaper, ...this.tiles]);
+		this._moveTiles();
+	}
+
+	/**
+	 * This methods creates an array of tiles
+	 * and returns them.
+	 * 
+	 * It will also pass in the configuration for that
+	 * tile (i.e. what type of tile is it? is it a corner peice? etc).
+	 * 
+	 * @returns {Tile[]} The new array of tile instances
+	 * @private
+	 */
+	_drawTiles() {
+		const tiles = [];
+		for(const tile in BoardConfig) {
+			const tileConfig = BoardConfig[tile];
+			const tileClass = tileConfig.type;
+			const t = new tileClass(this.scene, this, tileConfig);
+			tiles.push(t);
+		}
+		return tiles;
+	}
+
+	/**
+	 * This method moves and rotates all the tiles to construct
+	 * the board.
+	 * 
+	 * It works around the board from bottom right anti-clockwise.
+	 * 
+	 * @private
+	 */
+	_moveTiles() { 
+		const tileHeight = Tiles.HEIGHT;
+		const tileWidth = Tiles.WIDTH;
+		for(let i = 0; i &lt; this.dimension; i++) {
+			this.tiles[i].setPosition(tileWidth*(9-i) + tileHeight, tileWidth*(this.dimension-1) + tileHeight);
+			this.tiles[i+this.dimension].setAngle(90);
+			this.tiles[i+this.dimension].setPosition(tileHeight, tileWidth*((this.dimension-1)-i) + tileHeight);
+			this.tiles[i+this.dimension*2].setAngle(180);
+			this.tiles[i+this.dimension*2].setPosition(tileHeight + tileWidth*i, tileHeight);
+			this.tiles[i+this.dimension*3].setAngle(270);
+			this.tiles[i+this.dimension*3].setPosition(tileHeight + tileWidth*(this.dimension-1), tileHeight + tileWidth*i);
+		}
+	}
+
+
+	/**
+	 * Gets all the rentable tiles matching a specified
+	 * property color.
+	 * 
+	 * @param {Color} color The color to returns the tiles for.
+	 * @returns {Rentable[]} The matching rentable tiles.
+	 */
+	getRentableTilesByColor(color) {
+		const rentableTiles = [];
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const t = this.tiles[i];
+			if(t instanceof Rentable &amp;&amp; t.color == color) {
+				rentableTiles.push(t);
+			}
+		}
+		return rentableTiles;
+	}
+
+	/**
+	 * Gets all the tiles matching a specified tile
+	 * type.
+	 * 
+	 * Used for fetching tiles that can have multiple
+	 * instances such as Rentable or Utility.
+	 * 
+	 * @param {Type} type The type of tiles to return.
+	 * @returns {Tile[]} The matching tiles.
+	 */
+	getTilesByType(type) {
+		const tiles = [];
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const t = this.tiles[i];
+			if(t instanceof type) {
+				tiles.push(t);
+			}
+		}
+		return tiles;
+	}
+
+	/**
+	 * Gets a singleton (the only) tile that matches
+	 * the specified tile type.
+	 * 
+	 * Used for fetching tiles that only have a single
+	 * instance such as Jail or Free Parking.
+	 * 
+	 * @param {Type} type The type of tile to return.
+	 * @returns {Tile} The matching tile.
+	 */
+	getSingletonTileByType(type) {
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const t = this.tiles[i];
+			if(t instanceof type) {
+				return t;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the owner of a Monopoly which the tile
+	 * passed in takes part in.
+	 * 
+	 * Returns the owners Player instance if they own
+	 * all properties belonging to the same color-group.
+	 * 
+	 * Will return null if there is no monopoly.
+	 * 
+	 * Only works for tiles of type Rentable.
+	 * 
+	 * @param {Rentable} tile The rentable tile to get the monopoly owner for.
+	 */
+	getMonopolyOwner(tile) {
+		let monopolyOwner = null;
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const t = this.tiles[i];
+			if(t.color === tile.color) {
+				if(t.owner === null || (monopolyOwner !== null &amp;&amp; monopolyOwner !== t.owner)) {
+					return null;
+				} else {
+					monopolyOwner = t.owner;
+				}
+			}
+		}
+		return monopolyOwner;
+	}
+
+	/**
+	 * Returns a list of tiles owned by a particular player
+	 * with the option to filter by the type of tile.
+	 * 
+	 * @example &lt;caption>Getting Rentable tiles owned by player&lt;/caption>
+	 * board.getTilesOwnedByPlayer(player, Rentable)
+	 * 
+	 * @example &lt;caption>Getting all tiles owned by player&lt;/caption>
+	 * board.getTilesOwnedByPlayer(player)
+	 * 
+	 * @param {Player} player The player to find owned tiles for.
+	 * @param {Type} [tileType=Tile] The type of tile to find.
+	 */
+	getTilesOwnedByPlayer(player, tileType=Tile) {
+		const ownedTiles = [];
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const t = this.tiles[i];
+			if(t.owner === player &amp;&amp; t instanceof tileType) {
+				ownedTiles.push(t);
+			}
+		}
+		return ownedTiles;
+	}
+
+	/**
+	 * Makes all tiles except the ones passed in half
+	 * alpha, highlighting the tiles specified.
+	 * 
+	 * If null is passed in then all tiles will be reset
+	 * to full alpha.
+	 * 
+	 * @param {?Tile[]} tiles The tiles to highlight.
+	 */
+	highlightTiles(tiles=null) {
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const tile = this.tiles[i];
+			tile.setAlpha(tiles === null ? 1 : 0.5);
+		}
+		if(tiles !== null) {
+			for(let i = 0; i &lt; tiles.length; i++) {
+				const tile = tiles[i];
+				tile.setAlpha(1);
+			}
+		}
+	}
+
+	/**
+	 * Highlights tiles passed in and makes them interactive
+	 * so that current player can interact with their properties.
+	 * 
+	 * If null is passed in then all tiles will be reset.
+	 * 
+	 * @param {?Tiles} tiles The tiles to make interactive.
+	 */
+	setTilesActive(tiles=null) {
+		this.highlightTiles(tiles);
+
+		for(let i = 0; i &lt; this.tiles.length; i++) {
+			const tile = this.tiles[i];
+			tile.removeInteractive();
+		}
+		if(tiles !== null ){
+			for(let i = 0; i &lt; tiles.length; i++) {
+				const tile = tiles[i];
+				tile.setInteractive({
+					hitArea: tile.background, 
+					hitAreaCallback: Phaser.Geom.Rectangle.Contains, 
+					useHandCursor: true
+				});
+			}
+		}
+	}
+}
+
+export default Board;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tycoon/property.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tycoon/property.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Phaser from "phaser";
+
+/**
+ * This class represents an upgradable property. Rentable
+ * tiles will reference this class to give players a visual
+ * representation and record of the property associated with 
+ * the tile.
+ * 
+ * @extends Phaser.GameObjects.Rectangle
+ * 
+ * @property {Phaser.GameObjects.Sprite} houseGraphic The upgrade sprite.
+ * @property {integer} houses The number of houses on the property.
+ * @property {boolean} isHotel Is this property a hotel or not.
+ * @property {boolean} isUpgraded Has this property been upgraded.
+ */
+class Property extends Phaser.GameObjects.Rectangle {
+	/**
+	 * Creates a colored rectangle and house graphic to
+	 * indicate the upgrade level.
+	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
+	 * @param {Tile} tile The tile this property belongs to
+	 * @param {string} color The background color hex code
+	 */
+	constructor(scene, tile, color) {
+		super(scene, tile.background.x, tile.background.y, tile.background.width, 20, color);
+		this.tile = tile;
+
+		this.setStrokeStyle(3, 0x00000);
+		this.setOrigin(0);
+
+		this.houseGraphic = new Phaser.GameObjects.Sprite(
+			tile.scene, 
+			tile.background.x + (tile.background.width / 2), 
+			tile.background.y, 
+			"upgrades");
+		this.houseGraphic.setVisible(false);
+
+		this.houses = 0;
+		this.isHotel = false;
+		this.isUpgraded = false;
+	}
+
+	/**
+	 * Returns true if property can still be upgraded further.
+	 * 
+	 * @returns {boolean} Can this property be upgraded?
+	 */
+	isUpgradable() {
+		return !this.isHotel;
+	}
+
+	/**
+	 * Returns true if property can be downgraded further.
+	 * 
+	 * @returns {boolean} Can this property be downgraded?
+	 */
+	isDowngradable() {
+		return this.houses > 0;
+	}
+
+	/**
+	 * This returns the upgrade value of the property.
+	 * 
+	 * Needed to calculate the total value of a property
+	 * after upgrades.
+	 * 
+	 * The value of the upgrades is calculated by multiplying
+	 * the original cost of the property it belongs to by the
+	 * number of upgrades made.
+	 * 
+	 * (note this does NOT return the total value of the 
+	 * property, use Rentable.getValue() for that.)
+	 * 
+	 * @returns {integer} The value of all the upgrades.
+	 */
+	getValue() {
+		const value = this.houses * this.tile.upgradeCost;
+		if(this.isHotel) {
+			return value + (this.tile.upgradeCost * 4);
+		}
+		return value;
+	}
+
+	/**
+	 * Gets the cost of upgrading this property to
+	 * the next level.
+	 * 
+	 * @returns {integer} The cost of upgrading.
+	 */
+	getUpgradeCost() {
+		if(this.houses &lt; 4) {
+			return this.tile.upgradeCost;
+		} else if(!this.isHotel) {
+			return this.tile.upgradeCost * 4;
+		}
+		return 0;
+	}
+
+	/**
+	 * Gets the value for the property level currently on the
+	 * tile.
+	 * 
+	 * If property cannot be downgraded will return 0.
+	 */
+	getDowngradeValue() {
+		if(this.houses &lt;= 4 &amp;&amp; !this.isHotel &amp;&amp; this.houses > 0) {
+			return this.tile.upgradeCost;
+		} else if (this.isHotel) {
+			return this.tile.upgradeCost * 4;
+		}
+		return 0;
+	}
+
+	/**
+	 * This returns the "upgrade level" of this
+	 * property as a number. AKA the number of times
+	 * upgrade() has been used successfully.
+	 * 
+	 * No upgrades -> 0
+	 * 1 House -> 1
+	 * ...
+	 * Hotel -> 5
+	 * 
+	 * @returns {integer} The upgrade level of this property as a number.
+	 */
+	getUpgradeAsNumber() {
+		return this.houses + (this.isHotel ? 1 : 0);
+	}
+
+	/**
+	 * Downgrades this property to the previous stage.
+	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	downgrade(cb=null) {
+		if(this.houses === 4 &amp;&amp; this.isHotel) {
+			this.isHotel = false;
+		} else if(this.houses &lt;= 4 &amp;&amp; this.houses > 0) {
+			this.houses--;
+			if(this.houses === 0) {
+				this.isUpgraded = false;
+			}
+		}
+		this._update(cb);
+	}
+
+	/**
+	 * Called to upgrade the property to the next stage.
+	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	upgrade(cb=null) {
+		if(this.houses &lt; 4) {
+			this.houses++;
+		} else if(this.houses === 4 &amp;&amp; !this.isHotel) {
+			this.isHotel = true;
+		}
+
+		this.isUpgraded = true;
+		this._update(cb);
+	}
+
+	/**
+	 * Resets a property back to it original state without
+	 * any upgrades. Used when selling property.
+	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 */
+	reset(cb=null) {
+		this.houses = 0;
+		this.isHotel = false;
+
+		this.isUpgraded = false;
+		this._update(cb);
+	}
+
+	/**
+	 * Creates a easing effect on the graphic when a property is
+	 * upgraded and invokes a callback if supplied.
+	 * 
+	 * Will not do anything after property is upgraded to hotel
+	 * but will still perform tween so it is best to check
+	 * this.isUpgradable() before calling this.
+	 * 
+	 * @param {?Property~animationCallback} [cb=null] This will be called after any 
+	 * animation has completed.
+	 * @private
+	 */
+	_update(cb=null) {
+		const frame = this.houses &lt;= 4 &amp;&amp; !this.isHotel ? `house${this.houses}` : "hotel";
+		const timeline = this.scene.tweens.createTimeline();
+
+		if(this.houseGraphic.visible) {
+			const hideTween = {
+				targets: this.houseGraphic,
+				ease: "Back.easeIn",
+				scale: 0,
+				onComplete: () => {
+					if(this.houses > 0) {
+						this.houseGraphic.setFrame(frame);
+					} else {
+						this.houseGraphic.setVisible(false);
+						if(typeof cb === "function") {
+							cb();
+						}
+					}
+				}
+			};
+			timeline.add(hideTween);
+		}
+
+		if(!this.houseGraphic.visible &amp;&amp; this.houses > 0) {
+			this.houseGraphic.setScale(0);
+			this.houseGraphic.setVisible(true);
+			this.houseGraphic.setFrame(frame);
+		}
+
+		if(this.houses > 0) {
+			const showTween = {
+				targets: this.houseGraphic,
+				ease: "Back.easeOut",
+				scale: 1
+			};
+			timeline.add(showTween);
+	
+			if(typeof cb === "function") {
+				timeline.setCallback("onComplete", cb);
+			}
+		}
+
+		timeline.play();
+	}
+}
+
+/**
+ * This callback is invoked once animations complete.
+ * @callback Property~animationCallback
+ */
+
+export default Property;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

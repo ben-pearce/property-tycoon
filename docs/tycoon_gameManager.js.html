@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tycoon/gameManager.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tycoon/gameManager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Phaser from "phaser";
+import Board from "./board";
+import Hud from "./hud/hud";
+import Dice from "./dice";
+import Player from "./player";
+import Bank from "./bank";
+import Timer from "./timer";
+import CashText from "./ui/cashText";
+import Prompt from "./ui/prompt";
+import Cards from "../cards";
+import ActionCard from "./cards/actionCard";
+import GetOutOfJail from "./actions/getOutOfJail";
+import {WinStyle} from "../styles";
+import {getTokenNameByPlayerId} from "./utils";
+import {Computer} from "../enums";
+import Purchasable from "./tiles/purchasable";
+import {getTilesToUpgrade, getTilesToSell} from "./computer";
+import Rentable from "./tiles/rentable";
+
+/**
+ * This is our Game Controller, it is in charge
+ * of creating all the required objects and passing 
+ * them information about the progress of the game.
+ *  
+ * This class will initiate dice rolls, then ask for user
+ * input and display prompts as appropriate.
+ * 
+ * @property {Board} board The board instance for this game.
+ * @property {Phaser.GameObjects.Container} playerContainer The layer that player tokens sit inside of.
+ * @property {Player[]} players The players in this game.
+ * @property {integer} currentPlayer The players index of player whose turn it current is.
+ * @property {Dice} dice The dice instance for this game.
+ * @property {Bank} bank The bank instance for this game.
+ * @property {Timer} timer The timer instance for this game.
+ * @property {Hud} hud The HUD instance for this game.
+ * @property {Prompt} prompt The prompt instance for this game.
+ * @property {CardConfig[]} opportunityCards The opporunity cards configuration objects.
+ * @property {CardConfig[]} potluckCards The pot luck cards configuration objects.
+ */
+class GameManager extends Phaser.GameObjects.Group {
+	/**
+	 * @param {Phaser.Scene} scene The Phaser.Scene instance.
+	 * @param {GameConfig} config The options for this game instance.
+	 */
+	constructor(scene, config) {
+		super(scene);
+	
+		this.board = new Board(scene, this);
+
+		this.players = [];
+		this.currentPlayer = null;
+
+		const boardDimensions = this.board.getBounds();
+		const boardX = (scene.game.config.width / 2) - boardDimensions.width / 2;
+		const boardY = (scene.game.config.height / 2) - boardDimensions.height / 2;
+		this.board.setPosition(boardX, boardY);
+
+		// Create all the players and deposit 1500 cash
+		this.playerContainer = new Phaser.GameObjects.Container(scene);
+		for(let i = 0; i &lt; config.playerCount + config.computerCount; i++) {
+			const cash = 1500;
+			const isComputer = i >= config.playerCount; 
+			const p = new Player(scene, this, i, cash, isComputer);
+			p.teleportToTile(this.board.tiles[0]);
+
+			p.on("deposit", this._playerDeposit.bind(this, p));
+			p.on("withdraw", this._playerWithdraw.bind(this, p));
+			p.on("retire", this._playerRetire.bind(this, p));
+
+			this.players.push(p);
+		}
+		this.playerContainer.add(this.players);
+
+		this.dice = new Dice(this);
+		this.bank = new Bank(this);
+		this.timer = new Timer(this, config.timer);
+		this.hud = new Hud(scene, this);
+		this.prompt = new Prompt(scene, this);
+
+		this.addMultiple([this.board, this.playerContainer, this.dice.rollSprite, 
+			this.dice.diceOneSprite, this.dice.diceTwoSprite, this.hud, this.prompt], true);
+
+		this.opportunityCards = this._shuffleCards(Cards.opportunity.slice());
+		this.potluckCards = this._shuffleCards(Cards.potluck.slice());
+
+		this.dice.on("landed", this.playerRolled.bind(this));
+		this.dice.on("rolled", this.hud.setPlayerHudEnabled.bind(this.hud, false));
+
+		this.nextPlayer();
+	}
+
+	/**
+	 * This is called once a player has interacted with
+	 * the dice and they have landed.
+	 * 
+	 * @param {integer[]} roll The first and second dice result as a tuple.
+	 */
+	playerRolled(roll) {
+		const p = this.players[this.currentPlayer];
+		this.playerContainer.bringToTop(p);
+
+		const [diceOne, diceTwo] = roll;
+		const isDouble = diceOne == diceTwo;
+
+		if (isDouble) {
+			p.doubleRollStreak++;
+		} else {
+			p.doubleRollStreak = 0;
+		}
+
+		if (p.doubleRollStreak >= 3) {
+			p.jail(this.nextPlayer.bind(this));
+		} else {
+			p.moveForwards(diceOne + diceTwo);
+		}
+	}
+
+	/**
+	 * Advances the game turn.
+	 */
+	nextPlayer() {
+		this.hideSaleInterface();
+
+		const lastPlayerId = this.players.map(e => e.isRetired).lastIndexOf(false);
+		if(this.timer.complete &amp;&amp; this.currentPlayer == lastPlayerId) {
+			const maxNetWorth = Math.max(...this.players.map(e => e.getNetWorth()));
+			const winningPlayers = this.players.filter(e => e.getNetWorth() === maxNetWorth);
+			const winningPlayerNames = winningPlayers.map(e => getTokenNameByPlayerId(e.id));
+			
+			this.hud.setPlayerHudEnabled(false);
+			this.dice.reset();
+
+			const winText = new Phaser.GameObjects.Text(this.scene, 0, 0, `${winningPlayerNames.join(", ")} wins!`, WinStyle);
+			winText.setStroke(0x000000, 10);
+			this.prompt.show(winText);
+			
+			return;
+		}
+
+		const playersRemaining = this.players.reduce((remaining, player) => remaining + !player.isRetired, 0);
+		if(playersRemaining === 0) {
+			return;
+		}
+		
+		if(this.currentPlayer === null) {
+			this.currentPlayer = 0;
+			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
+		} else {
+			let p = this.players[this.currentPlayer];
+			this.hud.players[this.currentPlayer].setCurrentPlayer(false);
+
+			const [diceOne, diceTwo] = this.dice.result;
+			const isDouble = diceOne == diceTwo;
+
+			// So long as they have not rolled a double, advance to next player
+			if((!isDouble || p.doubleRollStreak >= 3) || p.isJailed || p.isRetired) {
+				// Reset their double roll streak, as they haven't rolled a double!
+				p.doubleRollStreak = 0;
+
+				this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+				p = this.players[this.currentPlayer];
+
+				// If the next player is in jail, increment their turns missed and move to the player after
+				while(p.isJailed || p.isRetired) {
+					if(p.isJailed) {
+						p.jailTurnsMissed++;
+
+						// If the player has missed 2 turns already, unjail them.
+						if(p.jailTurnsMissed >= 2) {
+							p.unjail();
+						}
+					}
+
+					this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+					p = this.players[this.currentPlayer];
+				}
+			}
+
+			this.hud.players[this.currentPlayer].setCurrentPlayer(true);
+		}
+
+		const p = this.players[this.currentPlayer];
+		this.hud.setPlayerHudEnabled(true);
+
+		if(p.isComputer) {
+			this.dice.computerRoll();
+		} else {
+			this.dice.requestRoll();
+		}
+	}
+
+	/**
+	 * Shows an action card and performs action upon player
+	 * once continue button has been pressed.
+	 * 
+	 * @param {Player} player The player to perform action on.
+	 * @param {CardConfig[]} deck The deck the card was picked up from.
+	 * @param {} cb The callback to invoke once action is complete.
+	 * 
+	 * @fires Player#jailpickup
+	 */
+	pickUpCard(player, deck, cb=null){
+		const card = deck.shift();
+		const actionCard = new ActionCard(this.scene, this, card, player);
+
+		const continueAction = () => {
+			this.prompt.closeWithAnim(() => {
+				card.action.do(this, player, () => {
+					// Don't place the card back in the deck if it's GetOutOfJail.
+					if(card.action instanceof GetOutOfJail) {
+						player.getOutOfJailCard.push([card, deck]);
+						player.emit("jailpickup");
+					} else {
+						deck.push(card);
+					}
+					
+					if(typeof cb === "function") {
+						cb();
+					}
+				});
+			});
+		};
+
+		const computerAction = () => {
+			actionCard.setEnabled(false);
+			setTimeout(continueAction, Computer.THINKING_TIMEOUT_MS);
+		};
+
+		if(player.isComputer) {
+			this.prompt.showWithAnim(actionCard, computerAction);
+		} else {
+			actionCard.continueButton.on("pointerup", continueAction);
+			this.prompt.showWithAnim(actionCard);
+		}
+
+	}
+
+	/**
+	 * Asks player if they wish to upgrade/downgrade/sell/mortgage
+	 * properties before moving to next player.
+	 * 
+	 * If player has no owned properties, will move to next
+	 * player instantly.
+	 * 
+	 * @param {Player} player The player to show the sale interface for.
+	 */
+	showSaleInterface(player) {
+		const ownedTiles = this.board.getTilesOwnedByPlayer(player, Purchasable);
+		if(player.debt > 0 &amp;&amp; player.isComputer) {
+			this.board.highlightTiles(ownedTiles);
+			const payDebt = () => {
+				const tilesToSell = getTilesToSell(player);
+				while(player.debt > 0) {
+					const tile = tilesToSell.shift();
+					if(tile instanceof Rentable &amp;&amp; tile.property.isUpgraded) {
+						tile.downgrade();
+						tilesToSell.unshift(tile);
+					} else {
+						tile.sell();
+					}
+				}
+			};
+			setTimeout(payDebt, Computer.THINKING_TIMEOUT_MS);
+
+		} else if(player.debt > 0) {
+			this.board.setTilesActive(ownedTiles);
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you must raise funds of £${player.debt}.`).setVisible(true);
+		} else if(ownedTiles.length > 0 &amp;&amp; player.isComputer) {
+			this.board.highlightTiles(ownedTiles);
+
+			const upgradeProperties = () => {
+				const tilesToUpgrade = getTilesToUpgrade(player);
+				for(let i = 0; i &lt; tilesToUpgrade.length; i++) {
+					const tile = tilesToUpgrade[i];
+					tile.upgrade();
+				}
+				setTimeout(this.nextPlayer.bind(this), Computer.THINKING_TIMEOUT_MS);
+			};
+			setTimeout(upgradeProperties, Computer.THINKING_TIMEOUT_MS);
+		} else if(ownedTiles.length > 0) {
+			this.board.setTilesActive(ownedTiles);
+
+			this.hud.actionText.setText(`${getTokenNameByPlayerId(player.id)}, you may modify properties now.`).setVisible(true);
+
+			this.hud.doneButton.removeListener("pointerup");
+			this.hud.doneButton.on("pointerup", this.nextPlayer.bind(this));
+			this.hud.doneButton.setVisible(true);
+		} else if(!player.isRetired) {
+			this.nextPlayer();
+		}
+	}
+
+	/**
+	 * Hides the sale interface.
+	 */
+	hideSaleInterface() {
+		this.hud.doneButton.setVisible(false);
+		this.hud.actionText.setVisible(false);
+		this.board.setTilesActive(null);
+	}
+
+	/**
+	 * Called when a player deposits money into their account.
+	 * 
+	 * Displays cash text animation above the player token.
+	 * 
+	 * @param {Player} p The player who deposited cash.
+	 * @param {integer} sum The sum of the deposit.
+	 * 
+	 * @private
+	 */
+	_playerDeposit(p, sum) {
+		const c = new CashText(p, sum);
+		this.playerContainer.add(c);
+		c.play();
+	}
+
+	/**
+	 * Called when a player withdraws money from their account.
+	 * 
+	 * Displays cash text animation above the player token.
+	 * 
+	 * @param {Player} p The player who withdrew cash.
+	 * @param {integer} sum The sum of the withdrawal.
+	 * 
+	 * @private
+	 */
+	_playerWithdraw(p, sum) {
+		const c = new CashText(p, -sum);
+		this.playerContainer.add(c);
+		c.play();
+	}
+
+	/**
+	 * Called when a player retires from the game.
+	 */
+	_playerRetire() {
+		const playersRemaining = this.players.reduce((remaining, player) => remaining + !player.isRetired, 0);
+		if(playersRemaining === 1) {
+			const winnerId = this.players.map(e => e.isRetired).indexOf(false);
+
+			this.hud.setPlayerHudEnabled(false);
+			this.dice.reset();
+
+			const winText = new Phaser.GameObjects.Text(this.scene, 0, 0, `${getTokenNameByPlayerId(winnerId)} wins!`, WinStyle);
+			winText.setStroke(0x000000, 10);
+			this.prompt.show(winText);
+		}
+	}
+
+	/**
+	 * Shuffles a deck of cards.
+	 * 
+	 * @param {CardConfig[]} cards The cards to shuffle.
+	 * @private
+	 */
+	_shuffleCards(cards) {
+		for (let i = cards.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[cards[i], cards[j]] = [cards[j], cards[i]];
+		}
+		return cards;
+	}
+
+}
+
+export default GameManager;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

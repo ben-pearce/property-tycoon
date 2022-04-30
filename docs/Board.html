@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Board</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Board</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>Board<span class="signature">(scene, game)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">This class represents our game board.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="Board"><span class="type-signature"></span>new Board<span class="signature">(scene, game)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates board background, tiles and adds logo.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scene</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Phaser.Scene</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scene this board belongs to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="GameManager.html">GameManager</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Game manager this board belongs to.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>background</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Phaser.GameObjects.Rectangle</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The board background.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tiles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Tile></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tiles around the board.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Phaser.GameObjects.Container</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getMonopolyOwner"><span class="type-signature"></span>getMonopolyOwner<span class="signature">(tile)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the owner of a Monopoly which the tile
+passed in takes part in.
+
+Returns the owners Player instance if they own
+all properties belonging to the same color-group.
+
+Will return null if there is no monopoly.
+
+Only works for tiles of type Rentable.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Rentable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The rentable tile to get the monopoly owner for.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getRentableTilesByColor"><span class="type-signature"></span>getRentableTilesByColor<span class="signature">(color)</span><span class="type-signature"> &rarr; {Array.&lt;Rentable>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets all the rentable tiles matching a specified
+property color.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Color</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The color to returns the tiles for.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matching rentable tiles.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Rentable></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getSingletonTileByType"><span class="type-signature"></span>getSingletonTileByType<span class="signature">(type)</span><span class="type-signature"> &rarr; {Tile}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets a singleton (the only) tile that matches
+the specified tile type.
+
+Used for fetching tiles that only have a single
+instance such as Jail or Free Parking.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Type</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of tile to return.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line143">line 143</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matching tile.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Tile</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getTilesByType"><span class="type-signature"></span>getTilesByType<span class="signature">(type)</span><span class="type-signature"> &rarr; {Array.&lt;Tile>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets all the tiles matching a specified tile
+type.
+
+Used for fetching tiles that can have multiple
+instances such as Rentable or Utility.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Type</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of tiles to return.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matching tiles.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Tile></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getTilesOwnedByPlayer"><span class="type-signature"></span>getTilesOwnedByPlayer<span class="signature">(player, tileType<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a list of tiles owned by a particular player
+with the option to filter by the type of tile.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The player to find owned tiles for.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tileType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Type</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Tile
+                
+                </td>
+            
+
+            <td class="description last">The type of tile to find.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption">Getting Rentable tiles owned by player</p>
+    
+    <pre class="prettyprint"><code>board.getTilesOwnedByPlayer(player, Rentable)</code></pre>
+
+        <p class="code-caption">Getting all tiles owned by player</p>
+    
+    <pre class="prettyprint"><code>board.getTilesOwnedByPlayer(player)</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="highlightTiles"><span class="type-signature"></span>highlightTiles<span class="signature">(tiles<span class="signature-attributes">nullable</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Makes all tiles except the ones passed in half
+alpha, highlighting the tiles specified.
+
+If null is passed in then all tiles will be reset
+to full alpha.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tiles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Tile></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">The tiles to highlight.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setTilesActive"><span class="type-signature"></span>setTilesActive<span class="signature">(tiles<span class="signature-attributes">nullable</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Highlights tiles passed in and makes them interactive
+so that current player can interact with their properties.
+
+If null is passed in then all tiles will be reset.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tiles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Tiles.html">Tiles</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">The tiles to make interactive.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tycoon_board.js.html">tycoon/board.js</a>, <a href="tycoon_board.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

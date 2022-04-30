@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tycoon/tiles/rentable.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tycoon/tiles/rentable.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Purchasable from "./purchasable";
+import Property from "../property";
+import RentableCard from "../cards/rentableCard";
+
+/**
+ * Represents a Rentable tile.
+ * 
+ * @memberof Tiles
+ * @extends Purchasable
+ * 
+ * @property {Color} color The color group this property belongs to.
+ * @property {integer} rent The price of rent for each upgrade.
+ */
+class Rentable extends Purchasable {
+	/**
+	 * Adds a property to the tile.
+	 * 
+	 * @param {Phaser.Scene} scene The scene this belongs to.
+	 * @param {Board} board The board this tile belongs to.
+	 * @param {TileConfig} config The tile configuration to observe.
+	 */
+	constructor(scene, board, config) {
+		super(scene, board, config);
+
+		this.color = config.color;
+		this.upgradeCost = config.upgrade;
+		this.rent = config.rent;
+
+		this.cardType = RentableCard;
+
+		this.property = new Property(this.scene, this, config.color);
+		this.add([this.property, this.property.houseGraphic]);
+	}
+
+	/**
+	 * Value can change as the game progresses.
+	 * 
+	 * Calls upon Property.getValue() and adds it to the existing
+	 * value (the purchase price) of the property.
+	 * 
+	 * @returns {integer} The total value of this property plus
+	 * any upgrade value.
+	 * @override
+	 */
+	getValue() {
+		const value = this.cost + this.property.getValue();
+		if(this.isMortgaged) {
+			return value / 2;
+		}
+		return value;
+	}
+
+	/**
+	 * Returns the mortgage value of this property. 
+	 * 
+	 * If this property has been upgraded, this will return 0.
+	 * 
+	 * @returns {integer} The mortgage value of this property.
+	 * @override
+	 */
+	getMortgageValue() {
+		if(this.property.isUpgraded) {
+			return 0;
+		}
+		return super.getMortgageValue();
+	}
+
+	/**
+	 * This returns the cost of rent for a property. If the
+	 * property is not owned by anyone this will return 0.
+	 * 
+	 * Cost will depend on the number of times the property has
+	 * been upgraded.
+	 * 
+	 * @returns {integer} The cost of rent.
+	 */
+	getRent() {
+		if(this.owner !== null) {
+			return this.rent[this.property.getUpgradeAsNumber()];
+		}
+		return 0;
+	}
+
+	/**
+	 * Calls property sell and resets the upgradable property
+	 * state.
+	 * 
+	 * @param {integer} value Overrides the value of this property for this sale only.
+	 */
+	sell(value) {
+		if(this.owner !== null) {
+			this.property.reset();
+			super.sell(value);
+		}
+	}
+
+	/**
+	 * Returns whether or not this tile is upgradable but subject to
+	 * the constraint that it may only be upgraded if the owner owns
+	 * all the properies in the same colored group as this one and that
+	 * there must never be a difference of one house per group.s
+	 * 
+	 * @returns {boolean} Can the property be upgraded or not.
+	 */
+	isUpgradable() {
+		const monopolyOwner = this.board.getMonopolyOwner(this);
+		const isMonopoly = monopolyOwner !== null;
+
+		if(isMonopoly) {
+			const colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			const upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			const minUpgradeCount = Math.min(...upgradeCounts);
+			const upgradable = this.property.getUpgradeAsNumber() &lt; minUpgradeCount + 1;
+			return upgradable &amp;&amp; this.property.isUpgradable();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not this tile is downgradable but subject to the 
+	 * same constraints that isUpgradable() is subject to.
+	 * 
+	 * @returns {boolean} Can the property be downgraded or not.
+	 */
+	isDowngradable() {
+		const upgradeCount = this.property.getUpgradeAsNumber();
+		if(upgradeCount > 0) {
+			const colorMatchingTiles = this.board.getRentableTilesByColor(this.color);
+			const upgradeCounts = colorMatchingTiles.map(tile => tile.property.getUpgradeAsNumber());
+			const maxUpgradeCount = Math.max(...upgradeCounts);
+			const downgradable = this.property.getUpgradeAsNumber() > maxUpgradeCount - 1;
+			return downgradable &amp;&amp; this.property.isDowngradable();
+		}
+		return false;
+	}
+
+	/**
+	 * Upgrades the property on this rentable tile and charges
+	 * the player the amount required for the upgrade.
+	 */
+	upgrade() {
+		this.property.upgrade();
+		this.owner.withdraw(this.property.getUpgradeCost());
+		this.game.bank.deposit(this.property.getUpgradeCost());
+	}
+
+	/**
+	 * Downgrades the property on this rentable tile and pays
+	 * the player the amount the property is valued at.
+	 */
+	downgrade() {
+		this.property.downgrade();
+		this.game.bank.withdraw(this.property.getDowngradeValue());
+		this.owner.deposit(this.property.getDowngradeValue());
+	}
+
+	/**
+	 * Registers the additional upgrade buttons in the 
+	 * context of the player that is passed in.
+	 * 
+	 * @param {Player} player The player the buttons should act upon.
+	 */
+	registerCardButtons(player) {
+		super.registerCardButtons(player);
+
+		if(!player.isComputer) {
+			this.cardInstance.sellButton.setEnabled(!this.property.isUpgraded);
+
+			this.cardInstance.upgradeButton.setEnabled(!this.isMortgaged &amp;&amp; player.cash > this.property.getUpgradeCost() &amp;&amp; this.isUpgradable());
+			this.cardInstance.upgradeButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.upgrade()));
+	
+			this.cardInstance.sellUpgradeButton.setEnabled(!this.isMortgaged &amp;&amp; this.isDowngradable());
+			this.cardInstance.sellUpgradeButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.downgrade()));
+	
+			this.cardInstance.auctionPlayerButton.on("pointerup", () => this.game.prompt.closeWithAnim(() => this.auction()));
+		}
+	}
+
+	showCard(player) {
+		super.showCard(player);
+		this.cardInstance.auctionPlayerButton.setVisible(!this.property.isUpgraded &amp;&amp; !this.isMortgaged);
+		this.cardInstance.upgradeButton.setVisible(!this.isMortgaged);
+		this.cardInstance.sellUpgradeButton.setVisible(this.property.isUpgraded &amp;&amp; !this.isMortgaged);
+	}
+
+	/**
+	 * If the property is owned and player is not the owner,
+	 * charge rent.
+	 * 
+	 * If the property is owned and player is the owner, offer
+	 * upgrade, sale or mortgage procedure.
+	 * 
+	 * @param {Player} player The player to charge or offer sale.
+	 * @override
+	 */
+	onLanded(player) {
+		super.onLanded(player);
+		if(this.owner !== null &amp;&amp; player !== this.owner &amp;&amp; !this.isMortgaged &amp;&amp; !this.owner.isJailed) {
+			let rentCharged = this.getRent();
+			const monopolyOwner = this.game.board.getMonopolyOwner(this);
+			if(monopolyOwner !== null) {
+				const coloredTiles = this.game.board.getRentableTilesByColor(this.color);
+				const totalUpgrades = coloredTiles.reduce((upgrades, tile) => upgrades + tile.property.getUpgradeAsNumber());
+				if(totalUpgrades == 0) {
+					rentCharged *= 2;
+				}
+			}
+			player.charge(rentCharged, this.owner, () => this.game.showSaleInterface(player));
+		}
+	}
+}
+
+export default Rentable;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

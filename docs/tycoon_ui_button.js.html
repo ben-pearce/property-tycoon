@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tycoon/ui/button.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tycoon/ui/button.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Phaser from "phaser";
+import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
+
+/**
+ * Creates a visually appealing and scalable button.
+ * 
+ * @memberof UI
+ * @extends Phaser.GameObjects.Container
+ * 
+ * @property {integer} color The button color.
+ * @property {RoundRectangle} background The button background.
+ * @property {Phaser.GameObjects.Text} text The text on the button.
+ */
+class Button extends Phaser.GameObjects.Container {
+	/**
+	 * Creates button background and text.
+	 * 
+	 * @param {Phaser.Scene} scene Button phaser scene.
+	 * @param {integer} x Button x-axis.
+	 * @param {integer} y Button y-axis.
+	 * @param {integer} width Button width
+	 * @param {integer} height Button height
+	 * @param {string} text Button text
+	 * @param {integer} color Button color
+	 * @param {boolean} isEnabled Is button enabled or not.
+	 */
+	constructor(scene, x, y, width, height, text, color) {
+		super(scene, x, y);
+
+		this.isEnabled = null;
+		this.color = color;
+
+		this.background = new RoundRectangle(this.scene, 0, 0, width, height, 15, color);
+		this.background.setAlpha(0.5).setStrokeStyle(3, color).setOrigin(0);
+
+		this.text = new Phaser.GameObjects.Text(this.scene, 0, 0, text, {
+			fontFamily: "Arial",
+			color: "#000000",
+			fontSize: height / 2 + "px",
+			align: "center",
+			fixedWidth: this.background.width
+		});
+		this.text.setY((this.background.height / 2) - (this.text.height / 2));
+
+		this.on("pointerover", this._buttonPointerOver.bind(this));
+		this.on("pointerout", this._buttonPointerOut.bind(this));
+
+		this.add([this.background, this.text]);
+		this.setEnabled(true);
+	}
+
+	/**
+	 * Called on pointer hover.
+	 * 
+	 * @private
+	 */
+	_buttonPointerOut() {
+		this.background.setAlpha(0.5);
+		this.text.setColor("#000000");
+	}
+
+	/**
+	 * Called on pointer rollout.
+	 * 
+	 * @private
+	 */
+	_buttonPointerOver() {
+		this.background.setAlpha(1);
+		this.text.setColor("#FFFFFF");
+	}
+
+	/**
+	 * Sets interactivity of this button.
+	 * 
+	 * @param {boolean} enabled Button enabled?
+	 */
+	setEnabled(enabled) {
+		this.isEnabled = enabled;
+		if(enabled) {
+			this.setInteractive({hitArea: this.background, 
+				hitAreaCallback: Phaser.Geom.Rectangle.Contains, 
+				useHandCursor: true});
+			this.setAlpha(1);
+		} else {
+			this._buttonPointerOut();
+			this.disableInteractive();
+			this.setAlpha(0.5);
+		}
+	}
+}
+
+export default Button;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Actions.html">Actions</a></li><li><a href="Cards.html">Cards</a></li><li><a href="Enums.html">Enums</a></li><li><a href="Hud.html">Hud</a></li><li><a href="Tiles.html">Tiles</a></li><li><a href="UI.html">UI</a></li></ul><h3>Classes</h3><ul><li><a href="Actions.AllPlayersPayPlayer.html">AllPlayersPayPlayer</a></li><li><a href="Actions.BankPayPlayer.html">BankPayPlayer</a></li><li><a href="Actions.FineOrOpportunity.html">FineOrOpportunity</a></li><li><a href="Actions.GetOutOfJail.html">GetOutOfJail</a></li><li><a href="Actions.PlayerGoToJail.html">PlayerGoToJail</a></li><li><a href="Actions.PlayerMove.html">PlayerMove</a></li><li><a href="Actions.PlayerMoveToTile.html">PlayerMoveToTile</a></li><li><a href="Actions.PlayerPayBank.html">PlayerPayBank</a></li><li><a href="Actions.PlayerPayFine.html">PlayerPayFine</a></li><li><a href="Actions.PlayerPayRepair.html">PlayerPayRepair</a></li><li><a href="Bank.html">Bank</a></li><li><a href="Board.html">Board</a></li><li><a href="Card.html">Card</a></li><li><a href="Cards.ActionCard.html">ActionCard</a></li><li><a href="Cards.FineCard.html">FineCard</a></li><li><a href="Cards.JailCard.html">JailCard</a></li><li><a href="Cards.PurchasableCard.html">PurchasableCard</a></li><li><a href="Cards.RentableCard.html">RentableCard</a></li><li><a href="Dice.html">Dice</a></li><li><a href="GameManager.html">GameManager</a></li><li><a href="Hud.BankHud.html">BankHud</a></li><li><a href="Hud.Hud.html">Hud</a></li><li><a href="Hud.ParkingHud.html">ParkingHud</a></li><li><a href="Hud.PlayerHud.html">PlayerHud</a></li><li><a href="Hud.TimerHud.html">TimerHud</a></li><li><a href="Menu.html">Menu</a></li><li><a href="Player.html">Player</a></li><li><a href="Property.html">Property</a></li><li><a href="Tiles.Cop.html">Cop</a></li><li><a href="Tiles.Go.html">Go</a></li><li><a href="Tiles.Jail.html">Jail</a></li><li><a href="Tiles.Luck.html">Luck</a></li><li><a href="Tiles.Opportunity.html">Opportunity</a></li><li><a href="Tiles.Parking.html">Parking</a></li><li><a href="Tiles.Purchasable.html">Purchasable</a></li><li><a href="Tiles.Rentable.html">Rentable</a></li><li><a href="Tiles.Station.html">Station</a></li><li><a href="Tiles.Tax.html">Tax</a></li><li><a href="Tiles.Tile.html">Tile</a></li><li><a href="Tiles.Utility.html">Utility</a></li><li><a href="Timer.html">Timer</a></li><li><a href="UI.Button.html">Button</a></li><li><a href="UI.CashText.html">CashText</a></li><li><a href="UI.Prompt.html">Prompt</a></li></ul><h3>Interfaces</h3><ul><li><a href="Actions.BaseAction.html">BaseAction</a></li></ul><h3>Events</h3><ul><li><a href="Bank.html#event:deposit">deposit</a></li><li><a href="Bank.html#event:withdraw">withdraw</a></li><li><a href="Dice.html#event:landed">landed</a></li><li><a href="Dice.html#event:rolled">rolled</a></li><li><a href="Menu.html#event:start">start</a></li><li><a href="Player.html#event:deposit">deposit</a></li><li><a href="Player.html#event:jaildrop">jaildrop</a></li><li><a href="Player.html#event:jailpickup">jailpickup</a></li><li><a href="Player.html#event:retire">retire</a></li><li><a href="Player.html#event:withdraw">withdraw</a></li><li><a href="Prompt.html#event:close">close</a></li><li><a href="Prompt.html#event:show">show</a></li><li><a href="Tiles.Parking.html#event:collect">collect</a></li><li><a href="Tiles.Parking.html#event:fee">fee</a></li><li><a href="Timer.html#event:complete">complete</a></li><li><a href="Timer.html#event:tick">tick</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getBidDecision">getBidDecision</a></li><li><a href="global.html#getFineDecision">getFineDecision</a></li><li><a href="global.html#getJailDecision">getJailDecision</a></li><li><a href="global.html#getPurchaseDecision">getPurchaseDecision</a></li><li><a href="global.html#getTilesToSell">getTilesToSell</a></li><li><a href="global.html#getTilesToUpgrade">getTilesToUpgrade</a></li><li><a href="global.html#getTimerSecondsByOption">getTimerSecondsByOption</a></li><li><a href="global.html#getTokenNameByPlayerId">getTokenNameByPlayerId</a></li><li><a href="global.html#getTokenSpriteByPlayerId">getTokenSpriteByPlayerId</a></li><li><a href="global.html#preload">preload</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Sat Apr 30 2022 22:15:55 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
