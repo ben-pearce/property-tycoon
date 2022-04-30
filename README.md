@@ -52,5 +52,5 @@ To build the docs for this project, you just need [JSDoc](https://jsdoc.app/).
 
 ```
 $ npm i -g jsdoc
-$ jsdoc -r -d docs
+$ jsdoc -r -d docs src
 ```
