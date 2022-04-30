@@ -1,5 +1,5 @@
 {
-  "name": "tycoon",
+  "name": "ben-pearce-property-tycoon",
   "version": "1.0.0",
   "description": "A property tycoon game",
   "main": "src/index.js",
